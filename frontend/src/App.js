@@ -1,16 +1,12 @@
 import logo from './logo.svg';
 import './App.css';
-
+import Login_Amir from './componets/login-amir';
+import DragAndDropAdvanced from './componets/dnd';
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          sec comm
-        </p>
-
-      </header>
+    <div>
+      {/* <DragAndDropAdvanced /> */}
+      <Login_Amir />
     </div>
   );
 }
