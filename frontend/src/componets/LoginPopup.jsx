@@ -4,12 +4,13 @@ import CloseButton from 'react-bootstrap/CloseButton'
 import "bootstrap-icons/font/bootstrap-icons.css";
 import { useRef } from "react";
 import APIService from "./APIService";
-function LoginPopup(){
-    const [isOpen, setIsOpen] = useState(false); // State to control popup visibility
+function LoginPopup({isOpen,setIsOpen}){
+    // const [isOpen, setIsOpen] = useState(false); // State to control popup visibility
     const inputRef = useRef(null);
     // Function to toggle popup
+
     const togglePopup = () => {
-      setIsOpen(!isOpen);
+      setIsOpen(false);
     };
     const [showPassword, setShowPassword] = useState(false); // בקרה להצגת הסיסמה
     const [users,setUsers] =useState([])
@@ -46,7 +47,7 @@ function LoginPopup(){
     return(
         <div ref={inputRef}>
                 <div>
-                    <button onClick={togglePopup}>Open Popup</button>
+                    {/* <button onClick={togglePopup}>Open Popup</button> */}
 
                     {isOpen && ( // Conditional rendering
                         <div style={popupStyles.overlay}>

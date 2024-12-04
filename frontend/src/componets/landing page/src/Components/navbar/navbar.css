@@ -1,0 +1,55 @@
+.navbar {
+    height: 5rem;
+    padding-left: 0px;
+    padding-right: 0px;
+    
+    
+    margin: 0 auto;
+    padding: 1rem 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;  /* כפתורים בצד ימין, הלוגו בצד שמאל, התפריט במרכז */
+    position: sticky;
+    top: 0;
+    z-index: 3;
+    gap: 0;  /* לא להשתמש ב-gap כאן */
+    background-color: rgb(25, 78, 3);
+}
+
+.logo {
+    object-fit: cover;
+    height: 6rem;
+    width: 6rem;
+    border-radius: 50%;
+}
+
+.deskTopMenu {
+    display: flex;
+    justify-content: center;  
+    flex-grow: 1; 
+    gap: 3rem;  
+}
+
+.deskTopMenuListItem {
+    cursor: pointer;
+    color:whitesmoke;
+    font-size: larger;
+}
+.deskTopMenuListItem:hover{
+    color : brown;
+    padding-bottom:0.5rem;
+    border-bottom: 2px solid brown;
+}
+
+button {
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+    font-size: 1rem;
+    margin: 0;  /* ביטול כל מרווחים בין הכפתורים */
+    margin-left: 10px;  /* אם אתה רוצה מרווח קטן בין הכפתורים, תוכל להוסיף כאן */
+}
+.active{
+     color : brown;
+    padding-bottom:0.5rem;
+}
