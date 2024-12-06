@@ -11,10 +11,10 @@ function App() {
     <div>
     <Router>
       <Routes>
-        <Route path="/" element={<LoginPopup />} />
+        <Route path="/" element={<LandingPage />} />
         <Route path="/newUser" element={<NewUser />} />
         <Route path="/Dnd1" element={<Dnd1 />} />
-        <Route path="/LandingPage" element={<LandingPage />} />
+        {/* <Route path="/LandingPage" element={<LandingPage />} /> */}
       </Routes>
     </Router>
 

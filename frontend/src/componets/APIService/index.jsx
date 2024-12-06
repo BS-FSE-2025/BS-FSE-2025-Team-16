@@ -17,9 +17,16 @@ class ApiServices
 
     //      return axios.post(API_URL+'newComment',  newComment,{'Access-Control-Allow-Origin': '*'});
     // }
-    users(){
+    user(){
         return axios.get(API_URL+'users', {'Access-Control-Allow-Origin': '*'})
     }
+    usersType(){
+        return axios.get(API_URL+'usersType', {'Access-Control-Allow-Origin': '*'})
+    }
+    createUser(newUser){
+        // console.log(1)
+         return axios.post(API_URL+'newUser', newUser,  {'Access-Control-Allow-Origin': '*'});
+     }
   
 }
 

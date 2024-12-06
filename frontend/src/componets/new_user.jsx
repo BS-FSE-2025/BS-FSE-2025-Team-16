@@ -1,9 +1,12 @@
 import { useEffect, useState } from "react"
-import "bootstrap/dist/css/bootstrap.min.css";
+import 'bootstrap/dist/css/bootstrap.min.css';
+import { useNavigate } from 'react-router-dom';
+
 import CloseButton from 'react-bootstrap/CloseButton'
 import "bootstrap-icons/font/bootstrap-icons.css";
 import { useRef } from "react";
 import OptionsList from "./option/index"
+import APIService from "./APIService";
 
 const NewUser=()=>{
     const[user,setUser]=useState({
@@ -12,7 +15,7 @@ const NewUser=()=>{
         Password:'',
     })
     const [type,setType]=useState('')
-    const [typesUser,SetTypesUser] =useState([{"id":1,"name":"ddd"}])
+    const [typesUser,SetTypesUser] =useState([{"id":1,"name":"Admin"}])
     const [confirmPassword, SetConfirmPassword]=useState('')
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
@@ -30,18 +33,30 @@ const NewUser=()=>{
         })
         
       }
+      useEffect(()=>{
+        APIService.usersType().then(res=>{
+            SetTypesUser(res.data)
+            console.log(res.data)
+        })
+        
+      },[])
+    
+      const navigate = useNavigate();
+
       const hundleSubmit =()=>{
         setIsMatchPassword(user.Password==confirmPassword)
         if(user.Password!=confirmPassword){
             window.alert("הסיסאות לא תואמות אחד לשני")
 
         }
+        APIService.createUser({"userType":type, "user":user}).then(res=>console.log(res.data))
+        navigate("/")
+
       }
     return(
         <div style={{backgroundColor: "#90EE90",minHeight: "100vh"}}>
-            <div className='container' >
-
-                <div className='row'>
+            <div className="container" style={{ display: 'flex', flexDirection: 'column', gap: '20px', marginTop: '20px' }}>
+            <div className="row">
                     <div className="text-center">
                         <h1 className="">ברוכים הבאים למערכת  הגינון שלנו </h1>
                     </div>
@@ -132,8 +147,9 @@ const NewUser=()=>{
                          }  
                         </div>
                     </div>
-                    </div>
                 </div>
+            
+            </div>
 
 
     )

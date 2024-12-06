@@ -22,7 +22,7 @@ app.config['SESSION_TYPE'] = 'filesystem'
 
 @app.route('/users', methods=['GET'])
 @cross_origin()
-def login():
+def users():
     conn = sqlite3.connect("PlantPricer.db")
     cursor = conn.cursor()
 
@@ -37,6 +37,59 @@ def login():
     json_data = backend.query_to_js(columns_names, rows)
 
     return json_data
+
+
+
+@app.route('/usersType', methods=['GET'])
+@cross_origin()
+def usersType():
+    conn = sqlite3.connect("PlantPricer.db")
+    cursor = conn.cursor()
+
+    # שליפת שמות העמודות אוטומטית
+    cursor.execute("SELECT * FROM UserType")
+    columns_names = [description[0] for description in cursor.description]
+
+    # שליפת נתונים
+    rows = cursor.fetchall()
+    print(rows)
+    # המרת הנתונים ל-JSON
+    json_data = backend.query_to_js(columns_names, rows)
+
+    return json_data
+
+
+
+
+
+@app.route('/newUser', methods=['POST'])
+@cross_origin()
+def NewProject():
+    req = request.json
+    print(req["userType"])
+    print(req["user"]["Name"])
+    print(req)
+    conn = sqlite3.connect("PlantPricer.db")
+    cursor = conn.cursor()
+    sql = f"""
+       INSERT INTO users (name, email, password, Type, inactive)
+       SELECT '{req["user"]["Name"]}', '{req["user"]["Email"]}', '{req["user"]["Password"]}', id, 1
+       FROM UserType
+       WHERE name = '{req["userType"]}';
+       """
+
+    print(sql)
+    try:
+        cursor.execute(sql)
+        conn.commit()
+        response = {"status": "success", "message": "User added successfully"}
+    except sqlite3.Error as e:
+        print(f"Database error: {e}")
+        response = {"status": "error", "message": str(e)}
+    finally:
+        conn.close()
+
+    return response
 
 
 if __name__ == "__main__":

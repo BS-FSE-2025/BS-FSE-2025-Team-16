@@ -12,15 +12,20 @@ import LoginPopup from "../../LoginPopup"
       setshow(!show)
     }
     return (
-      <div className="App">
+      <div>
         
-        <Navbar hundleOpenLoginPopup={hundleOpenLoginPopup} />
-        <Input/>
-        <AboutUs/>
+
         {
-          show ?
-          <LoginPopup isOpen={show} setIsOpen={setshow} />
-          :<></>
+          <div className="App">
+              <Navbar hundleOpenLoginPopup={hundleOpenLoginPopup} />
+              <Input/>
+              <AboutUs/>
+              {
+                show ?
+                <LoginPopup isOpen={show} setIsOpen={setshow} />
+                :<></>
+              }
+          </div>
         }
         
         

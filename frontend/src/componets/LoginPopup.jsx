@@ -25,7 +25,7 @@ function LoginPopup({isOpen,setIsOpen}){
         })
       }
       useEffect(()=>{
-        APIService.users().then(res=>{
+        APIService.user().then(res=>{
                   setUsers(res.data)
         })
 
@@ -36,13 +36,14 @@ function LoginPopup({isOpen,setIsOpen}){
       })
       const submit=()=>{
         console.log(users)
-        console.log(users.filter(worker=>worker.Name==user1.name && worker.Password==user1.password))
-        if(users.filter(worker=>worker.name==user1.name && worker.password==user1.password).length==1){
+        console.log(users.some(worker=>worker.Name==user1.name && worker.Password==user1.password))
+        if(users.some(worker=>worker.Name==user1.name && worker.Password==user1.password)){
           window.alert("היוזר קיים במערכת")
         }
         else{
           window.alert("היוזר לא קיים במערכת")
         }
+        setIsOpen(false);
       }
     return(
         <div ref={inputRef}>
@@ -113,7 +114,7 @@ function LoginPopup({isOpen,setIsOpen}){
                             </div>
                             <div className="row">
                             <div style={popupStyles.links}>
-                                      <a href="#" style={popupStyles.link} className="col-6 " dir="rtl">שכחת סיסמה?</a>
+                                      {/* <a href="#" style={popupStyles.link} className="col-6 " dir="rtl">שכחת סיסמה?</a> */}
                                       <a href="/newUser" style={popupStyles.link} className="col-6 " dir="rtl">אין לך חשבון? הירשם כאן</a>
                               </div>
                             

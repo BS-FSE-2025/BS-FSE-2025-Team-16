@@ -48,22 +48,4 @@ def query_to_js(columns_names, queries):
         for row in queries
     ]
 
-# חיבור למסד הנתונים
-conn = sqlite3.connect("PlantPricer.db")
-cursor = conn.cursor()
 
-# שליפת שמות העמודות אוטומטית
-cursor.execute("SELECT * FROM plants")
-columns_names = [description[0] for description in cursor.description]
-
-# שליפת נתונים
-rows = cursor.fetchall()
-
-# המרת הנתונים ל-JSON
-json_data = query_to_js(columns_names, rows)
-
-# הצגת הפלט
-print(json_data)
-
-# סגירת החיבור
-conn.close()

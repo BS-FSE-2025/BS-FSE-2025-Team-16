@@ -18,16 +18,4 @@ img{
   
 
 }
-.backgroundImage{
-  background-size: cover;  /* Makes sure the background covers the entire container */
-  background-position: center;  /* Centers the image */
-  height: 100vh;  /* Makes the div full screen */
-  width: 100%;    /* Makes the div full width */
-  position: absolute; /* Make it cover the full page */
-  top: 0;         /* Align the image from the top */
-  left: 0;        /* Align the image from the left */
-  z-index: -1;    /* Place the background behind other content */
-  background-attachment: fixed;
- 
-  
-}
+
