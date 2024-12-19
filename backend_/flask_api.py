@@ -2,7 +2,6 @@ from flask import Flask, render_template, request, redirect, url_for, session, f
 from flask_cors import CORS, cross_origin
 from flask_session import Session
 from flask_sqlalchemy import SQLAlchemy
-import json
 
 from flask_restful import Api
 # from mobile_resources.events import UserMobile
@@ -97,4 +96,4 @@ if __name__ == "__main__":
     # app.run(host='10.100.102.17', debug=True)
     # app.run(host='172.20.10.2', debug=True)
 
-     app.run(host='172.20.10.7', debug=True)
+    app.run(host="0.0.0.0", port=5000, debug=True)

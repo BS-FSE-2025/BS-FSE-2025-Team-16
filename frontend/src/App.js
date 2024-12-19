@@ -6,6 +6,7 @@ import LoginPopup from "./componets/LoginPopup";
 import NewUser from './componets/new_user';
 import Dnd1 from './componets/FullDnd';
 import LandingPage from './componets/landing page/src/LandingPage';
+import SuppliersPage from './componets/supplier_page/Supplier_list';
 function App() {
   return (
     <div>
@@ -14,6 +15,7 @@ function App() {
         <Route path="/" element={<LandingPage />} />
         <Route path="/newUser" element={<NewUser />} />
         <Route path="/Dnd1" element={<Dnd1 />} />
+        <Route path="/supplier" element={<SuppliersPage />} />
         {/* <Route path="/LandingPage" element={<LandingPage />} /> */}
       </Routes>
     </Router>

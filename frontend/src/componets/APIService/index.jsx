@@ -6,7 +6,7 @@ import axios from "axios";
 //const API_URL = "http://10.100.102.17:5000/"
 // "http://172.19.42.37:5000/"
 // "http://172.19.34.128:5000"
-const API_URL = "http://172.20.10.7:5000/"
+const API_URL = "http://127.0.0.1:5000/"
 class ApiServices
 {
     
@@ -27,6 +27,9 @@ class ApiServices
         // console.log(1)
          return axios.post(API_URL+'newUser', newUser,  {'Access-Control-Allow-Origin': '*'});
      }
+     updateSupplier(id, data) {
+        return axios.put(API_URL + `suppliers/${id}`, data, { 'Access-Control-Allow-Origin': '*' });
+    }
   
 }
 

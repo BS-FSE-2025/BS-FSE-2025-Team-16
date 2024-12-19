@@ -1,5 +1,5 @@
   import Navbar from "./Components/navbar/navbar";
-  import Input from "./Components/Intro/intro";
+  import Intro from "./Components/Intro/intro";
   import AboutUs from "./Components/AboutUs/aboutUs";
 import "../public/style.css"
 
@@ -18,7 +18,7 @@ import LoginPopup from "../../LoginPopup"
         {
           <div className="App">
               <Navbar hundleOpenLoginPopup={hundleOpenLoginPopup} />
-              <Input/>
+              <Intro/>
               <AboutUs/>
               {
                 show ?
