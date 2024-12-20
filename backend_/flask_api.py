@@ -1,8 +1,6 @@
 from flask import Flask, render_template, request, jsonify, session
 from flask_cors import CORS, cross_origin
-<<<<<<< HEAD
 import sqlite3
-=======
 from flask_session import Session
 from flask_sqlalchemy import SQLAlchemy
 
@@ -10,7 +8,6 @@ from flask_restful import Api
 # from mobile_resources.events import UserMobile
 import sqlite3,flask_sqlalchemy
 import json
->>>>>>> c49de15f9ea4f718cde873facd0fbd04320f4d2c
 import backend
 
 app = Flask(__name__)
@@ -147,12 +144,9 @@ def submit_review():
 
 
 if __name__ == "__main__":
-<<<<<<< HEAD
     app.run(host='0.0.0.0', debug=True)
-=======
     # db.create_all()
     # app.run(host='10.100.102.17', debug=True)
     # app.run(host='172.20.10.2', debug=True)
 
     app.run(host="0.0.0.0", port=5000, debug=True)
->>>>>>> c49de15f9ea4f718cde873facd0fbd04320f4d2c
