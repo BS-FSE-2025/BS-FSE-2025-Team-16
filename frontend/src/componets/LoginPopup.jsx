@@ -38,7 +38,13 @@ function LoginPopup({isOpen,setIsOpen}){
         console.log(users)
         console.log(users.some(worker=>worker.Name==user1.name && worker.Password==user1.password))
         if(users.some(worker=>worker.Name==user1.name && worker.Password==user1.password)){
+          const loggedInUser = users.find(worker => worker.Name === user1.name && worker.Password === user1.password);
+
+          // שמירת פרטי המשתמש ב-localStorage
+          localStorage.setItem('loggedInUser', JSON.stringify(loggedInUser));
+        
           window.alert("היוזר קיים במערכת")
+          window.location.reload()
         }
         else{
           window.alert("היוזר לא קיים במערכת")

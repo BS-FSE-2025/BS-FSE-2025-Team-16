@@ -1,0 +1,137 @@
+/* עיצוב כללי */
+/* body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f9f9f9;
+} */
+
+/* כותרת */
+h1 {
+    text-align: center;
+    color: #333;
+    margin-top: 20px;
+}
+
+/* מיכל עיצוב */ 
+.container {
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* טופס חיפוש וסינון */
+.filter-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.filter-container input {
+    width: 70%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.filter-container select {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background: white;
+    cursor: pointer;
+}
+
+/* רשימה */
+ul {
+    list-style: none;
+    padding: 0;
+}
+
+li {
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    margin-bottom: 10px;
+    background: #f8f8f8;
+    transition: 0.3s;
+}
+
+li:hover {
+    background: #e8e8e8;
+    cursor: pointer;
+}
+
+li strong {
+    color: #333;
+    font-weight: bold;
+}
+
+li span {
+    font-size: 14px;
+    color: #666;
+}
+/* רקע עבור החלונית */
+.modal-backdrop {
+    position: fixed; /* מבטיח שהרקע תמיד יהיה מעל המסך */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5); /* צבע רקע שחור עם שקיפות */
+    display: flex; /* יישור החלונית במרכז */
+    justify-content: center; /* יישור אופקי */
+    align-items: center; /* יישור אנכי */
+    z-index: 1000; /* מבטיח שהחלונית מעל שאר האלמנטים */
+}
+
+/* החלונית עצמה */
+/* .modal {
+    /* background: white; /* רקע לבן לחלונית */
+    /* padding: 20px; 
+    border-radius: 8px; 
+    width: 400px;  */
+        /* box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); הצללה לחלונית */
+
+.box{
+    background: "#90EE90";
+    padding: "150px";
+    border-radius: "8px";
+    box-shadow: "0 5px 15px rgba(0, 0, 0, 0.3)";
+    text-align: "center";
+    background-color: wheat;
+}
+/* פעולות בתוך החלונית */
+.modal-actions {
+    margin-top: 20px; /* רווח בין הטקסט לכפתורים */
+    display: flex; /* סידור הכפתורים בשורה */
+    justify-content: flex-end; /* יישור לכיוון ימין */
+    gap: 10px; /* רווח בין הכפתורים */
+}
+
+/* כפתורים */
+.modal-actions button {
+    padding: 10px 20px; /* רווח פנימי בכפתורים */
+    border: none; /* ללא גבול */
+    border-radius: 4px; /* פינות מעוגלות */
+    cursor: pointer; /* סמן יד */
+    font-size: 14px;
+}
+/* 
+.modal-actions button:first-child {
+    background-color: #f44336; 
+    color: white;
+}
+
+.modal-actions button:last-child {
+    background-color: #4caf50; 
+    color: white;
+}
+
+.modal-actions button:hover {
+    opacity: 0.9; 
+} */
