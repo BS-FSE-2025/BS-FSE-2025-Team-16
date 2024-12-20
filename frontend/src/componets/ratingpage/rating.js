@@ -27,7 +27,7 @@ function RatingPage() {
   };
 
   return (
-    <div>
+    <div id="RatingPage">
       <Navbar hundleOpenLoginPopup={handleOpenLoginPopup} />
       
       <div style={{ padding: "40px", textAlign: "center" }}>
