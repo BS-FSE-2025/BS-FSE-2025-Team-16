@@ -26,7 +26,11 @@ function SuppliersPage() {
 
     const handleSupplierClick = (supplier) => {
         setSelectedSupplier(supplier);
-        setEditForm({ id: supplier.id,name: supplier.name, info: supplier.info });
+        setEditForm({ 
+            id: supplier.Id, 
+            name: supplier.name, 
+            info: supplier.info 
+        });
     };
 
     const handleBackClick = () => {
@@ -42,21 +46,21 @@ function SuppliersPage() {
     const handleFormSubmit = (e) => {
         e.preventDefault();
         console.log(editForm.id)
-        // Update supplier information in the database
-        // APIService.updateSupplier({
-        //     id: editForm.id, // הוסף את ה-ID
-        //     name: editForm.name,
-        //     info: editForm.info
-        // }).then(() => {
-        //     // Update the local state with the new supplier information
-        //     // setSuppliers(suppliers.map(supplier => 
-        //     //     supplier.id === selectedSupplier.id ? { ...supplier, ...editForm } : supplier
-        //     // ));
-        //     // setSelectedSupplier(null);
-        //     // setIsEditMode(false);
-        // }).catch((error) => {
-        //     console.error("Error updating supplier:", error);
-        // });
+        //Update supplier information in the database
+        APIService.updateSupplier({
+            id: editForm.id, // הוסף את ה-ID
+            name: editForm.name,
+            info: editForm.info
+        }).then(() => {
+            // Update the local state with the new supplier information
+            setSuppliers(suppliers.map(supplier => 
+                supplier.id === selectedSupplier.id ? { ...supplier, ...editForm } : supplier
+            ));
+            setSelectedSupplier(null);
+            setIsEditMode(false);
+        }).catch((error) => {
+            console.error("Error updating supplier:", error);
+        });
     };
 
     const handleEditClick = () => {
@@ -108,7 +112,8 @@ function SuppliersPage() {
             ) : (
                 <ul className="supplier-list">
                     {suppliers.map(supplier => (
-                        <li key={supplier.id} onClick={() => handleSupplierClick(supplier)}>
+                        <li key={supplier.Id} onClick={() =>{console.log(supplier.Id);
+                         handleSupplierClick(supplier)}}>
                             <h3>{supplier.Name}</h3>
                         </li>
                     ))}
