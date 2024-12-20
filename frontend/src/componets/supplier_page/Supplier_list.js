@@ -5,7 +5,7 @@ import "./Supplier_list.css";
 import APIService from "../APIService";
 
 function SuppliersPage() {
-    const [show, setShow] = useState(false);
+    // const [show, setShow] = useState(false);
     const [selectedSupplier, setSelectedSupplier] = useState(null);
     const [suppliers, setSuppliers] = useState([]);
     const [editForm, setEditForm] = useState({ name: "", info: "" });
@@ -18,13 +18,15 @@ function SuppliersPage() {
         });
     }, []);
 
-    const handleOpenLoginPopup = () => {
-        setShow(!show);
-    };
+    const [show,setshow]=useState(false)
+    const hundleOpenLoginPopup =()=>{
+      
+      setshow(!show)
+    }
 
     const handleSupplierClick = (supplier) => {
         setSelectedSupplier(supplier);
-        setEditForm({ name: supplier.name, info: supplier.info });
+        setEditForm({ id: supplier.id,name: supplier.name, info: supplier.info });
     };
 
     const handleBackClick = () => {
@@ -39,15 +41,22 @@ function SuppliersPage() {
 
     const handleFormSubmit = (e) => {
         e.preventDefault();
+        console.log(editForm.id)
         // Update supplier information in the database
-        APIService.updateSupplier(selectedSupplier.id, editForm).then(() => {
-            // Update the local state with the new supplier information
-            setSuppliers(suppliers.map(supplier => 
-                supplier.id === selectedSupplier.id ? { ...supplier, ...editForm } : supplier
-            ));
-            setSelectedSupplier(null);
-            setIsEditMode(false);
-        });
+        // APIService.updateSupplier({
+        //     id: editForm.id, // הוסף את ה-ID
+        //     name: editForm.name,
+        //     info: editForm.info
+        // }).then(() => {
+        //     // Update the local state with the new supplier information
+        //     // setSuppliers(suppliers.map(supplier => 
+        //     //     supplier.id === selectedSupplier.id ? { ...supplier, ...editForm } : supplier
+        //     // ));
+        //     // setSelectedSupplier(null);
+        //     // setIsEditMode(false);
+        // }).catch((error) => {
+        //     console.error("Error updating supplier:", error);
+        // });
     };
 
     const handleEditClick = () => {
@@ -56,8 +65,12 @@ function SuppliersPage() {
 
     return (
         <div>
-            <Navbar handleOpenLoginPopup={handleOpenLoginPopup} />
-            {show && <LoginPopup isOpen={show} setIsOpen={setShow} />}
+               <Navbar hundleOpenLoginPopup={hundleOpenLoginPopup} />
+             {
+                show ?
+                <LoginPopup isOpen={show} setIsOpen={setshow} />
+                :<></>
+              }
             {selectedSupplier ? (
                 isEditMode ? (
                     <div className="supplier-info">

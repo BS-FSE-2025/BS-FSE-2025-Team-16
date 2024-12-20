@@ -27,8 +27,8 @@ class ApiServices
         // console.log(1)
          return axios.post(API_URL+'newUser', newUser,  {'Access-Control-Allow-Origin': '*'});
      }
-     updateSupplier(id, data) {
-        return axios.put(API_URL + `suppliers/${id}`, data, { 'Access-Control-Allow-Origin': '*' });
+     updateSupplier(data) {
+        return axios.post(API_URL + `suppliers`, data, { 'Access-Control-Allow-Origin': '*' });
     }
     plants(){
         return axios.get(API_URL+'plants', {'Access-Control-Allow-Origin': '*'})

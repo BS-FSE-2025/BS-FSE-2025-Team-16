@@ -145,6 +145,36 @@ def UpdatePlants():
     return response
 
 
+@app.route('/suppliers', methods=['POST'])
+@cross_origin()
+def update_supplier():
+    conn = sqlite3.connect("PlantPricer.db")
+    cursor = conn.cursor()
+    req = request.json  # הנתונים שמגיעים מהלקוח
+    print("Request received:", req)  # בדוק מה התקבל בשרת
+
+    if 'id' not in req:
+        return {"status": "error", "message": "Missing 'id' in request data"}, 400
+
+    sql = f"""
+        UPDATE users
+        SET
+            name = '{req["name"]}',
+            info = '{req["info"]}'
+        WHERE id = {req["id"]};
+        
+    """
+    print(sql)
+    try:
+        cursor.execute(sql)
+        conn.commit()
+        return {"status": "success", "message": "Supplier updated successfully"}
+    except sqlite3.Error as e:
+        return {"status": "error", "message": str(e)}, 500
+    finally:
+        conn.close()
+
+
 if __name__ == "__main__":
     # db.create_all()
     # app.run(host='10.100.102.17', debug=True)
