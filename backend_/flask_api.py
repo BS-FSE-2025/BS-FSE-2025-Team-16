@@ -175,6 +175,65 @@ def update_supplier():
         conn.close()
 
 
+@app.route('/newProject', methods=['POST'])
+@cross_origin()
+def newProject():
+    conn = sqlite3.connect("PlantPricer.db")
+    cursor = conn.cursor()
+    req = request.json  # הנתונים שמגיעים מהלקוח
+    print("Request received:", req)  # בדוק מה התקבל בשרת
+
+
+    sql = f"""
+    INSERT INTO projects (client_id,name, status_id,Budget,Width,Len,climate)
+    VALUES ({req["user"]["Id"]}, '{req["project"]["projectName"]}', 1,  {req["project"]["budget"]}, {req["project"]["width"]}, {req["project"]["length"]}, (SELECT id FROM Climate_type WHERE name='{req["project"]["climate"]}'));
+
+
+    """
+
+    print(sql)
+
+    try:
+        cursor.execute(sql)
+        conn.commit()
+        return {"status": "success", "message": "new Project successfully"}
+    except sqlite3.Error as e:
+        return {"status": "error", "message": str(e)}, 500
+    finally:
+        conn.close()
+
+
+
+
+@app.route('/newReview', methods=['POST'])
+@cross_origin()
+def newReview():
+    conn = sqlite3.connect("PlantPricer.db")
+    cursor = conn.cursor()
+    req = request.json  # הנתונים שמגיעים מהלקוח
+    print("Request received:", req)  # בדוק מה התקבל בשרת
+
+
+    sql = f"""
+    INSERT INTO rating (user_id,stars,review)
+    VALUES ({req["id"]},  '{req["rating"]}', '{req["feedback"]}');
+
+
+    """
+
+
+    try:
+        cursor.execute(sql)
+        conn.commit()
+        return {"status": "success", "message": "new Project successfully"}
+    except sqlite3.Error as e:
+        return {"status": "error", "message": str(e)}, 500
+    finally:
+        conn.close()
+
+
+
+
 if __name__ == "__main__":
     # db.create_all()
     # app.run(host='10.100.102.17', debug=True)

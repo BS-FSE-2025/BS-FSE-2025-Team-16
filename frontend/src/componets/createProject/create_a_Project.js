@@ -1,14 +1,15 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Navbar from "../landing page/src/Components/navbar/navbar";
 import LoginPopup from "../LoginPopup";
 import ".//create_a_Project.css";
+import APIService from "../APIService";
 
 function CreateProject() {
   const [show, setShow] = useState(false);
   const handleOpenLoginPopup = () => {
     setShow(!show);
   };
-
+  const [user, setUser] = useState({});
   const [formData, setFormData] = useState({
     projectName: "",
     budget: "",
@@ -23,7 +24,9 @@ function CreateProject() {
     length: "",
     climate: "", // שדה שגיאה עבור אקלים
   });
-
+  useEffect(()=>{
+    setUser(JSON.parse(localStorage.getItem('loggedInUser')));
+  },[])
   const validateInput = (name, value) => {
     if (name === "budget" || name === "width" || name === "length") {
       if (!/^\d*\.?\d+$/.test(value) || parseFloat(value) < 0) {
@@ -61,6 +64,9 @@ function CreateProject() {
     } else {
       alert("Please fix the errors before submitting.");
     }
+    console.log(user);
+    console.log(formData)
+    APIService.NewProject({"user":user,"project":formData})
   };
 
   return (
@@ -130,11 +136,11 @@ function CreateProject() {
                 onChange={handleChange}
               >
                 <option value="">Select Climate</option>
-                <option value="temperate">Temperate</option>
-                <option value="tropical">Tropical</option>
-                <option value="arid">Arid</option>
-                <option value="mediterranean">Mediterranean</option>
-                <option value="cold">Cold</option>
+                <option value="Temperate">Temperate</option>
+                <option value="Tropical">Tropical</option>
+                <option value="Arid">Arid</option>
+                <option value="Mediterranean">Mediterranean</option>
+                <option value="Cold">Cold</option>
               </select>
               {errors.climate && <p className="error-text">{errors.climate}</p>}
             </div>

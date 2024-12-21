@@ -43,7 +43,19 @@ class ApiServices
                 
             }
         },  {'Access-Control-Allow-Origin': '*'});
+        
+
+
+        
      }
+     NewProject(newProject){
+        console.log(newProject)
+         return axios.post(API_URL+'newProject', newProject,  {'Access-Control-Allow-Origin': '*'});
+    }
+    NewReview(newReview){
+        console.log(newReview)
+         return axios.post(API_URL+'newReview', newReview,  {'Access-Control-Allow-Origin': '*'});
+    }
 }
 
 export default new ApiServices()

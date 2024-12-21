@@ -1,12 +1,13 @@
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import Navbar from "../landing page/src/Components/navbar/navbar"; // Make sure the path is correct
 import LoginPopup from "../LoginPopup";
+import APIService from "../APIService";
 
 function RatingPage() {
   const [show, setShow] = useState(false);
   const [rating, setRating] = useState(0); // To store the user's rating
   const [feedback, setFeedback] = useState(""); // To store the feedback text
-
+  const [user, setUser] = useState({});
   const handleOpenLoginPopup = () => {
     setShow(!show);
   };
@@ -18,11 +19,15 @@ function RatingPage() {
   const handleFeedbackChange = (e) => {
     setFeedback(e.target.value); // Update feedback text when user types
   };
-
+  useEffect(()=>{
+    setUser(JSON.parse(localStorage.getItem('loggedInUser')));
+  },[])
   const handleSubmit = () => {
     // Handle the submit action (e.g., sending the data to a server)
     console.log("Rating submitted:", rating);
     console.log("Feedback submitted:", feedback);
+    console.log(user)
+    APIService.NewReview({"rating":rating,"feedback":feedback, "id":user.Id})
     // You could reset the form or show a success message here
   };
 
