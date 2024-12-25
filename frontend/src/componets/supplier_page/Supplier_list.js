@@ -10,12 +10,14 @@ function SuppliersPage() {
     const [suppliers, setSuppliers] = useState([]);
     const [editForm, setEditForm] = useState({ name: "", info: "" });
     const [isEditMode, setIsEditMode] = useState(false);
+    const [user, setUser] = useState({});
 
     useEffect(() => {
         APIService.user().then(data => {
             console.log(data.data);
             setSuppliers((data.data).filter((user) => user.Type === 3));
         });
+        setUser(JSON.parse(localStorage.getItem('loggedInUser')) || {});
     }, []);
 
     const [show,setshow]=useState(false)
@@ -28,7 +30,7 @@ function SuppliersPage() {
         setSelectedSupplier(supplier);
         setEditForm({ 
             id: supplier.Id, 
-            name: supplier.name, 
+            name: supplier.Name, 
             info: supplier.info 
         });
     };
@@ -56,6 +58,10 @@ function SuppliersPage() {
             setSuppliers(suppliers.map(supplier => 
                 supplier.id === selectedSupplier.id ? { ...supplier, ...editForm } : supplier
             ));
+            APIService.user().then(data => {
+                console.log(data.data);
+                setSuppliers((data.data).filter((user) => user.Type === 3));
+            });
             setSelectedSupplier(null);
             setIsEditMode(false);
         }).catch((error) => {
@@ -81,13 +87,13 @@ function SuppliersPage() {
                         <h2>Edit Supplier Info</h2>
                         <form onSubmit={handleFormSubmit}>
                             <label>
-                                Name:
-                                <input
+                                Name: {editForm.name}
+                                {/* <input
                                     type="text"
                                     name="name"
                                     value={editForm.name}
                                     onChange={handleInputChange}
-                                />
+                                /> */}
                             </label>
                             <label>
                                 Info:
@@ -105,7 +111,9 @@ function SuppliersPage() {
                     <div className="supplier-info">
                         <h2>{selectedSupplier.Name}</h2>
                         <p>{selectedSupplier.info}</p>
+                        {user.Id === selectedSupplier.Id && (
                         <button onClick={handleEditClick}>Edit</button>
+                        )}
                         <button onClick={handleBackClick}>Back</button>
                     </div>
                 )

@@ -153,13 +153,12 @@ def update_supplier():
     req = request.json  # הנתונים שמגיעים מהלקוח
     print("Request received:", req)  # בדוק מה התקבל בשרת
 
-    if 'id' not in req:
-        return {"status": "error", "message": "Missing 'id' in request data"}, 400
+    # if 'id' not in req:
+    #     return {"status": "error", "message": "Missing 'id' in request data"}, 400
 
     sql = f"""
         UPDATE users
         SET
-            name = '{req["name"]}',
             info = '{req["info"]}'
         WHERE id = {req["id"]};
         
