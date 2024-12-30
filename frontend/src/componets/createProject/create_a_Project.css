@@ -1,0 +1,93 @@
+/* הדף ימרכז את כל התוכן */
+.create-project-container {
+    font-family: 'Unbounded', sans-serif;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh; /* דאג למרכז אנכי של הדף */
+  }
+  
+  body {
+    
+      font-family: 'Unbounded', sans-serif;
+    
+      
+      background-image: url('../../componets/landing page/src/assest/back.png');
+      background-size: cover;
+      background-position: center;
+      margin: 0;
+      padding: 0;
+  }
+  /* הגדרת עיצוב עבור הטופס */
+  .form-wrapper {
+    
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 400px;
+  }
+  
+  .create-project-container h1 {
+    color: green;
+  }
+  .header{
+    text-align: center;
+    margin-top: 80px;
+  }
+  
+  .form-group {
+    margin-bottom: 20px; /* העלאת המרווח בין השדות */
+    text-align: center; /* למרכז את הכותרת בתוך כל שדה */
+  }
+  
+  label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: white;
+  }
+  
+  input {
+    width: 70%; /* גודל קטן יותר לשדות */
+    padding: 8px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    display: block;
+    margin: 0 auto; /* מרכז את השדה */
+  }
+  
+  input:focus {
+    outline: none;
+    border-color: #007bff;
+  }
+  
+  .error-text {
+    color: red;
+    font-size: 12px;
+    margin-top: 5px;
+  }
+  
+  .submit-btn {
+    width: 70%; /* גודל קטן יותר לכפתור */
+    padding: 10px;
+    background-color: rgb(25, 78, 3);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    margin-top: 20px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  
+  .submit-btn:hover {
+    background-color: brown;
+  }
+  
+  

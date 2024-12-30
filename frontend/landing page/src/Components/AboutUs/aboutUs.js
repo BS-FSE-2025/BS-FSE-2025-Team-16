@@ -1,5 +1,5 @@
 import React from 'react';
-import './aboutUs.css';
+import '../AboutUs/aboutUs.css';
 import logoForaboutUs from '../../assest/main-icon.jpg';
 
 
