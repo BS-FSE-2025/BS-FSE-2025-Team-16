@@ -8,6 +8,10 @@ import { useNavigate } from 'react-router-dom';
 const Navbar = ({hundleOpenLoginPopup}) => {
     const [loggedInUser, setLoggedInUser] = useState(null);
     const navigate = useNavigate();
+import { Link} from 'react-scroll';
+import { useState,useEffect } from 'react';
+const Navbar = ({hundleOpenLoginPopup}) => {
+    const [loggedInUser, setLoggedInUser] = useState(null);
 
     useEffect(() => {
         const savedUser = JSON.parse(localStorage.getItem('loggedInUser'));
@@ -37,6 +41,10 @@ const Navbar = ({hundleOpenLoginPopup}) => {
                <NavLink  to="/rating" className="deskTopMenuListItem"> Rating</NavLink>
                </>
               )}
+              
+              <Link activeClass='active' to="intro" spy={true} smooth={true} offset={-200} duration={500} className="deskTopMenuListItem">Home</Link>
+              <Link activeClass='active' to="aboutUs" spy={true} smooth={true} offset={-200} duration={500}  className="deskTopMenuListItem">About Us</Link>
+              <Link to="how-to-use" className="deskTopMenuListItem">How to use ?</Link>
             
             </div>
             {!loggedInUser ? (

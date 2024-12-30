@@ -3,19 +3,21 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import CloseButton from 'react-bootstrap/CloseButton'
 import "bootstrap-icons/font/bootstrap-icons.css";
 import { useRef } from "react";
-
-function LoginPopup(){
-    const [isOpen, setIsOpen] = useState(false); // State to control popup visibility
+import APIService from "./APIService";
+function LoginPopup({isOpen,setIsOpen}){
+    // const [isOpen, setIsOpen] = useState(false); // State to control popup visibility
     const inputRef = useRef(null);
     // Function to toggle popup
+
     const togglePopup = () => {
-      setIsOpen(!isOpen);
+      setIsOpen(false);
     };
     const [showPassword, setShowPassword] = useState(false); // בקרה להצגת הסיסמה
     const [users,setUsers] =useState([])
     const togglePasswordVisibility = () => {
       setShowPassword(!showPassword); // הפוך את המצב (true/false)
     };
+
     const hundleChange= (e) =>{
         setUser1({
           ...user1,
@@ -23,69 +25,10 @@ function LoginPopup(){
         })
       }
       useEffect(()=>{
-        setUsers([
-          {
-            "id": 1,
-            "name": "JohnDoe",
-            "email": "johndoe@example.com",
-            "password": "JohnDoe"
-          },
-          {
-            "id": 2,
-            "name": "JaneSmith",
-            "email": "janesmith@example.com",
-            "password": "JaneSmith"
-          },
-          {
-            "id": 3,
-            "name": "MichaelBrown",
-            "email": "michaelbrown@example.com",
-            "password": "MichaelBrown"
-          },
-          {
-            "id": 4,
-            "name": "EmilyDavis",
-            "email": "emilydavis@example.com",
-            "password": "EmilyDavis"
-          },
-          {
-            "id": 5,
-            "name": "DavidWilson",
-            "email": "davidwilson@example.com",
-            "password": "DavidWilson"
-          },
-          {
-            "id": 6,
-            "name": "SophiaTaylor",
-            "email": "sophiataylor@example.com",
-            "password": "SophiaTaylor"
-          },
-          {
-            "id": 7,
-            "name": "DanielMoore",
-            "email": "danielmoore@example.com",
-            "password": "DanielMoore"
-          },
-          {
-            "id": 8,
-            "name": "OliviaJackson",
-            "email": "oliviajackson@example.com",
-            "password": "OliviaJackson"
-          },
-          {
-            "id": 9,
-            "name": "JamesMartin",
-            "email": "jamesmartin@example.com",
-            "password": "JamesMartin"
-          },
-          {
-            "id": 10,
-            "name": "AvaThompson",
-            "email": "avathompson@example.com",
-            "password": "AvaThompson"
-          }
-        ]
-        )
+        APIService.user().then(res=>{
+                  setUsers(res.data)
+        })
+
       },[])
     const [user1, setUser1] =useState({
         name:'',
@@ -93,18 +36,25 @@ function LoginPopup(){
       })
       const submit=()=>{
         console.log(users)
-        console.log(users.filter(worker=>worker.name==user1.name && worker.password==user1.password))
-        if(users.filter(worker=>worker.name==user1.name && worker.password==user1.password).length>0){
+        console.log(users.some(worker=>worker.Name==user1.name && worker.Password==user1.password))
+        if(users.some(worker=>worker.Name==user1.name && worker.Password==user1.password)){
+          const loggedInUser = users.find(worker => worker.Name === user1.name && worker.Password === user1.password);
+
+          // שמירת פרטי המשתמש ב-localStorage
+          localStorage.setItem('loggedInUser', JSON.stringify(loggedInUser));
+        
           window.alert("היוזר קיים במערכת")
+          window.location.reload()
         }
         else{
           window.alert("היוזר לא קיים במערכת")
         }
+        setIsOpen(false);
       }
     return(
         <div ref={inputRef}>
                 <div>
-                    <button onClick={togglePopup}>Open Popup</button>
+                    {/* <button onClick={togglePopup}>Open Popup</button> */}
 
                     {isOpen && ( // Conditional rendering
                         <div style={popupStyles.overlay}>
@@ -170,8 +120,8 @@ function LoginPopup(){
                             </div>
                             <div className="row">
                             <div style={popupStyles.links}>
-                                      <a href="#" style={popupStyles.link} className="col-6 " dir="rtl">שכחת סיסמה?</a>
-                                      <a href="#" style={popupStyles.link} className="col-6 " dir="rtl">אין לך חשבון? הירשם כאן</a>
+                                      {/* <a href="#" style={popupStyles.link} className="col-6 " dir="rtl">שכחת סיסמה?</a> */}
+                                      <a href="/newUser" style={popupStyles.link} className="col-6 " dir="rtl">אין לך חשבון? הירשם כאן</a>
                               </div>
                             
                             </div>

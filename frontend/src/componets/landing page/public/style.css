@@ -1,0 +1,21 @@
+img{
+  margin: 0;               /* Resets the margin of all elements to 0, removing default spacing. */
+  padding: 0;              /* Resets the padding of all elements to 0, removing any internal spacing. */
+  box-sizing: border-box;  /* Changes how the total width/height of elements is calculated, including padding and borders in the element's width/height. */
+  text-decoration: none;   /* Removes any default text decorations, such as underlines on links. */
+  background: transparent; /* Sets the background to transparent (no background color). */
+  background-attachment: fixed;
+}
+.App {
+  font-family: 'Unbounded', sans-serif;
+  margin: 0;
+  padding: 0;
+  background-image:url(back.png);
+  background-size: cover;  /* תכסה את כל הרקע */
+  background-position: center;  /* תמקם את התמונה במרכז */
+  background-attachment: fixed;  /* התמונה תישאר קבועה בזמן גלילה */
+  color: white; /*color of the text*/
+  
+
+}
+
