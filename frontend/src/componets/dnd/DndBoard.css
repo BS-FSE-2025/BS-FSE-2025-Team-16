@@ -1,0 +1,54 @@
+.app {
+  display: flex;
+}
+
+.sidebar {
+  width: 200px;
+  background-color: #f0f0f0;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.sidebar-item {
+  margin: 10px 0;
+  padding: 10px;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  cursor: pointer;
+}
+
+.sidebar-item.dragging {
+  opacity: 0.5;
+}
+
+.board {
+  display: grid;
+  gap: 2px;
+  padding: 10px;
+  flex: 1;
+  background-color: #f9f9f9;
+}
+
+.board-cell {
+  width: 100%;
+  padding-top: 100%; /* שמירה על ריבוע */
+  position: relative;
+  background-color: #fff;
+  border: 1px solid #ddd;
+}
+
+.board-cell.hover {
+  background-color: #e0e0e0;
+}
+
+.board-item {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  background-color: #add8e6;
+  padding: 5px;
+  border: 1px solid #007acc;
+  border-radius: 4px;
+}
