@@ -96,6 +96,30 @@ def climateType():
     return json_data
 
 
+
+
+
+
+
+@app.route('/projects', methods=['GET'])
+@cross_origin()
+def projects():
+    conn = sqlite3.connect("PlantPricer.db")
+    cursor = conn.cursor()
+
+    # שליפת שמות העמודות אוטומטית
+    cursor.execute("SELECT * FROM projects")
+    columns_names = [description[0] for description in cursor.description]
+
+    # שליפת נתונים
+    rows = cursor.fetchall()
+    # print(rows)
+    # המרת הנתונים ל-JSON
+    json_data = backend.query_to_js(columns_names, rows)
+
+    return json_data
+
+
 @app.route('/newUser', methods=['POST'])
 @cross_origin()
 def newUser():
@@ -226,7 +250,7 @@ def plants():
     Plants.type AS plant_type,
     Plants.info AS info,
     Plants.img AS img,
-    Plants.price AS plant_price,
+    Plants.price,
     Climate_type.name AS climate_name
     FROM 
         Plants
@@ -276,6 +300,9 @@ def gardenElement():
     # return json_data
 
 
+
+
+
 @app.route('/UpdateGardenElement', methods=['POST'])
 @cross_origin()
 def UpdateGardenElement():
@@ -287,7 +314,7 @@ def UpdateGardenElement():
     sql = f"""
         UPDATE garden_elements
         SET 
-             name ='{req["garden"]["name"]}',
+             info ='{req["garden"]["info"]}',
             price = {req["garden"]["price"]}
          WHERE element_id =  {req["garden"]["id"]};
        """
@@ -323,11 +350,11 @@ def UpdatePlants():
 
     conn = sqlite3.connect("PlantPricer.db")
     cursor = conn.cursor()
-
+    print(req)
     sql = f"""
         UPDATE plants
         SET 
-             name ='{req["plants"]["name"]}',
+             info ='{req["plants"]["info"]}',
             price = {req["plants"]["price"]}
          WHERE plant_id =  {req["plants"]["id"]};
        """

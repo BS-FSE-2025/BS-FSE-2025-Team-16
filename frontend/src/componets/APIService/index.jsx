@@ -40,11 +40,11 @@ class ApiServices
         return axios.get(API_URL+'plants', {'Access-Control-Allow-Origin': '*'})
     }
     updateplants(UpdatePlants){
-        // console.log(1)
+        console.log(UpdatePlants.id)
          return axios.post(API_URL+'UpdatePlants', {
             plants: {
-                name: UpdatePlants.plant_name,
-                price: UpdatePlants.plant_price,
+                info: UpdatePlants.info,
+                price: UpdatePlants.price,
                 id: UpdatePlants.plant_id
                 
             }
@@ -58,7 +58,7 @@ class ApiServices
         // console.log(1)
          return axios.post(API_URL+'UpdateGardenElement', {
             garden: {
-                name: UpdateGardenElement.name,
+                info: UpdateGardenElement.info,
                 price: UpdateGardenElement.price,
                 id: UpdateGardenElement.id
                 

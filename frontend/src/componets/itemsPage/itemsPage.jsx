@@ -124,13 +124,14 @@ const ProductList = () => {
                                 <li>
                                     <div  key={product.plant_id} onClick={() => {
                                     setSelectedProduct(product);
+                                   console.log(product.plant_id)
                                     if( user.Type==1 || user.Type==3){
                                         setShowModal(true);
                                         setTypeItem(1)
                                     }
                                     
                                 }}>
-                                    <strong>{product.plant_name}</strong> ({product.climate_name}) - ${product.plant_price}<br></br> 
+                                    <strong>{product.plant_name}</strong> ({product.climate_name}) - ${product.price}<br></br> 
                                     {product.info}
                                     </div>
                                     <button onClick={() => handleShowImage(product)}>Show Image</button>
@@ -143,7 +144,8 @@ const ProductList = () => {
                       
                             {filteredGardenItem.map((product) => (
                               <li>
-                                <div  key={product.plant_id} onClick={() => {
+                                <div  key={product.id} onClick={() => {
+                                        console.log(product.id)
                                         setSelectedProduct(product);
                                         if( user.Type==1 || user.Type==3){
                                             setShowModal(true);
@@ -190,56 +192,11 @@ const ProductList = () => {
     );
 };
 
-// const Modal = ({ product, onClose, onSave }) => {
-//     const [updatedProduct, setUpdatedProduct] = useState({ ...product });
 
-//     const handleChange = (e) => {
-//         const { name, value } = e.target;
-//         setUpdatedProduct((prev) => ({ ...prev, [name]: value }));
-//     };
-
-//     return (
-//         <div className="modal-backdrop">
-//              <div className="modal">
-//                 <h2>Edit Product</h2>
-//                 <label>
-//                     Name:
-//                     <input
-//                         type="text"
-//                         name="plant_name"
-//                         value={updatedProduct.plant_name}
-//                         onChange={handleChange}
-//                     />
-//                 </label>
-//                 <label>
-//                     Type:
-//                     <input
-//                         type="text"
-//                         name="plant_type"
-//                         value={updatedProduct.plant_type}
-//                         onChange={handleChange}
-//                     />
-//                 </label>
-//                 <label>
-//                     Price:
-//                     <input
-//                         type="number"
-//                         name="plant_price"
-//                         value={updatedProduct.plant_price}
-//                         onChange={handleChange}
-//                     />
-//                 </label>
-//                 <div className="modal-actions">
-//                     <button onClick={onClose}>Cancel</button>
-//                     <button onClick={() => onSave(updatedProduct)}>Save</button>
-//                 </div>
-//             </div>
-//         </div>
-    
-//     );
-// };
 const Modal = ({ product,setProdouct, onClose, onSave,TypeItem }) => {
-  
+    useEffect(()=>{
+        // console.log(1+"e ",TypeItem)
+    },[])
     const [updatedProduct, setUpdatedProduct] = useState({ ...product });
     const hundlesubmit = () => {
         onSave(updatedProduct);
@@ -271,12 +228,13 @@ const Modal = ({ product,setProdouct, onClose, onSave,TypeItem }) => {
     
         setUpdatedProduct((prev) => {
             // עדכון השדה המתאים לפי TypeItem
-            if (TypeItem === 1 && (name === "plant_name" || name === "plant_price")) {
-                return { ...prev, [name]: value };
-            } else if (TypeItem === 2 && (name === "name" || name === "price")) {
-                return { ...prev, [name]: value };
-            }
-            return prev;
+            // if (TypeItem === 1 && (name === "plant_name" || name === "plant_price")) {
+            //     return { ...prev, [name]: value };
+            // } else if (TypeItem === 2 && (name === "name" || name === "price")) {
+            //     return { ...prev, [name]: value };
+            // }
+            return { ...prev, [name]: value };
+            
         });
     };
     
@@ -290,25 +248,35 @@ const Modal = ({ product,setProdouct, onClose, onSave,TypeItem }) => {
             {/* <h2>Edit Product</h2> */}
             <div className="box">
                 <h2>Edit Product</h2>
-                <label>
+                {/* <label>
                     Name:
+                   
                     <input
                         type="text"
                         name={TypeItem === 1 ? "plant_name" : "name"}
-                        value={TypeItem === 1 ? updatedProduct.plant_name : updatedProduct.name}
+                        value={TypeItem === 1 ? updatedProduct.plant_name : product.name}
                         onChange={handleChange}
                     />
-                </label>
+                </label> */}
                 <label>
                     Price:
                     <input
                         type="number"
-                        name={TypeItem === 1 ? "plant_price" : "price"}
-                        value={TypeItem === 1 ? updatedProduct.plant_price : updatedProduct.price}
+                        name={"price"}
+                        value={updatedProduct.price}
                         onChange={handleChange}
                     />
                 </label>
-
+                <label>
+                    info:
+                   
+                    <textarea
+                        name="info"
+                        value={updatedProduct.info}
+                        onChange={handleChange}
+                        style={{ width: "100%", height: "100px", resize: "vertical" }} // הגדלת התיבה
+                    />
+                </label>
                 <div className="modal-actions">
                     <button onClick={onClose}>Cancel</button>
                     <button onClick={hundlesubmit}>Save</button>

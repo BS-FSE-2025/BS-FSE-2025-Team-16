@@ -17,10 +17,7 @@ const SidebarItem = ({ item }) => {
     }));
 
     return (
-        <div
-            ref={drag}
-            className={`sidebar-item ${isDragging ? "dragging" : ""}`}
-        >
+        <div ref={drag} className={`sidebar-item ${isDragging ? "dragging" : ""}`}>
             {item.name}
         </div>
     );
@@ -37,32 +34,41 @@ const BoardCell = ({ x, y, children, onDrop }) => {
     }));
 
     return (
-        <div
-            ref={drop}
-            className={`board-cell ${isOver ? "hover" : ""}`}
-        >
+        <div ref={drop} className={`board-cell ${isOver ? "hover" : ""}`}>
             {children}
         </div>
     );
 };
 
 // הלוח
-const Board = ({ size, items, onDrop }) => {
+const Board = ({ size, items, onDrop, onRemove }) => {
     const cells = [];
     for (let x = 0; x < size.rows; x++) {
         for (let y = 0; y < size.cols; y++) {
-            const itemInCell = items.find(
-                (item) => item.x === x && item.y === y
-            );
+            const itemsInCell = items.filter((item) => item.x === x && item.y === y);
             cells.push(
                 <BoardCell key={`${x}-${y}`} x={x} y={y} onDrop={onDrop}>
-                    {itemInCell && <div className="board-item">{itemInCell.name}</div>}
+                    {itemsInCell.map((item) => (
+                        <div key={item.id} className="board-item">
+                            {item.name}
+                            <button
+                                className="remove-button"
+                                onClick={() => onRemove(item.id)}
+                            >
+                                X
+                            </button>
+                        </div>
+                    ))}
                 </BoardCell>
             );
         }
     }
 
-    return <div className="board" style={{ gridTemplateColumns: `repeat(${size.cols}, 1fr)` }}>{cells}</div>;
+    return (
+        <div className="board" style={{ gridTemplateColumns: `repeat(${size.cols}, 1fr)` }}>
+            {cells}
+        </div>
+    );
 };
 
 // האפליקציה
@@ -77,9 +83,13 @@ const DndBoardApp = () => {
 
     const handleDrop = (item, x, y) => {
         setItems((prevItems) => [
-            ...prevItems.filter((i) => i.id !== item.id), // הסרת פריט קיים
-            { ...item, x, y },
+            ...prevItems,
+            { ...item, id: `${item.id}-${x}-${y}-${Date.now()}`, x, y },
         ]);
+    };
+
+    const handleRemoveItem = (id) => {
+        setItems((prevItems) => prevItems.filter((item) => item.id !== id));
     };
 
     return (
@@ -90,7 +100,7 @@ const DndBoardApp = () => {
                         <SidebarItem key={item.id} item={item} />
                     ))}
                 </div>
-                <Board size={boardSize} items={items} onDrop={handleDrop} />
+                <Board size={boardSize} items={items} onDrop={handleDrop} onRemove={handleRemoveItem} />
             </div>
         </DndProvider>
     );
