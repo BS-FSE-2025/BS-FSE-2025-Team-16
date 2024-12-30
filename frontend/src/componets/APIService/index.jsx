@@ -23,6 +23,12 @@ class ApiServices
     usersType(){
         return axios.get(API_URL+'usersType', {'Access-Control-Allow-Origin': '*'})
     }
+    climateType(){
+        return axios.get(API_URL+'climateType', {'Access-Control-Allow-Origin': '*'})
+    }
+    plantsType(){
+        return axios.get(API_URL+'plantsType', {'Access-Control-Allow-Origin': '*'})
+    }
     createUser(newUser){
         // console.log(1)
          return axios.post(API_URL+'newUser', newUser,  {'Access-Control-Allow-Origin': '*'});
@@ -48,6 +54,31 @@ class ApiServices
 
         
      }
+     updateGardenItem(UpdateGardenElement){
+        // console.log(1)
+         return axios.post(API_URL+'UpdateGardenElement', {
+            garden: {
+                name: UpdateGardenElement.name,
+                price: UpdateGardenElement.price,
+                id: UpdateGardenElement.id
+                
+            }
+        },  {'Access-Control-Allow-Origin': '*'});
+        
+
+
+        
+     }
+
+     NewPlants(newPlants){
+        console.log(newPlants)
+         return axios.post(API_URL+'newPlants', newPlants,  {'Access-Control-Allow-Origin': '*'});
+    }
+    NewELement(newELement){
+        console.log(newELement)
+         return axios.post(API_URL+'newElement', newELement,  {'Access-Control-Allow-Origin': '*'});
+    }
+
      NewProject(newProject){
         console.log(newProject)
          return axios.post(API_URL+'newProject', newProject,  {'Access-Control-Allow-Origin': '*'});
@@ -55,6 +86,9 @@ class ApiServices
     NewReview(newReview){
         console.log(newReview)
          return axios.post(API_URL+'newReview', newReview,  {'Access-Control-Allow-Origin': '*'});
+    }
+    GardenElement(){
+        return axios.get(API_URL+'gardenElement', {'Access-Control-Allow-Origin': '*'})
     }
 }
 

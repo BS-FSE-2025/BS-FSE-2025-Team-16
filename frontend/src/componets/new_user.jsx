@@ -15,6 +15,7 @@ const NewUser=()=>{
         Password:'',
     })
     const [type,setType]=useState('')
+    
     const [typesUser,SetTypesUser] =useState([{"id":1,"name":"Admin"}])
     const [confirmPassword, SetConfirmPassword]=useState('')
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -42,17 +43,26 @@ const NewUser=()=>{
       },[])
     
       const navigate = useNavigate();
-
-      const hundleSubmit =()=>{
-        setIsMatchPassword(user.Password==confirmPassword)
-        if(user.Password!=confirmPassword){
-            window.alert("הסיסאות לא תואמות אחד לשני")
-
+      const validatePassword = (password) => {
+        const regex = /^(?=.*[A-Z])(?=.*\d)(?=.*[a-zA-Z])[A-Za-z\d]{8,12}$/;
+        return regex.test(password);
+    };
+    
+      const hundleSubmit = () => {
+        if (!validatePassword(user.Password)) {
+            window.alert("הסיסמה חייבת לכלול לפחות 8 תווים, לפחות אות גדולה אחת, ספרה אחת, ורק באנגלית.");
+            return;
         }
-        APIService.createUser({"userType":type, "user":user}).then(res=>console.log(res.data))
-        navigate("/")
-
-      }
+        
+        setIsMatchPassword(user.Password === confirmPassword);
+        if (user.Password !== confirmPassword) {
+            window.alert("הסיסמאות לא תואמות אחת לשנייה");
+            return;
+        }
+    
+        APIService.createUser({ "userType": type, "user": user }).then(res => console.log(res.data));
+        navigate("/");
+    };
     return(
         <div style={{backgroundColor: "#90EE90",minHeight: "100vh"}}>
             <div className="container" style={{ display: 'flex', flexDirection: 'column', gap: '20px', marginTop: '20px' }}>

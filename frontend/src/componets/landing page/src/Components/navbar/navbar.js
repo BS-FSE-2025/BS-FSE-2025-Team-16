@@ -3,9 +3,12 @@ import './navbar.css';
 import logo from '../../main-icon.jpg'
 import { Link} from 'react-scroll';
 import { useState,useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+
+
 const Navbar = ({hundleOpenLoginPopup}) => {
     const [loggedInUser, setLoggedInUser] = useState(null);
-
+    const navigate = useNavigate();
     useEffect(() => {
         const savedUser = JSON.parse(localStorage.getItem('loggedInUser'));
         if (savedUser) {
@@ -28,10 +31,12 @@ const Navbar = ({hundleOpenLoginPopup}) => {
             </div>
             {!loggedInUser ? (
                 <>
-                    <button className="register" onClick={hundleOpenLoginPopup}>
+                    <button className="" onClick={hundleOpenLoginPopup}>
                         Login
                     </button>
-                    <button className="login">Sign up</button>
+                    <button className=""onClick={()=>{
+                        navigate("/newUser")
+                    }}>Sign up</button>
                 </>
             ) : (
                 <div className="logged-in">
