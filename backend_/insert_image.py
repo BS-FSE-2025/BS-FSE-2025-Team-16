@@ -32,3 +32,16 @@ update_image(4, '/Users/nadavd/Downloads/Gravel.jpg')  # החלף את הנתי�
 
 # סגירת החיבור
 conn.close()
+
+
+
+
+
+
+
+
+
+
+
+
+

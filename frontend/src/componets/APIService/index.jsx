@@ -20,6 +20,9 @@ class ApiServices
     user(){
         return axios.get(API_URL+'users', {'Access-Control-Allow-Origin': '*'})
     }
+    projects(){
+        return axios.get(API_URL+'projects', {'Access-Control-Allow-Origin': '*'})
+    }
     usersType(){
         return axios.get(API_URL+'usersType', {'Access-Control-Allow-Origin': '*'})
     }
@@ -45,7 +48,7 @@ class ApiServices
             plants: {
                 info: UpdatePlants.info,
                 price: UpdatePlants.price,
-                id: UpdatePlants.plant_id
+                id: UpdatePlants.id
                 
             }
         },  {'Access-Control-Allow-Origin': '*'});
@@ -89,6 +92,13 @@ class ApiServices
     }
     GardenElement(){
         return axios.get(API_URL+'gardenElement', {'Access-Control-Allow-Origin': '*'})
+    }
+    insertItemProject(categorizedItems){
+        return axios.post(API_URL+'insertItemProject',categorizedItems, {'Access-Control-Allow-Origin': '*'})
+    }
+    ProjectDetails(project){
+        console.log({"project":project})
+        return axios.post(API_URL+'project_details',{"project":project}, {'Access-Control-Allow-Origin': '*'})
     }
 }
 

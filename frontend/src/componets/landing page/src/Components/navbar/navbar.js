@@ -1,9 +1,12 @@
 import React from 'react';
 import './navbar.css';
 import logo from '../../main-icon.jpg'
-import { Link} from 'react-scroll';
+import { NavLink } from "react-router-dom";
+import { Link as ScrollLink } from "react-scroll";
 import { useState,useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+
+
 
 
 const Navbar = ({hundleOpenLoginPopup}) => {
@@ -23,10 +26,22 @@ const Navbar = ({hundleOpenLoginPopup}) => {
         <nav className="navbar">
             <img src={logo} alt="Logo" className="logo" />
             <div className="deskTopMenu">
+              {!loggedInUser && (
+                <> 
+               <ScrollLink activeClass='active' to="intro" spy={true} smooth={true} offset={-200} duration={500} className="deskTopMenuListItem">Home</ScrollLink >
+               <ScrollLink activeClass='active' to="aboutUs" spy={true} smooth={true} offset={-90} duration={500}  className="deskTopMenuListItem">About Us</ScrollLink >
+                </>
+              )}
+             {loggedInUser && (
+                <> 
+               <NavLink  to="/CreateProject" className="deskTopMenuListItem"> Create project</NavLink>
+               <NavLink  to="/ProductList" className="deskTopMenuListItem">Product list</NavLink>
+               <NavLink  to="/supplier" className="deskTopMenuListItem"> Supplier info</NavLink>
+               <NavLink  to="/rating" className="deskTopMenuListItem"> Rating</NavLink>
+               </>
+              )}
               
-              <Link activeClass='active' to="intro" spy={true} smooth={true} offset={-200} duration={500} className="deskTopMenuListItem">Home</Link>
-              <Link activeClass='active' to="aboutUs" spy={true} smooth={true} offset={-200} duration={500}  className="deskTopMenuListItem">About Us</Link>
-              <Link to="how-to-use" className="deskTopMenuListItem">How to use ?</Link>
+             
             
             </div>
             {!loggedInUser ? (
@@ -47,6 +62,7 @@ const Navbar = ({hundleOpenLoginPopup}) => {
                             localStorage.removeItem('loggedInUser');
                             setLoggedInUser(null);
                             console.log('User logged out');
+                            navigate('/')
                         }}
                     >
                         Logout

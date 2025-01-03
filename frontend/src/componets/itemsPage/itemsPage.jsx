@@ -19,7 +19,7 @@ const ProductList = () => {
     const [selectedImage, setSelectedImage] = useState(null);
     // סינון רשימה לפי שם וסוג
     const filteredProducts = Products.filter((product) => {
-        const matchesSearch = product.plant_name.toLowerCase().includes(searchTerm.toLowerCase());
+        const matchesSearch = product.name.toLowerCase().includes(searchTerm.toLowerCase());
 
         return matchesSearch;
     });
@@ -38,7 +38,7 @@ const ProductList = () => {
     const handleUpdateProduct = (updatedProduct) => {
         setProducts((prev) =>
             prev.map((product) =>
-                product.plant_id === updatedProduct.plant_id ? updatedProduct : product
+                product.id === updatedProduct.id ? updatedProduct : product
             )
         );
         setShowModal(false); // סגירת החלונית
@@ -87,6 +87,7 @@ const ProductList = () => {
                         }}
                     >
                         {selectedImage ? (
+                            // `data:image/jpeg;base64,${product.img}`
                         <img
                             src={selectedImage}
                             alt="Selected Product"
@@ -122,16 +123,16 @@ const ProductList = () => {
                             <div>
                             {filteredProducts.map((product) => (
                                 <li>
-                                    <div  key={product.plant_id} onClick={() => {
+                                    <div  key={product.id} onClick={() => {
                                     setSelectedProduct(product);
-                                   console.log(product.plant_id)
+                                   console.log(product.id)
                                     if( user.Type==1 || user.Type==3){
                                         setShowModal(true);
                                         setTypeItem(1)
                                     }
                                     
                                 }}>
-                                    <strong>{product.plant_name}</strong> ({product.climate_name}) - ${product.price}<br></br> 
+                                    <strong>{product.name}</strong> ({product.climate_name}) - ${product.price}<br></br> 
                                     {product.info}
                                     </div>
                                     <button onClick={() => handleShowImage(product)}>Show Image</button>
@@ -228,7 +229,7 @@ const Modal = ({ product,setProdouct, onClose, onSave,TypeItem }) => {
     
         setUpdatedProduct((prev) => {
             // עדכון השדה המתאים לפי TypeItem
-            // if (TypeItem === 1 && (name === "plant_name" || name === "plant_price")) {
+            // if (TypeItem === 1 && (name === "name" || name === "plant_price")) {
             //     return { ...prev, [name]: value };
             // } else if (TypeItem === 2 && (name === "name" || name === "price")) {
             //     return { ...prev, [name]: value };
@@ -253,8 +254,8 @@ const Modal = ({ product,setProdouct, onClose, onSave,TypeItem }) => {
                    
                     <input
                         type="text"
-                        name={TypeItem === 1 ? "plant_name" : "name"}
-                        value={TypeItem === 1 ? updatedProduct.plant_name : product.name}
+                        name={TypeItem === 1 ? "name" : "name"}
+                        value={TypeItem === 1 ? updatedProduct.name : product.name}
                         onChange={handleChange}
                     />
                 </label> */}

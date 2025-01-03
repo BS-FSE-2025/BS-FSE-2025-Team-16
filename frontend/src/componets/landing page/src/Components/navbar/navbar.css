@@ -24,7 +24,7 @@
 .deskTopMenu {
     display: flex;
     justify-content: center;  
-    flex-grow: 1; 
+    flex-grow: 1;
     gap: 3rem;  
 }
 

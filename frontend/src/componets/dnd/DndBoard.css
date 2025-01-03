@@ -66,3 +66,70 @@
 .remove-button:hover {
   background-color: darkred;
 }
+.board {
+  display: grid;
+  gap: 2px;
+  padding: 10px;
+  background-color: #f9f9f9;
+  margin: 20px auto; /* למרכז את הלוח */
+  width: 60vw; /* גודל הלוח כ-50% מרוחב המסך */
+  max-width: 600px; /* מגבלת רוחב מקסימלית */
+  height: auto; /* גובה יחושב אוטומטית */
+}
+.purchased-list {
+  width: 200px;
+  background-color: #f0f0f0;
+  padding: 10px;
+  border-left: 1px solid #ddd;
+  box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
+  position: relative;
+  right: 0;
+}
+
+.purchased-list h3,
+.purchased-list h4 {
+  margin: 0 0 10px;
+  text-align: center;
+}
+
+.purchased-list ul {
+  list-style: none;
+  padding: 0;
+}
+
+.purchased-list li {
+  margin: 5px 0;
+  padding: 5px;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 3px;
+}
+.board-item img {
+  width: 100%; /* להתאים לרוחב המשבצת */
+  height: auto; /* לשמור על היחס המקורי של התמונה */
+  max-width: 100px; /* מגבלת גודל לרוחב */
+  max-height: 100px; /* מגבלת גודל לגובה */
+  object-fit: contain; /* לשמור על התמונה במרכז המשבצת */
+  display: block;
+  margin: auto;
+}
+.save-button-container {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.save-button {
+  background-color: #007acc;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s ease;
+}
+
+.save-button:hover {
+  background-color: #005f99;
+}
+
