@@ -20,8 +20,17 @@ class ApiServices
     user(){
         return axios.get(API_URL+'users', {'Access-Control-Allow-Origin': '*'})
     }
+    projects(){
+        return axios.get(API_URL+'projects', {'Access-Control-Allow-Origin': '*'})
+    }
     usersType(){
         return axios.get(API_URL+'usersType', {'Access-Control-Allow-Origin': '*'})
+    }
+    climateType(){
+        return axios.get(API_URL+'climateType', {'Access-Control-Allow-Origin': '*'})
+    }
+    plantsType(){
+        return axios.get(API_URL+'plantsType', {'Access-Control-Allow-Origin': '*'})
     }
     createUser(newUser){
         // console.log(1)
@@ -34,12 +43,12 @@ class ApiServices
         return axios.get(API_URL+'plants', {'Access-Control-Allow-Origin': '*'})
     }
     updateplants(UpdatePlants){
-        // console.log(1)
+        console.log(UpdatePlants.id)
          return axios.post(API_URL+'UpdatePlants', {
             plants: {
-                name: UpdatePlants.plant_name,
-                price: UpdatePlants.plant_price,
-                id: UpdatePlants.plant_id
+                info: UpdatePlants.info,
+                price: UpdatePlants.price,
+                id: UpdatePlants.id
                 
             }
         },  {'Access-Control-Allow-Origin': '*'});
@@ -48,6 +57,31 @@ class ApiServices
 
         
      }
+     updateGardenItem(UpdateGardenElement){
+        // console.log(1)
+         return axios.post(API_URL+'UpdateGardenElement', {
+            garden: {
+                info: UpdateGardenElement.info,
+                price: UpdateGardenElement.price,
+                id: UpdateGardenElement.id
+                
+            }
+        },  {'Access-Control-Allow-Origin': '*'});
+        
+
+
+        
+     }
+
+     NewPlants(newPlants){
+        console.log(newPlants)
+         return axios.post(API_URL+'newPlants', newPlants,  {'Access-Control-Allow-Origin': '*'});
+    }
+    NewELement(newELement){
+        console.log(newELement)
+         return axios.post(API_URL+'newElement', newELement,  {'Access-Control-Allow-Origin': '*'});
+    }
+
      NewProject(newProject){
         console.log(newProject)
          return axios.post(API_URL+'newProject', newProject,  {'Access-Control-Allow-Origin': '*'});
@@ -55,6 +89,16 @@ class ApiServices
     NewReview(newReview){
         console.log(newReview)
          return axios.post(API_URL+'newReview', newReview,  {'Access-Control-Allow-Origin': '*'});
+    }
+    GardenElement(){
+        return axios.get(API_URL+'gardenElement', {'Access-Control-Allow-Origin': '*'})
+    }
+    insertItemProject(categorizedItems){
+        return axios.post(API_URL+'insertItemProject',categorizedItems, {'Access-Control-Allow-Origin': '*'})
+    }
+    ProjectDetails(project){
+        console.log({"project":project})
+        return axios.post(API_URL+'project_details',{"project":project}, {'Access-Control-Allow-Origin': '*'})
     }
 }
 
