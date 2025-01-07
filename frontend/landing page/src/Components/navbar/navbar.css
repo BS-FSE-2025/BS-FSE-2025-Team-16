@@ -1,0 +1,53 @@
+.navbar {
+    height: 5rem;
+    padding-left: 0px;
+    padding-right: 0px;
+    margin: 0 auto;
+    padding: 1rem 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 3;
+    gap: 0;
+    background-color: rgb(25, 78, 3);
+}
+
+.logo {
+    object-fit: cover;
+    height: 3rem;
+    width: 3rem;
+    border-radius: 50%;
+}
+
+.deskTopMenu {
+    display: flex;
+    justify-content: center;  
+    flex-grow: 1; 
+    gap: 3rem;  
+}
+
+.deskTopMenuListItem {
+    cursor: pointer;
+    color: whitesmoke;
+    font-size: larger;
+    text-decoration: none;  /* מוסיף - מבטל קו הדגשה */
+}
+
+.deskTopMenuListItem:hover {
+    color: brown;
+}
+
+button {
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+    font-size: 1rem;
+    margin: 0;
+    margin-left: 10px;
+}
+
+.active {
+    color: brown;
+}
