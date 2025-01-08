@@ -1,0 +1,99 @@
+/* עיצוב כללי לדף */
+.project-container {
+    display: flex;
+    flex-direction: column;
+    height: calc(100vh - 60px);
+    padding: 20px;
+    align-items: center;  /* ממרכז את התוכן לרוחב */
+    justify-content: center;  /* ממרכז את התוכן לגובה */
+    gap: 20px;
+  }
+  
+  /* עיצוב כותרת */
+  .title {
+    color: green;
+    text-align: center;
+  }
+  
+  /* עיצוב כפתור ה-NavLink */
+  .create-button {
+    padding: 10px;
+    font-size: 16px;
+    background-color: green;
+    color: white;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    text-align: center;
+    width: 30%;
+    border-radius: 5px;
+    margin-top: 20px;
+  }
+  
+  .create-button:hover {
+    background-color: brown;
+  }
+  
+  /* עיצוב רשימת הפרויקטים */
+  .project-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    align-items: center;  /* ממרכז את הכרטיסים */
+    width: 100%;
+    max-width: 800px;  /* הגבלת רוחב הרשימה */
+  }
+  
+  /* עיצוב כל פרויקט ככרטיס (לוח) */
+  .project-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 15px;
+    background-color: white;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    width: 100%;  /* פריסת הרוחב 100% */
+    max-width: 600px;  /* מגבלת רוחב הכרטיס */
+    box-sizing: border-box;
+  }
+  
+  /* שם הפרויקט */
+  .project-name {
+    flex-grow: 1;
+    font-size: 18px;
+  }
+  
+  /* עיצוב כפתורי פעולה */
+  .project-actions {
+    display: flex;
+    justify-content: space-between;
+    width: 150px;
+  }
+  
+  .icon-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 24px;
+    padding: 5px;
+    border-radius: 5px;
+  }
+  
+  .delete-button {
+    color: red;
+    margin-left: auto;
+  }
+  
+  .delete-button:hover {
+    background-color: rgba(255, 0, 0, 0.1);
+  }
+  
+  .pdf-button {
+    color: green;
+  }
+  
+  .pdf-button:hover {
+    background-color: rgba(0, 128, 0, 0.1);
+  }

@@ -233,10 +233,6 @@ def newElement():
     return response
 
 
-
-
-
-
 @app.route('/project_details', methods=['POST'])
 @cross_origin()
 def project_details():
@@ -283,7 +279,6 @@ def project_details():
         return jsonify(response)
     finally:
         conn.close()
-
 
 
 # @app.route('/project_details', methods=['POST'])
@@ -502,9 +497,38 @@ def newProject():
     print("Request received:", req)  # בדוק מה התקבל בשרת
 
     sql = f"""
-    INSERT INTO projects (client_id,name, status_id,Budget,Width,Len,climate)
-    VALUES ({req["user"]["Id"]}, '{req["project"]["projectName"]}', 1,  {req["project"]["budget"]}, {req["project"]["width"]}, {req["project"]["length"]}, (SELECT id FROM Climate_type WHERE name='{req["project"]["climate"]}'));
+    INSERT INTO projects (client_id,name, status_id,Budget,Width,Len,climate,inactive)
+    VALUES ({req["user"]["Id"]}, '{req["project"]["projectName"]}', 1,  {req["project"]["budget"]}, {req["project"]["width"]}, {req["project"]["length"]}, (SELECT id FROM Climate_type WHERE name='{req["project"]["climate"]}'),1);
 
+
+    """
+
+    print(sql)
+
+    try:
+        cursor.execute(sql)
+        conn.commit()
+        return {"status": "success", "message": "new Project successfully"}
+    except sqlite3.Error as e:
+        return {"status": "error", "message": str(e)}, 500
+    finally:
+        conn.close()
+
+
+@app.route('/deleteProject', methods=['POST'])
+@cross_origin()
+def deleteProject():
+    conn = sqlite3.connect("PlantPricer.db")
+    cursor = conn.cursor()
+    req = request.json  # הנתונים שמגיעים מהלקוח
+    print("Request received:", req)  # בדוק מה התקבל בשרת
+
+    sql = f"""
+     UPDATE projects
+        SET
+            inactive=0
+        WHERE id = {req["id"]};
+        
 
     """
 
@@ -576,6 +600,7 @@ def insert_details(item, project, detail_id_to_check):
             item["x"],
             item["y"]
         ))
+        print(project["id"])
         conn.commit()
         print({"status": "success", "message": "New item added successfully"})
     except sqlite3.Error as e:

@@ -100,6 +100,9 @@ class ApiServices
         console.log({"project":project})
         return axios.post(API_URL+'project_details',{"project":project}, {'Access-Control-Allow-Origin': '*'})
     }
+    deleteProject(projectid){
+        return axios.post(API_URL+'deleteProject',{"id":projectid}, {'Access-Control-Allow-Origin': '*'})
+    }
 }
 
 export default new ApiServices()

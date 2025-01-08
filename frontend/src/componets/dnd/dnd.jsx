@@ -144,23 +144,16 @@ const DndBoardApp = () => {
     const [sidebarItems, setSidebarItems] = useState([]);
     const [show, setshow] = useState(false);
     const [message, setMessage] = useState("");
-
+    //localStorage.setItem('project', JSON.stringify(loggedInUser));
+// 
     useEffect(() => {
         const savedUser = JSON.parse(localStorage.getItem("loggedInUser"));
+        const savedProject= JSON.parse(localStorage.getItem("project"))
+        console.log(savedProject)
         if (savedUser) {
             setLoggedInUser(savedUser);
-            APIService.projects()
-                .then((res) => {
-                    const userProject = res.data.find(
-                        (project) =>
-                            project.status_id === 1 && project.client_id === savedUser.Id
-                    );
-                    if (userProject) {
-                        setProject(userProject);
-                        setBoardSize({ rows: userProject.Width, cols: userProject.Len });
-                    }
-                })
-                .catch((error) => console.error("Error fetching projects:", error));
+            setProject(savedProject);
+            setBoardSize({ rows: savedProject.Width, cols: savedProject.Len });
         }
 
         const fetchSidebarItems = async () => {
@@ -188,6 +181,8 @@ const DndBoardApp = () => {
 
     useEffect(() => {
         if (project.id) { // בדיקה אם project הוגדר
+            console.log(project.id)
+
             APIService.ProjectDetails(project)
                 .then((res) => {
                     console.log("Project details:", res.data);
@@ -202,6 +197,14 @@ const DndBoardApp = () => {
     
                     setItems(updatedItems); // עדכון items
                     setPurchasedItems(updatedItems); // עדכון Purchased Items
+
+                    console.log("All Items:", updatedItems);
+                    console.log("Filtering by Project ID:", project.id);
+                    console.log(
+                        "Filtered Items:",
+                        updatedItems.filter(res => res.project_id === project.id)
+                    );
+                    console.log({ "project": project });
                 })
                 .catch((error) => console.error("Error fetching project details:", error));
         }

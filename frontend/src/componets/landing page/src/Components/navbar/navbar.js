@@ -34,7 +34,7 @@ const Navbar = ({hundleOpenLoginPopup}) => {
               )}
              {loggedInUser && (
                 <> 
-               <NavLink  to="/CreateProject" className="deskTopMenuListItem"> Create project</NavLink>
+               <NavLink  to="/ProjectManagement" className="deskTopMenuListItem"> Project Management</NavLink>
                <NavLink  to="/ProductList" className="deskTopMenuListItem">Product list</NavLink>
                <NavLink  to="/supplier" className="deskTopMenuListItem"> Supplier info</NavLink>
                <NavLink  to="/rating" className="deskTopMenuListItem"> Rating</NavLink>

@@ -3,6 +3,7 @@ import Navbar from "../landing page/src/Components/navbar/navbar";
 import LoginPopup from "../LoginPopup";
 import ".//create_a_Project.css";
 import APIService from "../APIService";
+import { useNavigate } from "react-router-dom";  // ייבוא useNavigate
 
 function CreateProject() {
   const [show, setShow] = useState(false);
@@ -24,9 +25,14 @@ function CreateProject() {
     length: "",
     climate: "", // שדה שגיאה עבור אקלים
   });
+
+  // יצירת משתנה ניווט
+  const navigate = useNavigate();
+
   useEffect(()=>{
     setUser(JSON.parse(localStorage.getItem('loggedInUser')));
-  },[])
+  },[]);
+
   const validateInput = (name, value) => {
     if (name === "budget" || name === "width" || name === "length") {
       if (!/^\d*\.?\d+$/.test(value) || parseFloat(value) < 0) {
@@ -61,12 +67,18 @@ function CreateProject() {
     if (!Object.values(errors).some((err) => err) && formData.projectName && formData.climate) {
       alert("Form submitted successfully!");
       console.log(formData);
+
+      // שליחת הנתונים ל-API
+      APIService.NewProject({ "user": user, "project": formData });
+
+      // ניווט לדף /projectmanager
+      navigate("/ProjectManagement");
     } else {
       alert("Please fix the errors before submitting.");
     }
+
     console.log(user);
-    console.log(formData)
-    APIService.NewProject({"user":user,"project":formData})
+    console.log(formData);
   };
 
   return (
