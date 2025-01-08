@@ -81,6 +81,7 @@ function DesignersPage() {
                 <LoginPopup isOpen={show} setIsOpen={setshow} />
                 :<></>
               }
+            <h1>Designer Page</h1>
             {selectedDesigner ? (
                 isEditMode ? (
                     <div className="designer-info">

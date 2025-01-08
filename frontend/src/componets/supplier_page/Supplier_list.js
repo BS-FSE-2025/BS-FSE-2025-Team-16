@@ -81,6 +81,7 @@ function SuppliersPage() {
                 <LoginPopup isOpen={show} setIsOpen={setshow} />
                 :<></>
               }
+            <h1>Supplier Page</h1>
             {selectedSupplier ? (
                 isEditMode ? (
                     <div className="supplier-info">

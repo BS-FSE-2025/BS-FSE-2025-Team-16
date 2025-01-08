@@ -42,6 +42,9 @@ class ApiServices
     updateDesigner(data) {
         return axios.post(API_URL + `designers`, data, { 'Access-Control-Allow-Origin': '*' });
     }
+    updateUser(data) {
+        return axios.post(API_URL + `updateUserStatus`, data, { 'Access-Control-Allow-Origin': '*' });
+    }
     plants(){
         return axios.get(API_URL+'plants', {'Access-Control-Allow-Origin': '*'})
     }
