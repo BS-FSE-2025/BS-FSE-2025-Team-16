@@ -29,6 +29,7 @@ function App() {
         <Route path="/CreateProduct" element={<CombinedForm />} />
         <Route path="/designer" element={<DesignersPage />} />
         <Route path="/admin" element={<AdminsPage />} />
+        <Route path="*" element={<LandingPage />} />
 
         {/* <Route path="/LandingPage" element={<LandingPage />} /> */}
       </Routes>

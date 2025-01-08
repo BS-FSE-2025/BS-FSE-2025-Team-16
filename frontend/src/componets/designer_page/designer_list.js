@@ -13,11 +13,15 @@ function DesignersPage() {
     const [user, setUser] = useState({});
 
     useEffect(() => {
+        const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser'));
+        if (!loggedInUser) {
+            window.location.href = '/';
+        } else {
         APIService.user().then(data => {
             console.log(data.data);
             setDesigners((data.data).filter((user) => user.Type === 4));
         });
-        setUser(JSON.parse(localStorage.getItem('loggedInUser')) || {});
+    }
     }, []);
 
     const [show,setshow]=useState(false)

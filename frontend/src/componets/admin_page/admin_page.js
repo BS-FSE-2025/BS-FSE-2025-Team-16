@@ -13,11 +13,16 @@ function AdminsPage() {
     const [user, setUser] = useState({});
 
     useEffect(() => {
-        APIService.user().then(data => {
-            console.log(data.data);
-            setUsers((data.data).filter((user) => user.Type !== 1));
-        });
-        setUser(JSON.parse(localStorage.getItem('loggedInUser')) || {});
+        const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser'));
+        if (!loggedInUser) {
+            window.location.href = '/'; // Redirect to a specific page if not logged in
+        } else {
+            setUser(loggedInUser);
+            APIService.user().then(data => {
+                console.log(data.data);
+                setUsers((data.data).filter((user) => user.Type !== 1));
+            });
+        }
     }, []);
 
     const [show,setshow]=useState(false)
