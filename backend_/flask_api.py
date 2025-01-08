@@ -233,10 +233,6 @@ def newElement():
     return response
 
 
-
-
-
-
 @app.route('/project_details', methods=['POST'])
 @cross_origin()
 def project_details():
@@ -283,7 +279,6 @@ def project_details():
         return jsonify(response)
     finally:
         conn.close()
-
 
 
 # @app.route('/project_details', methods=['POST'])
@@ -533,7 +528,7 @@ def deleteProject():
         SET
             inactive=0
         WHERE id = {req["id"]};
-
+        
 
     """
 
@@ -604,6 +599,7 @@ def insert_details(item, project, detail_id_to_check):
             item["x"],
             item["y"]
         ))
+        print(project["id"])
         conn.commit()
         print({"status": "success", "message": "New item added successfully"})
     except sqlite3.Error as e:
