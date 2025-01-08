@@ -96,6 +96,25 @@ def climateType():
     return json_data
 
 
+@app.route('/projects', methods=['GET'])
+@cross_origin()
+def projects():
+    conn = sqlite3.connect("PlantPricer.db")
+    cursor = conn.cursor()
+
+    # שליפת שמות העמודות אוטומטית
+    cursor.execute("SELECT * FROM projects")
+    columns_names = [description[0] for description in cursor.description]
+
+    # שליפת נתונים
+    rows = cursor.fetchall()
+    # print(rows)
+    # המרת הנתונים ל-JSON
+    json_data = backend.query_to_js(columns_names, rows)
+
+    return json_data
+
+
 @app.route('/newUser', methods=['POST'])
 @cross_origin()
 def newUser():
@@ -214,6 +233,104 @@ def newElement():
     return response
 
 
+
+
+
+
+@app.route('/project_details', methods=['POST'])
+@cross_origin()
+def project_details():
+    req = request.json
+    print(req)
+    conn = sqlite3.connect("PlantPricer.db")
+    cursor = conn.cursor()
+    sql = f"""
+        SELECT 
+            CASE 
+                WHEN project_details.type = 'Plant' THEN plants.img
+                WHEN project_details.type = 'Garden Element' THEN garden_elements.img
+            END AS img,
+            project_details.*
+
+        FROM project_details
+        LEFT JOIN plants
+            ON project_details.item_id = plants.id AND project_details.type = 'Plant'
+        LEFT JOIN garden_elements
+            ON project_details.item_id = garden_elements.element_id AND project_details.type = 'Garden Element'
+        WHERE project_details.project_id = {req["project"]["id"]};
+    """
+
+    try:
+        cursor.execute(sql)
+        columns_names = [description[0] for description in cursor.description]
+
+        rows = cursor.fetchall()
+
+        # Convert the image bytes to base64 strings
+        json_data = []
+        for row in rows:
+            row_dict = dict(zip(columns_names, row))
+            if row_dict.get("img") is not None:
+                # Convert bytes to base64 string
+                row_dict["img"] = base64.b64encode(row_dict["img"]).decode('utf-8')
+            json_data.append(row_dict)
+
+        return jsonify({"status": "success", "data": json_data})
+
+    except sqlite3.Error as e:
+        print(f"Database error: {e}")
+        response = {"status": "error", "message": str(e)}
+        return jsonify(response)
+    finally:
+        conn.close()
+
+
+
+# @app.route('/project_details', methods=['POST'])
+# @cross_origin()
+# def project_details():
+#     req = request.json
+#     print(req)
+#     conn = sqlite3.connect("PlantPricer.db")
+#     cursor = conn.cursor()
+#     sql = f"""
+#             SELECT
+#     CASE
+#         WHEN project_details.type = 'Plant' THEN plants.img
+#         WHEN project_details.type = 'Garden Element' THEN garden_elements.img
+#     END AS img,
+#     project_details.*
+#
+#     FROM project_details
+#     LEFT JOIN plants
+#         ON project_details.item_id = plants.id AND project_details.type = 'Plant'
+#     LEFT JOIN garden_elements
+#         ON project_details.item_id = garden_elements.element_id AND project_details.type = 'Garden Element'
+#     WHERE project_details.project_id =   {req["project"]["id"]};
+#
+#        """
+#
+#     # print(sql)
+#     try:
+#         cursor.execute(sql)
+#         columns_names = [description[0] for description in cursor.description]
+#
+#         # שליפת נתונים
+#         rows = cursor.fetchall()
+#         # print(rows)
+#         # המרת הנתונים ל-JSON
+#         json_data = backend.query_to_js(columns_names, rows)
+#         # print(json_data)
+#         return {"1":json_data}
+#     except sqlite3.Error as e:
+#         print(f"Database error: {e}")
+#         response = {"status": "error", "message": str(e)}
+#     finally:
+#         conn.close()
+#
+#     return response
+
+
 @app.route('/plants', methods=['GET'])
 @cross_origin()
 def plants():
@@ -221,12 +338,12 @@ def plants():
     cursor = conn.cursor()
 
     sql = """SELECT 
-    Plants.plant_id AS plant_id,
-    Plants.name AS plant_name,
+    Plants.id,
+    Plants.name,
     Plants.type AS plant_type,
     Plants.info AS info,
     Plants.img AS img,
-    Plants.price AS plant_price,
+    Plants.price,
     Climate_type.name AS climate_name
     FROM 
         Plants
@@ -287,7 +404,7 @@ def UpdateGardenElement():
     sql = f"""
         UPDATE garden_elements
         SET 
-             name ='{req["garden"]["name"]}',
+             info ='{req["garden"]["info"]}',
             price = {req["garden"]["price"]}
          WHERE element_id =  {req["garden"]["id"]};
        """
@@ -323,13 +440,13 @@ def UpdatePlants():
 
     conn = sqlite3.connect("PlantPricer.db")
     cursor = conn.cursor()
-
+    print(req)
     sql = f"""
         UPDATE plants
         SET 
-             name ='{req["plants"]["name"]}',
+             info ='{req["plants"]["info"]}',
             price = {req["plants"]["price"]}
-         WHERE plant_id =  {req["plants"]["id"]};
+         WHERE id =  {req["plants"]["id"]};
        """
 
     # print(sql)
@@ -453,6 +570,141 @@ def newReview():
         return {"status": "error", "message": str(e)}, 500
     finally:
         conn.close()
+
+
+# def insert_details(item,project,detail_id_to_check):
+def insert_details(item, project, detail_id_to_check):
+    print((item["id"]))
+    conn = sqlite3.connect("PlantPricer.db")
+    cursor = conn.cursor()
+
+    # בדיקת קיום `detail_id_to_check` בטבלה
+    check_sql = "SELECT 1 FROM project_details WHERE detail_id = ?"
+    cursor.execute(check_sql, (detail_id_to_check,))
+    if cursor.fetchone():
+        print({"status": "error", "message": f"detail_id {detail_id_to_check} already exists"}, 400)
+        conn.close()
+        return
+
+    # הוספת פריט חדש
+    insert_sql = """
+        INSERT INTO project_details
+        (detail_id, project_id, item_id, itemName, total_price, type, x, y)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?);
+    """
+    try:
+        cursor.execute(insert_sql, (
+            detail_id_to_check,
+            project["id"],
+            item["id"],
+            item["name"],  # הנחה ש-name הוא מחרוזת ולא מספר
+            item["price"],
+            item["type"],
+            item["x"],
+            item["y"]
+        ))
+        conn.commit()
+        print({"status": "success", "message": "New item added successfully"})
+    except sqlite3.Error as e:
+        print({"status": "error", "message": str(e)}, 500)
+    finally:
+        conn.close()
+
+
+def delete_item(delete_id):
+    delete_sql = f"""
+        DELETE FROM project_details
+        WHERE detail_id = {delete_id}; 
+    """
+    conn = sqlite3.connect("PlantPricer.db")
+    cursor = conn.cursor()
+    try:
+        cursor.execute(delete_sql)
+        conn.commit()
+        print({"status": "success", "message": "item delete successfully"})
+
+    except sqlite3.Error as e:
+        print({"status": "error", "message": str(e)}, 500)
+    finally:
+        conn.close()
+
+
+@app.route('/insertItemProject', methods=['POST'])
+@cross_origin()
+def insertItemProject():
+    req = request.get_json()
+    # print("plant:",req["Plant"][0])
+    # print("GardenElement:", req["Garden Element"])
+    # print("project:", req["project"])
+    project = req["project"]
+    plant = req["Plant"]
+    removeList = req["removedItems"]
+
+    conn = sqlite3.connect("PlantPricer.db")
+    cursor = conn.cursor()
+
+    # sql = f"""
+    #   INSERT INTO project_details
+    #     (detail_id, project_id, item_id, itemName, total_price, type)
+    #     VALUES (1, 1, 1, '1', 1, '1');
+    #    """
+
+    # print(sql)
+    try:
+
+        # cursor.execute(sql)
+        # conn.commit()
+        sql = """SELECT * from project_details"""
+        # שליפת שמות העמודות אוטומטית
+        cursor.execute(sql)
+        columns_names = [description[0] for description in cursor.description]
+
+        # # שליפת נתונים
+        rows = cursor.fetchall()
+        print(rows)
+
+        # # המרת הנתונים ל-JSON
+        json_data = backend.query_to_js(columns_names, rows)
+        print(json_data)
+        if len(req["Garden Element"]) != 0:
+            for i in range(len(req["Garden Element"])):
+
+                detail_id_to_check = req["Garden Element"][i]["uniqueId"]
+                exists = any(detail['detail_id'] == detail_id_to_check for detail in json_data)
+                if exists:
+                    print(f"detail_id {detail_id_to_check} קיים ברשימה.")
+                    # update_detail()
+                else:
+                    insert_details(req["Garden Element"][i], project, detail_id_to_check)
+                    print(f"detail_id {detail_id_to_check} לא קיים ברשימה.")
+
+        if len(req["Plant"]) != 0:
+            for i in range(len(req["Plant"])):
+
+                detail_id_to_check = plant[i]["uniqueId"]
+                exists = any(detail['detail_id'] == detail_id_to_check for detail in json_data)
+                if exists:
+                    print(f"detail_id {detail_id_to_check} קיים ברשימה.")
+                    # update_detail()
+                else:
+                    insert_details(req["Plant"][i], project, detail_id_to_check)
+                    # print(plant[i])
+                    print(f"detail_id {detail_id_to_check} לא קיים ברשימה.")
+        if len(removeList) != 0:
+            for i in range(len(removeList)):
+                detail_id_to_check = removeList[i]["uniqueId"]
+                exists = any(detail['detail_id'] == detail_id_to_check for detail in json_data)
+                if (exists):
+                    delete_item(detail_id_to_check)
+                    print("item is delete")
+        response = {"status": "success", "message": " added successfully", "new_elements": json_data}
+    except sqlite3.Error as e:
+        print(f"Database error: {e}")
+        response = {"status": "error", "message": str(e)}
+    finally:
+        conn.close()
+
+    return response
 
 
 if __name__ == "__main__":
