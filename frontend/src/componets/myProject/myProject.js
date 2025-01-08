@@ -13,19 +13,29 @@ function ProjectManagement() {
     setShow(!show);
   };
 
-  useEffect(() => {
+  const fetchProjects = () => {
     APIService.projects()
       .then((res) => {
-        setProjects(res.data);
+        setProjects(res.data.filter((project) => project.inactive === 1));
       })
       .catch((error) => {
         console.error("Error fetching projects:", error);
       });
+  };
+
+  useEffect(() => {
+    fetchProjects();  // Fetch projects on component mount
   }, []);
 
   const handleDeleteProject = (projectId) => {
     console.log(`Delete project with ID: ${projectId}`);
-    // Add deletion logic here
+    APIService.deleteProject(projectId)
+      .then(() => {
+        fetchProjects();  // Refresh project list after deletion
+      })
+      .catch((error) => {
+        console.error("Error deleting project:", error);
+      });
   };
 
   const handleDownloadPDF = (projectId) => {
@@ -37,12 +47,22 @@ function ProjectManagement() {
     <div>
       <Navbar handleOpenLoginPopup={handleOpenLoginPopup} />
       <div className="project-container">
-        <h1 className="title">Project Management</h1>
+        <div className="header">
+          <h1 className="title">Project Management</h1>
+        </div>
         <div className="project-list">
           {projects.map((project) => (
             <div key={project.id} className="project-row">
               <span className="project-name">{project.name}</span>
               <div className="project-actions">
+              <button
+            className="icon-button home-button"
+            onClick={() => console.log("Go to garden")}
+            style={{ fontSize: "24px" }}
+          >
+            🏡
+          </button>
+                
                 <button
                   className="icon-button pdf-button"
                   onClick={() => handleDownloadPDF(project.id)}
