@@ -13,6 +13,8 @@ import RatingPage from './componets/ratingpage/rating';
 import CreateProject from './componets/createProject/create_a_Project';
 import CombinedForm from './componets/newProduct/newProduct'
 import ProjectManagement from './componets/myProject/myProject.js'
+import DesignersPage from './componets/designer_page/designer_list';
+import AdminsPage from './componets/admin_page/admin_page';
 function App() {
   return (
     <div>
@@ -27,7 +29,9 @@ function App() {
         <Route path="/CreateProject" element={<CreateProject />} />
         <Route path="/CreateProduct" element={<CombinedForm />} />
         <Route path="/ProjectManagement" element={<ProjectManagement />} />
-
+        <Route path="/designer" element={<DesignersPage />} />
+        <Route path="/admin" element={<AdminsPage />} />
+        <Route path="*" element={<LandingPage />} />
 
         {/* <Route path="/LandingPage" element={<LandingPage />} /> */}
       </Routes>

@@ -626,6 +626,63 @@ def delete_item(delete_id):
         conn.close()
 
 
+@app.route('/designers', methods=['POST'])
+@cross_origin()
+def update_designer():
+    conn = sqlite3.connect("PlantPricer.db")
+    cursor = conn.cursor()
+    req = request.json  # הנתונים שמגיעים מהלקוח
+    print("Request received:", req)  # בדוק מה התקבל בשרת
+
+    # if 'id' not in req:
+    #     return {"status": "error", "message": "Missing 'id' in request data"}, 400
+
+    sql = f"""
+        UPDATE users
+        SET
+            info = '{req["info"]}'
+        WHERE id = {req["id"]};
+
+    """
+    # print(sql)
+    try:
+        cursor.execute(sql)
+        conn.commit()
+        return {"status": "success", "message": "Designer updated successfully"}
+    except sqlite3.Error as e:
+        return {"status": "error", "message": str(e)}, 500
+    finally:
+        conn.close()
+
+
+@app.route('/updateUserStatus', methods=['POST'])
+@cross_origin()
+def update_user_status():
+    conn = sqlite3.connect("PlantPricer.db")
+    cursor = conn.cursor()
+    req = request.json  # הנתונים שמגיעים מהלקוח
+    print("Request received:", req)  # בדוק מה התקבל בשרת
+
+    # if 'id' not in req:
+    #     return {"status": "error", "message": "Missing 'id' in request data"}, 400
+    print(req)
+    sql = f"""
+        UPDATE users
+        SET
+            inactive = {req["isActive"]}
+        WHERE id = {req["id"]};
+
+    """
+    # print(sql)
+    try:
+        cursor.execute(sql)
+        conn.commit()
+        return {"status": "success", "message": "User updated successfully"}
+    except sqlite3.Error as e:
+        return {"status": "error", "message": str(e)}, 500
+    finally:
+        conn.close()
+
 @app.route('/insertItemProject', methods=['POST'])
 @cross_origin()
 def insertItemProject():
