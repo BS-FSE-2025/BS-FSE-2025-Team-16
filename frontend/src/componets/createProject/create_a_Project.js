@@ -27,6 +27,15 @@ function CreateProject() {
   useEffect(()=>{
     setUser(JSON.parse(localStorage.getItem('loggedInUser')));
   },[])
+  const APIService = {
+    GetReviews: async function() {
+        const response = await fetch('/api/reviews');
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return await response.json();
+    },
+  };
   const validateInput = (name, value) => {
     if (name === "budget" || name === "width" || name === "length") {
       if (!/^\d*\.?\d+$/.test(value) || parseFloat(value) < 0) {

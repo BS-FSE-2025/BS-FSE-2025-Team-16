@@ -12,6 +12,8 @@ import ProductList from './componets/itemsPage/itemsPage';
 import RatingPage from './componets/ratingpage/rating';
 import CreateProject from './componets/createProject/create_a_Project';
 import CombinedForm from './componets/newProduct/newProduct'
+import AboutUs from './componets/Odot/AboutUs'
+
 function App() {
   return (
     <div>
@@ -25,6 +27,7 @@ function App() {
         <Route path="/rating" element={<RatingPage />} />
         <Route path="/CreateProject" element={<CreateProject />} />
         <Route path="/CreateProduct" element={<CombinedForm />} />
+        <Route path="/AboutUs" element={<AboutUs/>}/>
 
         {/* <Route path="/LandingPage" element={<LandingPage />} /> */}
       </Routes>

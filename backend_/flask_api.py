@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for, session, flash, jsonify, after_this_request
 from flask_cors import CORS, cross_origin
-from flask_session import Session
+
 from flask_sqlalchemy import SQLAlchemy
 
 from flask_restful import Api
@@ -426,11 +426,37 @@ def newReview():
         return {"status": "error", "message": str(e)}, 500
     finally:
         conn.close()
+@app.route('/review', methods=['GET'])
+@cross_origin()
+def review():
+    conn = sqlite3.connect("PlantPricer.db")
+    cursor = conn.cursor()
 
+    # שליפת שמות העמודות אוטומטית
+    cursor.execute("""SELECT 
+    rating.id,
+    rating.review,
+    rating.created_at,
+    rating.stars,
+	users.Name 
+    FROM 
+    rating
+    JOIN 
+    users
+    ON 
+    rating.user_id = users.Id;""")
+    columns_names = [description[0] for description in cursor.description]
 
+    # שליפת נתונים
+    rows = cursor.fetchall()
+    # print(rows)
+    # המרת הנתונים ל-JSON
+    json_data = backend.query_to_js(columns_names, rows)
+
+    return json_data
 if __name__ == "__main__":
     # db.create_all()
     # app.run(host='10.100.102.17', debug=True)
     # app.run(host='172.20.10.2', debug=True)
 
-    app.run(host="0.0.0.0", port=5001, debug=True)
+    app.run(host="0.0.0.0", port=5002, debug=True)

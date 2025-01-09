@@ -6,7 +6,7 @@ import axios from "axios";
 //const API_URL = "http://10.100.102.17:5000/"
 // "http://172.19.42.37:5000/"
 // "http://172.19.34.128:5000"
-const API_URL = "http://127.0.0.1:5001/"
+const API_URL = "http://127.0.0.1:5002/"
 class ApiServices
 {
     
@@ -53,6 +53,10 @@ class ApiServices
 
 
         
+     }
+     rating(){
+
+        return axios.get(API_URL+'review', {'Access-Control-Allow-Origin': '*'})
      }
      updateGardenItem(UpdateGardenElement){
         // console.log(1)
