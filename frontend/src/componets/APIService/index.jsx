@@ -103,6 +103,12 @@ class ApiServices
     deleteProject(projectid){
         return axios.post(API_URL+'deleteProject',{"id":projectid}, {'Access-Control-Allow-Origin': '*'})
     }
+    updateDesigner(data) {
+        return axios.post(API_URL + `designers`, data, { 'Access-Control-Allow-Origin': '*' });
+    }
+    updateUser(data) {
+        return axios.post(API_URL + `updateUserStatus`, data, { 'Access-Control-Allow-Origin': '*' });
+    }
 }
 
 export default new ApiServices()
