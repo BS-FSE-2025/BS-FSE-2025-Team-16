@@ -36,7 +36,7 @@ function LoginPopup({isOpen,setIsOpen}){
       })
       const submit=()=>{
         console.log(users)
-        console.log(users.some(worker=>worker.Name==user1.name && worker.Password==user1.password))
+        console.log(users.some(worker=>worker.Name.toUpperCase()==user1.name.toUpperCase() && worker.Password==user1.password))
         if(users.some(worker=>worker.Name==user1.name && worker.Password==user1.password)){
           const loggedInUser = users.find(worker => worker.Name === user1.name && worker.Password === user1.password);
 

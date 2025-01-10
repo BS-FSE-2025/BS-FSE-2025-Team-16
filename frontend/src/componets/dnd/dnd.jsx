@@ -7,6 +7,7 @@ import "./DndBoard.css";
 import APIService from "../APIService";
 import Navbar from "../landing page/src/Components/navbar/navbar";
 import LoginPopup from "../LoginPopup";
+import html2canvas from "html2canvas"; // ייבוא הספרייה לצילום מסך
 
 const ITEM_TYPE = "ITEM";
 const nanoid = customAlphabet('1234567890', 10); // Creates unique numerical IDs
@@ -144,42 +145,69 @@ const DndBoardApp = () => {
     const [sidebarItems, setSidebarItems] = useState([]);
     const [show, setshow] = useState(false);
     const [message, setMessage] = useState("");
-    //localStorage.setItem('project', JSON.stringify(loggedInUser));
-// 
-    useEffect(() => {
-        const savedUser = JSON.parse(localStorage.getItem("loggedInUser"));
-        const savedProject= JSON.parse(localStorage.getItem("project"))
-        console.log(savedProject)
-        if (savedUser) {
-            setLoggedInUser(savedUser);
-            setProject(savedProject);
-            setBoardSize({ rows: savedProject.Width, cols: savedProject.Len });
-        }
 
-        const fetchSidebarItems = async () => {
+    useEffect(() => {
+        const initialize = async () => {
+            const savedUser = JSON.parse(localStorage.getItem("loggedInUser"));
+            if (!savedUser) {
+                window.location.href = '/';
+                return;
+            }
+    
             try {
-                const plantsResponse = await APIService.plants();
-                const gardenElementsResponse = await APIService.GardenElement();
-                const plants = plantsResponse.data.map((plant) => ({
-                    ...plant,
-                    type: "Plant",
-                    uniqueId: parseInt(nanoid()),
-                }));
-                const gardenElements = gardenElementsResponse.data.map((element) => ({
-                    ...element,
-                    type: "Garden Element",
-                    uniqueId: parseInt(nanoid()),
-                }));
-                setSidebarItems([...plants, ...gardenElements]);
+                // בדיקת פרויקטים בשרת
+                const projectsResponse = await APIService.projects();
+                if (projectsResponse.data.filter((project) => project.inactive === 1 && project.client_id==savedUser.Id).length === 0) {
+                    window.location.href = '/';
+                    return;
+                }
+    
+                // בדיקת פרויקט שמור ב-localStorage
+                const savedProject = JSON.parse(localStorage.getItem("project"));
+                console.log("Saved Project:", savedProject);
+    
+                if (savedUser) {
+                    setLoggedInUser(savedUser);
+    
+                    if (savedProject) {
+                        setProject(savedProject);
+                        setBoardSize({ rows: savedProject.Width, cols: savedProject.Len });
+                    }
+                }
+    
+                // הבאת פריטים לסרגל הצד
+                const fetchSidebarItems = async () => {
+                    try {
+                        const plantsResponse = await APIService.plants();
+                        const gardenElementsResponse = await APIService.GardenElement();
+                        const plants = plantsResponse.data.map((plant) => ({
+                            ...plant,
+                            type: "Plant",
+                            uniqueId: parseInt(nanoid()),
+                        }));
+                        const gardenElements = gardenElementsResponse.data.map((element) => ({
+                            ...element,
+                            type: "Garden Element",
+                            uniqueId: parseInt(nanoid()),
+                        }));
+                        setSidebarItems([...plants, ...gardenElements]);
+                    } catch (error) {
+                        console.error("Error fetching sidebar items:", error);
+                    }
+                };
+    
+                await fetchSidebarItems(); // קריאה לפונקציה שהביאה פריטים
             } catch (error) {
-                console.error("Error fetching sidebar items:", error);
+                console.error("Error during initialization:", error);
             }
         };
-
-        fetchSidebarItems();
+    
+        initialize(); // קריאה לפונקציה
     }, []);
+    
 
     useEffect(() => {
+
         if (project.id) { // בדיקה אם project הוגדר
             console.log(project.id)
 
@@ -198,24 +226,60 @@ const DndBoardApp = () => {
                     setItems(updatedItems); // עדכון items
                     setPurchasedItems(updatedItems); // עדכון Purchased Items
 
-                    console.log("All Items:", updatedItems);
-                    console.log("Filtering by Project ID:", project.id);
-                    console.log(
-                        "Filtered Items:",
-                        updatedItems.filter(res => res.project_id === project.id)
-                    );
-                    console.log({ "project": project });
+
                 })
                 .catch((error) => console.error("Error fetching project details:", error));
         }
     }, [project]); // פועל בכל פעם ש-project משתנה
 
+
     const handleDrop = (item, x, y) => {
+        // בדיקה אם כבר קיים פריט עם אותן קורדינטות
+        const isCellOccupied = items.some(existingItem => existingItem.x === x && existingItem.y === y);
+        if (isCellOccupied) {
+            showMessage("Cell is already occupied!"); // הצגת הודעה למשתמש
+            return; // עצירה אם המשבצת תפוסה
+        }
+    
+        // יצירת פריט חדש עם מזהה ייחודי
         const uniqueId = parseInt(nanoid());
         const newItem = { ...item, uniqueId, x, y };
-        setItems((prevItems) => [...prevItems, newItem]);
-        setPurchasedItems((prevPurchased) => [...prevPurchased, newItem]);
+    
+        // הוספת הפריט החדש
+        setItems((prevItems) => {
+            const updatedItems = [...prevItems, newItem];
+    
+            // בדיקה אם יש יותר מפריט אחד עם אותן קורדינטות
+            const itemsWithSameCoordinates = updatedItems.filter(existingItem => existingItem.x === x && existingItem.y === y);
+            if (itemsWithSameCoordinates.length > 1) {
+                showMessage("Cell is already occupied!");
+                // שמירה על הפריט האחרון בלבד
+                return updatedItems.filter(existingItem => existingItem.uniqueId !== uniqueId);
+                 
+            }
+    
+            return updatedItems;
+        });
+    
+        setPurchasedItems((prevPurchased) => {
+            const updatedPurchased = [...prevPurchased, newItem];
+    
+            // בדיקה אם יש יותר מפריט אחד עם אותן קורדינטות
+            const itemsWithSameCoordinates = updatedPurchased.filter(existingItem => existingItem.x === x && existingItem.y === y);
+            if (itemsWithSameCoordinates.length > 1) {
+                showMessage("Cell is already occupied!");
+                // שמירה על הפריט האחרון בלבד
+                return updatedPurchased.filter(existingItem => existingItem.uniqueId !== uniqueId);
+            }
+    
+            return updatedPurchased;
+        });
+    
+        console.log("Added new item:", newItem);
     };
+    
+    
+    
 
     const handleRemoveItem = (uniqueId) => {
         setItems((prevItems) => prevItems.filter((item) => item.uniqueId !== uniqueId));
@@ -237,7 +301,7 @@ const DndBoardApp = () => {
         setshow(!show);
     };
 
-    const handleSave = () => {
+    const handleSave = async () => {
         console.log("Save button clicked");
         const categorizedItems = items.reduce(
             (acc, item) => {
@@ -249,7 +313,39 @@ const DndBoardApp = () => {
         );
         console.log("Categorized Items:", categorizedItems);
         APIService.insertItemProject(categorizedItems);
+        const boardElement = document.querySelector(".board"); // בוחר את הלוח
+        if (boardElement) {
+            try {
+                const canvas = await html2canvas(boardElement); // יצירת קנבס מהאלמנט
+                const base64Image = canvas.toDataURL("image/png"); // המרה ל-base64
+    
+                // console.log("Base64 Image String:", base64Image); // הדפסת המחרוזת ל-console
+                APIService.InsertImgToProject({"img":base64Image,"id":project.id})
+                // כאן ניתן לשלוח את המחרוזת לשרת Python
+                // sendToPython(base64Image);
+            } catch (error) {
+                console.error("Error capturing screenshot:", error);
+            }
+        }
     };
+  
+    // const handleFinish = async () => {
+    //     const boardElement = document.querySelector(".board"); // בוחר את הלוח
+    //     if (boardElement) {
+    //         try {
+    //             const canvas = await html2canvas(boardElement); // יצירת קנבס מהאלמנט
+    //             const base64Image = canvas.toDataURL("image/png"); // המרה ל-base64
+    
+    //             // console.log("Base64 Image String:", base64Image); // הדפסת המחרוזת ל-console
+    //             APIService.InsertImgToProject({"img":base64Image,"id":project.id})
+    //             // כאן ניתן לשלוח את המחרוזת לשרת Python
+    //             // sendToPython(base64Image);
+    //         } catch (error) {
+    //             console.error("Error capturing screenshot:", error);
+    //         }
+    //     }
+    // };
+    
 
     return (
         <div>
@@ -274,6 +370,9 @@ const DndBoardApp = () => {
                         <button className="save-button" onClick={handleSave}>
                             Save
                         </button>
+                        {/* <button className="finish-button" onClick={handleFinish}>
+                            Finish
+                        </button> */}
                     </div>
                     <PurchasedList purchasedItems={purchasedItems} onRemove={handleRemoveItem} />
                 </div>
@@ -283,3 +382,7 @@ const DndBoardApp = () => {
 };
 
 export default DndBoardApp;
+
+    
+
+
