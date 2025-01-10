@@ -1,10 +1,10 @@
-
 import React, { useEffect, useState } from "react";
 import Navbar from "../landing page/src/Components/navbar/navbar";
 import LoginPopup from "../LoginPopup";
 import "../myProject/myProject.css";
 import APIService from "../APIService";
-import { NavLink,useNavigate } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
+import jsPDF from "jspdf";
 
 function ProjectManagement() {
   const [projects, setProjects] = useState([]);
@@ -55,9 +55,27 @@ function ProjectManagement() {
   };
 
   const handleDownloadPDF = (projectId) => {
-    console.log(`Download PDF for project ID: ${projectId}`);
-    // Add PDF download logic here
+    const selectedProject = projects.find((project) => project.id === projectId);
+
+    if (!selectedProject) {
+      alert("Project not found!");
+      return;
+    }
+
+    const doc = new jsPDF();
+    doc.setFontSize(20);
+    doc.text("Project Details", 10, 10);
+
+    doc.setFontSize(12);
+    doc.text(`Project Name: ${selectedProject.name}`, 10, 30);
+    doc.text(`Budget: ${selectedProject.Budget}`, 10, 40);
+    doc.text(`Width: ${selectedProject.Width}`, 10, 50);
+    doc.text(`Length: ${selectedProject.Len}`, 10, 60);
+    doc.text(`Climate: ${selectedProject.Climate}`, 10, 70);
+
+    doc.save(`Project_${selectedProject.id}.pdf`);
   };
+
 
   return (
     <div>

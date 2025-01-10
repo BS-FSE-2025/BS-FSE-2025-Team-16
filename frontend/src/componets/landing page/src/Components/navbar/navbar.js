@@ -36,11 +36,16 @@ const Navbar = ({hundleOpenLoginPopup}) => {
              {loggedInUser && (
                 <> 
                 {loggedInUser &&
+                (loggedInUser.Type === 1) &&(
+               <NavLink  to="/admin" className="deskTopMenuListItem"> Admin page</NavLink>
+                )}
+                {loggedInUser &&
                 (loggedInUser.Type !== 4) &&(
                <NavLink  to="/ProjectManagement" className="deskTopMenuListItem"> Project Management</NavLink>
                 )}
                <NavLink  to="/ProductList" className="deskTopMenuListItem">Product list</NavLink>
                <NavLink  to="/supplier" className="deskTopMenuListItem"> Supplier info</NavLink>
+               <NavLink  to="/designer" className="deskTopMenuListItem"> Designers Page</NavLink>
                {loggedInUser &&
                 (loggedInUser.Type !== 1) &&(
                <NavLink  to="/rating" className="deskTopMenuListItem"> Rating</NavLink>
