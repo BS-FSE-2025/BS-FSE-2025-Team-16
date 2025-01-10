@@ -3,13 +3,13 @@ import Navbar from "../landing page/src/Components/navbar/navbar";
 import LoginPopup from "../LoginPopup";
 import "../myProject/myProject.css";
 import APIService from "../APIService";
-import { NavLink, useNavigate } from "react-router-dom";
+import { NavLink,useNavigate } from "react-router-dom";
 import jsPDF from "jspdf";
-
 function ProjectManagement() {
   const [projects, setProjects] = useState([]);
   const [show, setShow] = useState(false);
   const [loggedInUser, setLoggedInUser] = useState(null);
+  const [ProjectDetails,setProjectDetails] =useState([])
   const [len, setlen] = useState(0);
   const handleOpenLoginPopup = () => {
     setShow(!show);
@@ -54,27 +54,68 @@ function ProjectManagement() {
       });
   };
 
-  const handleDownloadPDF = (projectId) => {
-    const selectedProject = projects.find((project) => project.id === projectId);
 
+
+
+  const handleDownloadPDF = async (projectId) => {
+    const selectedProject = projects.find((project) => project.id === projectId);
+  
     if (!selectedProject) {
       alert("Project not found!");
       return;
     }
-
-    const doc = new jsPDF();
-    doc.setFontSize(20);
-    doc.text("Project Details", 10, 10);
-
-    doc.setFontSize(12);
-    doc.text(`Project Name: ${selectedProject.name}`, 10, 30);
-    doc.text(`Budget: ${selectedProject.Budget}`, 10, 40);
-    doc.text(`Width: ${selectedProject.Width}`, 10, 50);
-    doc.text(`Length: ${selectedProject.Len}`, 10, 60);
-    doc.text(`Climate: ${selectedProject.Climate}`, 10, 70);
-
-    doc.save(`Project_${selectedProject.id}.pdf`);
+  
+    try {
+      // שליפת פרטי הפרויקט
+      const res = await APIService.ProjectDetails(selectedProject);
+      const projectDetails = res.data["data"];
+      
+      // יצירת קובץ PDF
+      const doc = new jsPDF();
+      doc.setFontSize(20);
+      doc.text("Project Details", 10, 10);
+  
+      doc.setFontSize(12);
+      doc.text(`Project Name: ${selectedProject.name}`, 10, 30);
+      doc.text(`Budget: ${selectedProject.Budget}`, 10, 40);
+      doc.text(`Width: ${selectedProject.Width}`, 10, 50);
+      doc.text(`Length: ${selectedProject.Len}`, 10, 60);
+      doc.text(`Climate: ${selectedProject.Climate}`, 10, 70);
+      
+      doc.setFontSize(16);
+      doc.setFont("helvetica", "bold");
+      doc.text(`Price Quote`, 10, 90);
+  
+      // הוספת פרטי הפריטים
+      doc.setFontSize(12);
+      doc.setFont("helvetica", "normal");
+      let yPosition = 100; // מיקום התחלתי בשורת Y
+      projectDetails.forEach((detail) => {
+        doc.text(`${detail.itemName}: $${detail.total_price}`, 10, yPosition);
+        yPosition += 10; // הזזת השורה הבאה כלפי מטה
+      });
+  
+      // הוספת תמונה, אם קיימת
+      if (selectedProject.img) {
+        const imgX = 10; // מיקום אופקי
+        const imgY = yPosition + 10; // מיקום אנכי מתחת לרשימה
+        const imgWidth = 50; // רוחב התמונה
+        const imgHeight = 50; // גובה התמונה
+  
+        doc.addImage(selectedProject.img, 'JPEG', imgX, imgY, imgWidth, imgHeight);
+      }
+  
+      // שמירת הקובץ
+      doc.save(`Project_${selectedProject.id}.pdf`);
+    } catch (error) {
+      console.error("Error generating PDF:", error);
+      alert("Failed to generate PDF. Please try again later.");
+    }
   };
+  
+  
+
+
 
 
   return (
