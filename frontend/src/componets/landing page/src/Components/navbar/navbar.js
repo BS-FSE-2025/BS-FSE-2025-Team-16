@@ -9,6 +9,7 @@ import { useNavigate } from 'react-router-dom';
 
 
 
+
 const Navbar = ({hundleOpenLoginPopup}) => {
     const [loggedInUser, setLoggedInUser] = useState(null);
     const navigate = useNavigate();
@@ -34,10 +35,16 @@ const Navbar = ({hundleOpenLoginPopup}) => {
               )}
              {loggedInUser && (
                 <> 
-               <NavLink  to="/CreateProject" className="deskTopMenuListItem"> Create project</NavLink>
+                {loggedInUser &&
+                (loggedInUser.Type !== 4) &&(
+               <NavLink  to="/ProjectManagement" className="deskTopMenuListItem"> Project Management</NavLink>
+                )}
                <NavLink  to="/ProductList" className="deskTopMenuListItem">Product list</NavLink>
                <NavLink  to="/supplier" className="deskTopMenuListItem"> Supplier info</NavLink>
+               {loggedInUser &&
+                (loggedInUser.Type !== 1) &&(
                <NavLink  to="/rating" className="deskTopMenuListItem"> Rating</NavLink>
+                )}
                </>
               )}
               

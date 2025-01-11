@@ -29,6 +29,7 @@ function RatingPage() {
     console.log(user)
     APIService.NewReview({"rating":rating,"feedback":feedback, "id":user.Id})
     // You could reset the form or show a success message here
+    window.location.reload()
   };
 
   return (

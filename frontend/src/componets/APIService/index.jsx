@@ -106,6 +106,22 @@ class ApiServices
         console.log({"project":project})
         return axios.post(API_URL+'project_details',{"project":project}, {'Access-Control-Allow-Origin': '*'})
     }
+    deleteProject(projectid){
+        return axios.post(API_URL+'deleteProject',{"id":projectid}, {'Access-Control-Allow-Origin': '*'})
+    }
+    updateDesigner(data) {
+        return axios.post(API_URL + `designers`, data, { 'Access-Control-Allow-Origin': '*' });
+    }
+    updateUser(data) {
+        return axios.post(API_URL + `updateUserStatus`, data, { 'Access-Control-Allow-Origin': '*' });
+    }
+    InsertImgToProject(data) {
+        return axios.post(API_URL + `InsertImgToProject`, data, { 'Access-Control-Allow-Origin': '*' });
+    }
+    rating(){
+
+        return axios.get(API_URL+'review', {'Access-Control-Allow-Origin': '*'})
+     }
 }
 
 export default new ApiServices()

@@ -10,7 +10,7 @@ function DesignersPage() {
     const [designers, setDesigners] = useState([]);
     const [editForm, setEditForm] = useState({ name: "", info: "" });
     const [isEditMode, setIsEditMode] = useState(false);
-    const [user, setUser] = useState({});
+    const [user, setUser] = useState(JSON.parse(localStorage.getItem('loggedInUser')));
 
     useEffect(() => {
         const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser'));
@@ -116,6 +116,7 @@ function DesignersPage() {
                     <div className="designer-info">
                         <h2>{selectedDesigner.Name}</h2>
                         <p>{selectedDesigner.info}</p>
+                        <p>{selectedDesigner.Id}</p>
                         {user.Id === selectedDesigner.Id && (
                         <button onClick={handleEditClick}>Edit</button>
                         )}

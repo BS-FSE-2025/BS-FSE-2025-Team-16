@@ -14,7 +14,7 @@ function AdminsPage() {
 
     useEffect(() => {
         const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser'));
-        if (!loggedInUser) {
+        if (!loggedInUser || loggedInUser.Type!==1) {
             window.location.href = '/'; // Redirect to a specific page if not logged in
         } else {
             setUser(loggedInUser);
@@ -23,6 +23,7 @@ function AdminsPage() {
                 setUsers((data.data).filter((user) => user.Type !== 1));
             });
         }
+        
     }, []);
 
     const [show,setshow]=useState(false)
@@ -30,7 +31,9 @@ function AdminsPage() {
       
       setshow(!show)
     }
-
+    useEffect(()=>{
+        console.log(editForm)
+    },[isEditMode])
     const handleUserClick = (user) => {
         setSelectedUser(user);
         setEditForm({ 
