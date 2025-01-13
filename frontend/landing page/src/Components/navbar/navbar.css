@@ -31,7 +31,7 @@
 .deskTopMenuListItem {
     cursor: pointer;
     color: whitesmoke;
-    font-size: larger;
+    font-size: medium;
     text-decoration: none;  /* מוסיף - מבטל קו הדגשה */
 }
 

@@ -10,7 +10,8 @@
 
 body {
  
-    font-family: 'Unbounded', sans-serif;
+  font-family: 'Unbounded', sans-serif;
+  font-size: medium;
  
    
     background-image: url('../../componets/landing page/src/assest/back.png');
