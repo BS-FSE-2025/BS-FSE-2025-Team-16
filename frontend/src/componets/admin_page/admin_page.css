@@ -1,5 +1,5 @@
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'Unbounded', sans-serif;
     background-color: #f4f4f4;
     background-image: url('../../componets/landing page/src/assest/back.png');
     background-size: cover;
@@ -10,7 +10,7 @@ body {
 
 h1 {
     text-align: center;
-    color: #333;
+    color: #ffffff;
 }
 
 .user-list {

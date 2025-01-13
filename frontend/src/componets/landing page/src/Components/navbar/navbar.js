@@ -25,7 +25,9 @@ const Navbar = ({hundleOpenLoginPopup}) => {
 
     return (
         <nav className="navbar">
-            <img src={logo} alt="Logo" className="logo" />
+            <NavLink to="/">
+                <img src={logo} alt="Logo" className="logo" />
+            </NavLink>
             <div className="deskTopMenu">
               {!loggedInUser && (
                 <> 
