@@ -15,7 +15,6 @@ import CombinedForm from './componets/newProduct/newProduct'
 import ProjectManagement from './componets/myProject/myProject.js'
 import DesignersPage from './componets/designer_page/designer_list';
 import AdminsPage from './componets/admin_page/admin_page';
-import AboutUs from './componets/Odot/ratingUs.js'
 function App() {
   return (
     <div>
@@ -32,7 +31,6 @@ function App() {
         <Route path="/ProjectManagement" element={<ProjectManagement />} />
         <Route path="/designer" element={<DesignersPage />} />
         <Route path="/admin" element={<AdminsPage />} />
-        <Route path="/AboutUs" element={<AboutUs/>}/>
         <Route path="*" element={<LandingPage />} />
 
         {/* <Route path="/LandingPage" element={<LandingPage />} /> */}
