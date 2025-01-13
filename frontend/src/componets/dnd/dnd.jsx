@@ -79,7 +79,7 @@ const PurchasedList = ({ purchasedItems, onRemove }) => {
                         <li key={item.uniqueId}>
                             {normalizedItem.name} - ${normalizedItem.price}
                             <button
-                                className="remove-button"
+                                className="remove-button-purchased"
                                 onClick={() => onRemove(item.uniqueId)}
                             >
                                 X
@@ -301,35 +301,18 @@ const DndBoardApp = () => {
         setshow(!show);
     };
 
-    const handleSave = async () => {
-        console.log("Save button clicked");
-        const categorizedItems = items.reduce(
-            (acc, item) => {
-                acc[item.type] = acc[item.type] || [];
-                acc[item.type].push(item);
-                return acc;
-            },
-            { "Plant": [], "Garden Element": [], project, removedItems }
-        );
-        console.log("Categorized Items:", categorizedItems);
-        APIService.insertItemProject(categorizedItems);
-        const boardElement = document.querySelector(".board"); // בוחר את הלוח
-        if (boardElement) {
-            try {
-                const canvas = await html2canvas(boardElement); // יצירת קנבס מהאלמנט
-                const base64Image = canvas.toDataURL("image/png"); // המרה ל-base64
-    
-                // console.log("Base64 Image String:", base64Image); // הדפסת המחרוזת ל-console
-                APIService.InsertImgToProject({"img":base64Image,"id":project.id})
-                // כאן ניתן לשלוח את המחרוזת לשרת Python
-                // sendToPython(base64Image);
-            } catch (error) {
-                console.error("Error capturing screenshot:", error);
-            }
-        }
-    };
-  
-    // const handleFinish = async () => {
+    // const handleSave = async () => {
+    //     console.log("Save button clicked");
+    //     const categorizedItems = items.reduce(
+    //         (acc, item) => {
+    //             acc[item.type] = acc[item.type] || [];
+    //             acc[item.type].push(item);
+    //             return acc;
+    //         },
+    //         { "Plant": [], "Garden Element": [], project, removedItems }
+    //     );
+    //     console.log("Categorized Items:", categorizedItems);
+    //     APIService.insertItemProject(categorizedItems);
     //     const boardElement = document.querySelector(".board"); // בוחר את הלוח
     //     if (boardElement) {
     //         try {
@@ -345,6 +328,43 @@ const DndBoardApp = () => {
     //         }
     //     }
     // };
+    const handleSave = async () => {
+        console.log("Save button clicked");
+    
+        const categorizedItems = items.reduce(
+            (acc, item) => {
+                acc[item.type] = acc[item.type] || [];
+                acc[item.type].push(item);
+                return acc;
+            },
+            { "Plant": [], "Garden Element": [], project, removedItems }
+        );
+        console.log("Categorized Items:", categorizedItems);
+    
+        APIService.insertItemProject(categorizedItems);
+    
+        const boardElement = document.querySelector(".board"); // בוחר את הלוח
+    
+        if (boardElement) {
+            try {
+                // הוספת מחלקה להסתרת כפתורי המחיקה
+                boardElement.classList.add("hide-remove-buttons");
+    
+                const canvas = await html2canvas(boardElement); // יצירת קנבס מהאלמנט
+                const base64Image = canvas.toDataURL("image/png"); // המרה ל-base64
+    
+                APIService.InsertImgToProject({ img: base64Image, id: project.id });
+    
+                // הסרת המחלקה לאחר צילום המסך
+                boardElement.classList.remove("hide-remove-buttons");
+            } catch (error) {
+                console.error("Error capturing screenshot:", error);
+    
+                // הסרת המחלקה במקרה של שגיאה
+                boardElement.classList.remove("hide-remove-buttons");
+            }
+        }
+    };
     
 
     return (

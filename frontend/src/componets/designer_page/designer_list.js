@@ -11,6 +11,7 @@ function DesignersPage() {
     const [editForm, setEditForm] = useState({ name: "", info: "" });
     const [isEditMode, setIsEditMode] = useState(false);
     const [user, setUser] = useState(JSON.parse(localStorage.getItem('loggedInUser')));
+    const [desingerProjects, setDesignersProjects] = useState([]);
 
     useEffect(() => {
         const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser'));
@@ -35,8 +36,12 @@ function DesignersPage() {
         setEditForm({ 
             id: designer.Id, 
             name: designer.Name, 
-            info: designer.info 
+            info: designer.info
         });
+        APIService.projects().then(data => {
+            console.log(data.data);
+            setDesignersProjects(data.data.filter((project) => project.client_id === designer.Id));
+        })
     };
 
     const handleBackClick = () => {
@@ -116,7 +121,20 @@ function DesignersPage() {
                     <div className="designer-info">
                         <h2>{selectedDesigner.Name}</h2>
                         <p>{selectedDesigner.info}</p>
-                        <p>{selectedDesigner.Id}</p>
+                        {
+                            desingerProjects.length > 0 && (
+                                <div>
+                                    <h3>Projects</h3>
+                                    <ul>
+                                        {desingerProjects.map(project => (
+                                            <li key={project.id}>
+                                                <img key={project.id} src={`data:image/jpeg;base64,${project.img}`} alt={project.name} />
+                                            </li>
+                                        ))}
+                                    </ul>
+                                </div>
+                            )
+                        }
                         {user.Id === selectedDesigner.Id && (
                         <button onClick={handleEditClick}>Edit</button>
                         )}

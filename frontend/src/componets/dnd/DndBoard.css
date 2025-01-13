@@ -31,6 +31,7 @@
 
 .board-cell {
   width: 100%;
+  height: 100%;
   padding-top: 100%; 
   position: relative;
   background-color: #fff;
@@ -41,7 +42,7 @@
   background-color: #e0e0e0;
 }
 
-.board-item {
+/* .board-item {
   position: absolute;
   top: 50%;
   left: 50%;
@@ -51,9 +52,19 @@
   padding: 5px;
   border: 1px solid #007acc;
   border-radius: 4px;
+} */
+.board-item {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%; /* לכסות את כל המשבצת */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
 }
-
-.remove-button {
+/* .remove-button {
   margin-left: 5px;
   background-color: red;
   color: white;
@@ -61,6 +72,26 @@
   padding: 2px 5px;
   border-radius: 3px;
   cursor: pointer;
+}
+
+.remove-button:hover {
+  background-color: darkred;
+} */
+.hide-remove-buttons .remove-button {
+  display: none;
+}
+.remove-button {
+  position: absolute; /* מיקום מוחלט */
+  top: 5px; /* מרחק מהחלק העליון */
+  right: 5px; /* מרחק מהחלק הימני */
+  background-color: red;
+  color: white;
+  border: none;
+  padding: 1px 4px; /* גודל הכפתור */
+  border-radius: 50%; /* עיצוב מעוגל */
+  cursor: pointer;
+  font-size: 14px; /* גודל הטקסט */
+  z-index: 10; /* מבטיח שהכפתור מעל התמונה */
 }
 
 .remove-button:hover {
@@ -104,18 +135,26 @@
   border: 1px solid #ddd;
   border-radius: 3px;
 }
-.board-item img {
-  width: 100%; /* להתאים לרוחב המשבצת */
-  height: auto; /* לשמור על היחס המקורי של התמונה */
-  max-width: 100px; /* מגבלת גודל לרוחב */
-  max-height: 100px; /* מגבלת גודל לגובה */
-  object-fit: contain; /* לשמור על התמונה במרכז המשבצת */
+/* .board-item img {
+  width: 100%; /* להתאים לרוחב המשבצת 
+  height: auto; /* לשמור על היחס המקורי של התמונה 
+  max-width: 100px; /* מגבלת גודל לרוחב 
+  max-height: 100px; /* מגבלת גודל לגובה 
+  object-fit: contain; /* לשמור על התמונה במרכז המשבצת 
   display: block;
   margin: auto;
-}
+} */
 .save-button-container {
   text-align: center;
   margin-top: 20px;
+}
+.board-item img {
+  width: 100%;
+  height: 100%; /* להתאים לגובה המשבצת */
+  object-fit: cover; /* למלא את המשבצת מבלי לשמור על יחס התמונה */
+  display: block;
+  margin: 0; /* להסיר שוליים */
+  border-radius: 4px; /* פינות מעוגלות קלות */
 }
 
 .save-button {
@@ -132,4 +171,27 @@
 .save-button:hover {
   background-color: #005f99;
 }
-
+/* .remove-button-purchased{
+  margin-left: 5px;
+  background-color: red;
+  color: white;
+  border: none;
+  padding: 2px 5px;
+  border-radius: 3px;
+  cursor: pointer;
+}
+.remove-button-purchased:hover {
+  background-color: darkred;
+} */
+.remove-button-purchased {
+  margin-left: 5px;
+  background-color: red;
+  color: white;
+  border: none;
+  padding: 2px 5px;
+  border-radius: 3px;
+  cursor: pointer;
+}
+.remove-button-purchased:hover {
+  background-color: darkred;
+}
