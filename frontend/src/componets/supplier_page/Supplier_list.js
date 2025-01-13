@@ -82,21 +82,23 @@ function SuppliersPage() {
                         <form onSubmit={handleFormSubmit}>
                             <label>
                                 Name:
+                            </label>
                                 <input
                                     type="text"
                                     name="name"
-                                    value={editForm.name}
+                                    value={selectedSupplier.Name}
                                     onChange={handleInputChange}
                                 />
-                            </label>
+                            
                             <label>
                                 Info:
+                            </label>
                                 <textarea
                                     name="info"
-                                    value={editForm.info}
+                                    value={selectedSupplier.info}
                                     onChange={handleInputChange}
                                 />
-                            </label>
+                            
                             <button type="submit">Save</button>
                             <button type="button" onClick={handleBackClick}>Back</button>
                         </form>

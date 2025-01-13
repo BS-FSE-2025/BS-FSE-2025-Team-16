@@ -3,211 +3,156 @@ import APIService from "../APIService";
 import LoginPopup from "../LoginPopup";
 import Navbar from "../landing page/src/Components/navbar/navbar";
 import { useNavigate } from 'react-router-dom';
-import "./index.css"
+import "./index.css";
+
 const ProductList = () => {
-    
-    // נתונים לדוגמה
-    const [TypeItem,setTypeItem] =useState(0)
-    const [showModal, setShowModal] = useState(false); // שליטה על החלונית
-    // const [show, setShow] = useState(false);
-    const [Products, setProducts] =useState([]);
-    const [searchTerm, setSearchTerm] = useState(""); // טקסט לחיפוש
-    const [filterType, setFilterType] = useState("All"); // סינון לפי סוג
-    const [selectedProduct, setSelectedProduct] = useState(null); // מוצר לעריכה
+    const [TypeItem, setTypeItem] = useState(0);
+    const [showModal, setShowModal] = useState(false);
+    const [Products, setProducts] = useState([]);
+    const [searchTerm, setSearchTerm] = useState("");
+    const [filterType, setFilterType] = useState("All");
+    const [selectedProduct, setSelectedProduct] = useState(null);
     const [user, setUser] = useState({});
-    const [gardenElement, setGardenElement] =useState([]);
+    const [gardenElement, setGardenElement] = useState([]);
     const [selectedImage, setSelectedImage] = useState(null);
-    // סינון רשימה לפי שם וסוג
-    const filteredProducts = Products.filter((product) => {
-        const matchesSearch = product.name.toLowerCase().includes(searchTerm.toLowerCase());
-
-        return matchesSearch;
-    });
     const navigate = useNavigate();
-    const filteredGardenItem = gardenElement.filter((product) => {
-        const matchesSearch = product.name.toLowerCase().includes(searchTerm.toLowerCase());
+    const [showImagePopup, setShowImagePopup] = useState(false);  // שינוי שם משתנה
 
-        return matchesSearch;
-    });
+    const hundleOpenLoginPopup = () => {
+        setShowImagePopup(!showImagePopup);  // שינוי פה גם
+    };
 
-    const [show,setshow]=useState(false)
-    const hundleOpenLoginPopup =()=>{
-      
-      setshow(!show)
-    }
     const handleUpdateProduct = (updatedProduct) => {
         setProducts((prev) =>
             prev.map((product) =>
                 product.id === updatedProduct.id ? updatedProduct : product
             )
         );
-        setShowModal(false); // סגירת החלונית
+        setShowModal(false);
     };
-    useEffect(()=>{
-        APIService.plants().then(res=>{
-            console.log(res.data)
-            setProducts(res.data)
-        })
-        APIService.GardenElement().then(res=>{
-            console.log(res.data)
-            setGardenElement(res.data)
-        })
-        setUser(JSON.parse(localStorage.getItem('loggedInUser')) || {});
-        console.log(user.Type)
-       
-    },[])
-    const handleShowImage = (product) => {
-        setSelectedImage(`data:image/jpeg;base64,${product.img}`); // הגדרת התמונה שנבחרה
-      };
-    return (
-         <div>
 
-             <Navbar hundleOpenLoginPopup={hundleOpenLoginPopup} />
-             {
-                show ?
-                <LoginPopup isOpen={show} setIsOpen={setshow} />
-                :<></>
-              }
-        {/* {
-            user.Type==1 || user.Type==3 ? */}
+    const handleShowImage = (product) => {
+        setSelectedImage(`data:image/jpeg;base64,${product.img}`);
+        setShowImagePopup(true); // הצגת הפופ-אפ עם התמונה
+    };
+
+    const filteredProducts = Products.filter((product) => {
+        const matchesSearch = product.name.toLowerCase().includes(searchTerm.toLowerCase());
+        return matchesSearch;
+    });
+
+    const filteredGardenItem = gardenElement.filter((product) => {
+        const matchesSearch = product.name.toLowerCase().includes(searchTerm.toLowerCase());
+        return matchesSearch;
+    });
+
+    useEffect(() => {
+        APIService.plants().then((res) => {
+            setProducts(res.data);
+        });
+        APIService.GardenElement().then((res) => {
+            setGardenElement(res.data);
+        });
+        setUser(JSON.parse(localStorage.getItem('loggedInUser')) || {});
+    }, []);
+
+    return (
+        <div>
+            <Navbar hundleOpenLoginPopup={hundleOpenLoginPopup} />
+            {/* {showImagePopup && <LoginPopup isOpen={showImagePopup} setIsOpen={setShowImagePopup} />} */}
             <div>
-               
                 <div className="container">
-                    <div
-                        style={{
-                        width: "300px",
-                        height: "400px",
-                        border: "1px solid #ccc",
-                        borderRadius: "8px",
-                        marginRight: "20px",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        backgroundColor: "#f9f9f9",
-                        }}
-                    >
-                        {selectedImage ? (
-                            // `data:image/jpeg;base64,${product.img}`
-                        <img
-                            src={selectedImage}
-                            alt="Selected Product"
-                            style={{ maxWidth: "100%", maxHeight: "100%", borderRadius: "8px" }}
-                        />
-                        ) : (
-                        <p style={{ textAlign: "center" }}>No image selected</p>
-                        )}
-                    </div>
                     <div className="header">
                         <h1>Products List</h1>
                         <button
                             className="btn btn-primary add-button"
-                            onClick={() => {
-                                console.log("Add button clicked");
-                                navigate('/CreateProduct')
-                                // הוסף כאן פעולה כמו פתיחת חלונית להוספת מוצר חדש
-                            }}
+                            onClick={() => navigate('/CreateProduct')}
                         >
-                            <i className="bi bi-plus"></i> 
+                            <i className="bi bi-plus"></i>
                         </button>
                     </div>
-                        <div className="filter-container">
-                            <input
-                                type="text"
-                                placeholder="Search by name"
-                                value={searchTerm}
-                                onChange={(e) => setSearchTerm(e.target.value)}
-                            />
-        
-                        </div>
-                        <ul>
-                            <div>
-                            {filteredProducts.map((product) => (
-                                <li>
-                                    <div  key={product.id} onClick={() => {
-                                    setSelectedProduct(product);
-                                   console.log(product.id)
-                                    if( user.Type==1 || user.Type==3){
-                                        setShowModal(true);
-                                        setTypeItem(1)
-                                    }
-                                    
-                                }}>
-                                    <strong>{product.name}</strong> ({product.climate_name}) - ${product.price}<br></br> 
-                                    {product.info}
-                                    </div>
-                                    <button onClick={() => handleShowImage(product)}>Show Image</button>
-                                   
-                                
-                                </li>
-                                
-                            ))}
-                            </div>
-                      
-                            {filteredGardenItem.map((product) => (
-                              <li>
-                                <div  key={product.id} onClick={() => {
-                                        console.log(product.id)
-                                        setSelectedProduct(product);
-                                        if( user.Type==1 || user.Type==3){
-                                            setShowModal(true);
-                                            setTypeItem(1)
-                                        }
-                                        
-                                    }}>
-                                    <strong>{product.name}</strong>  - ${product.price}<br></br> 
-                                    {product.info}
-                                    </div>
-                                    <button onClick={() => handleShowImage(product)}>Show Image</button>
-                                </li>
-                            ))}
-                        </ul>
-                
-                        <ul>
-                            
-                        </ul>
-                
+                    <div className="filter-container">
+                        <input
+                            type="text"
+                            placeholder="Search by name"
+                            value={searchTerm}
+                            onChange={(e) => setSearchTerm(e.target.value)}
+                        />
                     </div>
-                    <div>
-                    {
-                        user.Type==1 || user.Type==3 ?
+                    <ul>
                         <div>
-                        {showModal &&  (
-                            <Modal
-                                product={selectedProduct}
-                                setProdouct={TypeItem === 1 ? setProducts : setGardenElement}
-                                onClose={() => setShowModal(false)}
-                                onSave={handleUpdateProduct}
-                                TypeItem={TypeItem}
-                            />
-                        )}
+                            {filteredProducts.map((product) => (
+                                <li key={product.id}>
+                                    <div onClick={() => {
+                                        setSelectedProduct(product);
+                                        if (user.Type === 1 || user.Type === 3) {
+                                            setShowModal(true);
+                                            setTypeItem(1);
+                                        }
+                                    }}>
+                                        <strong>{product.name}</strong> ({product.climate_name}) - ${product.price}<br />
+                                        {product.info}
+                                    </div>
+                                    <button onClick={() => handleShowImage(product)}>Show Image</button>
+                                </li>
+                            ))}
                         </div>
-                        
-                        :null}
-                        
-                    </div>
+                        {filteredGardenItem.map((product) => (
+                            <li key={product.id}>
+                                <div onClick={() => {
+                                    setSelectedProduct(product);
+                                    if (user.Type === 1 || user.Type === 3) {
+                                        setShowModal(true);
+                                        setTypeItem(1);
+                                    }
+                                }}>
+                                    <strong>{product.name}</strong> - ${product.price}<br />
+                                    {product.info}
+                                </div>
+                                <button onClick={() => handleShowImage(product)}>Show Image</button>
+                            </li>
+                        ))}
+                    </ul>
+                </div>
+                {user.Type === 1 || user.Type === 3 ? (
+                    showModal && (
+                        <Modal
+                            product={selectedProduct}
+                            setProdouct={TypeItem === 1 ? setProducts : setGardenElement}
+                            onClose={() => setShowModal(false)}
+                            onSave={handleUpdateProduct}
+                            TypeItem={TypeItem}
+                        />
+                    )
+                ) : null}
             </div>
-            {/* :<></> */}
-        {/* } */}
-        
-    </div>
+            
+            {/* Modal for image */}
+            {showImagePopup && (
+                <div className="modal-backdrop">
+                    <div className="box">
+                        <img
+                            src={selectedImage}
+                            alt="Selected Product"
+                            style={{ maxWidth: "100%", maxHeight: "100%" }}
+                        />
+                        <button onClick={() => setShowImagePopup(false)}>Close</button>
+                    </div>
+                </div>
+            )}
+        </div>
     );
 };
 
-
-const Modal = ({ product,setProdouct, onClose, onSave,TypeItem }) => {
-    useEffect(()=>{
-        // console.log(1+"e ",TypeItem)
-    },[])
+const Modal = ({ product, setProdouct, onClose, onSave, TypeItem }) => {
     const [updatedProduct, setUpdatedProduct] = useState({ ...product });
+
     const hundlesubmit = () => {
         onSave(updatedProduct);
-        console.log(updatedProduct);
-    
         if (TypeItem === 1) {
             APIService.updateplants(updatedProduct)
                 .then((res) => {
                     console.log("Plant updated:", res.data);
-
                 })
                 .catch((err) => {
                     console.error("Error updating plant:", err);
@@ -216,66 +161,41 @@ const Modal = ({ product,setProdouct, onClose, onSave,TypeItem }) => {
             APIService.updateGardenItem(updatedProduct)
                 .then((res) => {
                     console.log("Garden item updated:", res.data.new_elements);
-                    setProdouct(res.data.new_elements)
+                    setProdouct(res.data.new_elements);
                 })
                 .catch((err) => {
                     console.error("Error updating garden item:", err);
                 });
         }
     };
-    
+
     const handleChange = (e) => {
         const { name, value } = e.target;
-    
         setUpdatedProduct((prev) => {
-            // עדכון השדה המתאים לפי TypeItem
-            // if (TypeItem === 1 && (name === "name" || name === "plant_price")) {
-            //     return { ...prev, [name]: value };
-            // } else if (TypeItem === 2 && (name === "name" || name === "price")) {
-            //     return { ...prev, [name]: value };
-            // }
             return { ...prev, [name]: value };
-            
         });
     };
-    
 
     return (
         <div className="modal-backdrop">
-            {/* <div className="modal">
-                <h2>Edit Product</h2>
-           
-            </div> */}
-            {/* <h2>Edit Product</h2> */}
             <div className="box">
                 <h2>Edit Product</h2>
-                {/* <label>
-                    Name:
-                   
-                    <input
-                        type="text"
-                        name={TypeItem === 1 ? "name" : "name"}
-                        value={TypeItem === 1 ? updatedProduct.name : product.name}
-                        onChange={handleChange}
-                    />
-                </label> */}
                 <label>
                     Price:
                     <input
                         type="number"
-                        name={"price"}
+                        name="price"
                         value={updatedProduct.price}
                         onChange={handleChange}
                     />
                 </label>
                 <label>
-                    info:
-                   
+                    Info:
                     <textarea
                         name="info"
                         value={updatedProduct.info}
                         onChange={handleChange}
-                        style={{ width: "100%", height: "100px", resize: "vertical" }} // הגדלת התיבה
+                        style={{ width: "100%", height: "100px", resize: "vertical" }}
                     />
                 </label>
                 <div className="modal-actions">
@@ -286,6 +206,5 @@ const Modal = ({ product,setProdouct, onClose, onSave,TypeItem }) => {
         </div>
     );
 };
-
 
 export default ProductList;

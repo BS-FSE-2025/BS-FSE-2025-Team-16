@@ -3,31 +3,32 @@ import React, { useEffect, useState } from "react";
 import "./CombinedForm.css";
 import OptionsList from "../option";
 import APIService from "../APIService";
+
 const CombinedForm = () => {
     const [formType, setFormType] = useState("plant");
-    const [PlantsType,setPlantsType] = useState([{}])
-    const [climateType,setclimateType] = useState([{}])
-    // <OptionsList optionsList={PlantsType} InputValue={TypePlants} setInputValue={SetTypePlants} />
-    const [typesclimate,SetTypesclimate] =useState([{"id":1,"name":"Admin"}])
-    const [TypePlants,SetTypePlants] =useState([{"id":1,"name":"Admin"}])
+    const [PlantsType, setPlantsType] = useState([{}]);
+    const [climateType, setclimateType] = useState([{}]);
+    const [typesclimate, SetTypesclimate] = useState([{"id":1,"name":"Admin"}]);
+    const [TypePlants, SetTypePlants] = useState([{"id":1,"name":"Admin"}]);
     const [formData, setFormData] = useState({
         id: "",
         name: "",
         price: "",
-        // climate: "",
-        // type: "",
         img: null,
         description: "",
     });
-    useEffect(()=>{
-        APIService.climateType().then(res=>{
-            setclimateType(res.data)
-            console.log(res.data)
-        })
-        APIService.plantsType().then(res=>{
-            setPlantsType(res.data)
-        })
-    },[])
+
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        APIService.climateType().then(res => {
+            setclimateType(res.data);
+            console.log(res.data);
+        });
+        APIService.plantsType().then(res => {
+            setPlantsType(res.data);
+        });
+    }, []);
 
     const handleTypeChange = (e) => {
         const selectedType = e.target.value;
@@ -52,66 +53,45 @@ const CombinedForm = () => {
         if (file) {
             setFormData((prev) => ({
                 ...prev,
-                img: file, // שמירת הקובץ בפורמט File
+                img: file,
             }));
         }
     };
-    const navigate = useNavigate();
+
     const handleSubmit = (e) => {
         e.preventDefault();
-
-        // הצגת הנתונים בקונסול
-        // const handleSubmit = (e) => {
-            e.preventDefault();
         
-            const reader = new FileReader();
-            
-                reader.readAsDataURL(formData.img);
-                reader.onload = () => {
-                    const base64Img = reader.result;
-        
-                    // יצירת אובייקט JSON
-                    const jsonData = {
-                        ...formData,
-                        img: base64Img, // הוספת התמונה כ-Base64
-                    };
-                    console.log(jsonData)
-                    if(formType=="plant"){
-                        APIService.NewPlants({"data":jsonData, "climate":typesclimate, "type_plant":TypePlants,"img":JSON.stringify(jsonData.img)})
-                    }else{
-                        APIService.NewELement({"data":jsonData,"img":JSON.stringify(jsonData.img)})
-                    }
-                    
-                };
-                navigate("/ProductList");
-            
-        // };
-        
+        const reader = new FileReader();
+        reader.readAsDataURL(formData.img);
+        reader.onload = () => {
+            const base64Img = reader.result;
 
+            const jsonData = {
+                ...formData,
+                img: base64Img,
+            };
 
+            console.log(jsonData);
 
+            if(formType === "plant"){
+                APIService.NewPlants({"data":jsonData, "climate":typesclimate, "type_plant":TypePlants,"img":JSON.stringify(jsonData.img)});
+            } else {
+                APIService.NewELement({"data":jsonData,"img":JSON.stringify(jsonData.img)});
+            }
+        };
 
-
-
-        // תצוגה מוקדמת של התמונה בקונסול (אם יש)
-        // if (formData.img) {
-        //     const reader = new FileReader();
-        //     reader.onload = () => {
-        //         console.log("Image Preview Data (Base64):", reader.result);
-        //     };
-        //     reader.readAsDataURL(formData.img);
-        // }
-
-
-
-        // if(selectedType=="plant"){
-            APIService.NewPlants({"data":formData, "climate":typesclimate, "type_plant":TypePlants})
-        //}
+        navigate("/ProductList");
     };
 
     return (
         <div className="combined-form">
-            <h2 className="form-title">{formType === "plant" ? "Edit Plant" : "Edit Garden Element"}</h2>
+            <h2 className="form-title">{formType === "plant" ? "Add Plant" : "Add Garden Element"}</h2>
+
+            {/* כפתור ❌ לסגירה ולניווט לדף ProductList */}
+            <button onClick={() => navigate("/ProductList")} className="close-btn">
+                ❌
+            </button>
+
             <form onSubmit={handleSubmit} className="form-container">
                 <div className="form-group">
                     <label>
@@ -189,10 +169,9 @@ const CombinedForm = () => {
                         </label>
 
                         <label>
-                                Plants
-                                <OptionsList optionsList={PlantsType} InputValue={TypePlants} setInputValue={SetTypePlants} />
+                            Plants
+                            <OptionsList optionsList={PlantsType} InputValue={TypePlants} setInputValue={SetTypePlants} />
                         </label>
-
                     </div>
                 )}
 

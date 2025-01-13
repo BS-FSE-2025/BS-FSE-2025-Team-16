@@ -1,5 +1,6 @@
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'Unbounded', sans-serif;
+    font-size: medium;
     background-color: #f4f4f4;
     background-image: url('../../componets/landing page/src/assest/back.png');
     background-size: cover;
@@ -7,3 +8,60 @@ body {
     margin: 0;
     padding: 0;
 }
+
+.rating-container {
+    padding: 40px;
+    text-align: center;
+    color: whitesmoke;
+  }
+  
+  .rating-paragraph {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 20px;
+  }
+  
+  .rating-header {
+    font-size: 24px;
+  }
+  
+  .rating-buttons {
+    margin-top: 10px;
+  }
+  
+  .rating-button {
+    background-color: gray;
+    border: none;
+    padding: 10px;
+    margin: 5px;
+    cursor: pointer;
+    font-size: 20px;
+  }
+  
+  .rating-button.selected {
+    background-color: gold;
+  }
+  
+  .feedback-section {
+    margin-top: 20px;
+  }
+  
+  .feedback-textarea {
+    border: 1px solid #ccc;
+    padding: 10px;
+    font-size: 16px;
+  }
+  
+  .submit-button-container {
+    margin-top: 20px;
+  }
+  
+  .submit-button {
+    padding: 10px 20px;
+    background-color: green;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+  }
+  

@@ -9,7 +9,8 @@ import sqlite3, flask_sqlalchemy
 import json
 import backend
 import base64
-import sqlitecloud
+# import sqlitecloud
+
 app = Flask(__name__)
 CORS(app, supports_credentials=True, resources={r"/api/*": {"origins": "*"}})
 app.config['CORS_HEADERS'] = 'Content-Type'
@@ -51,7 +52,7 @@ def usersType():
 
     # שליפת נתונים
     rows = cursor.fetchall()
-#     # print(rows)
+    #     # print(rows)
     # המרת הנתונים ל-JSON
     json_data = backend.query_to_js(columns_names, rows)
 
@@ -69,7 +70,7 @@ def plantsType():
 
     # שליפת נתונים
     rows = cursor.fetchall()
-#     # print(rows)
+    #     # print(rows)
     # המרת הנתונים ל-JSON
     json_data = backend.query_to_js(columns_names, rows)
 
@@ -87,7 +88,7 @@ def climateType():
 
     # שליפת נתונים
     rows = cursor.fetchall()
-#     # print(rows)
+    #     # print(rows)
     # המרת הנתונים ל-JSON
     json_data = backend.query_to_js(columns_names, rows)
 
@@ -112,7 +113,7 @@ def projects():
             row_dict['img'] = base64.b64encode(row_dict['img']).decode('utf-8')
         json_data.append(row_dict)
 
-#     # print(rows)
+    #     # print(rows)
     # המרת הנתונים ל-JSON
     # json_data = backend.query_to_js(columns_names, rows)
 
@@ -133,7 +134,7 @@ def newUser():
        WHERE name = '{req["userType"]}';
        """
 
-#     # print(sql)
+    #     # print(sql)
     try:
         cursor.execute(sql)
         conn.commit()
@@ -155,7 +156,7 @@ def NewPlants():
         conn = sqlite3.connect("PlantPricer.db")
         cursor = conn.cursor()
         req = request.get_json()
-#         # print("Request received:", req)
+        #         # print("Request received:", req)
 
         img = req.get("img", None)  # Safely access the img key
         data = req.get("data", None)
@@ -163,7 +164,7 @@ def NewPlants():
         if img is None or data is None:
             return {"success": True}, 200
 
-#         # print("Image Data:", img.split(",")[1])  # Debug Base64 content
+        #         # print("Image Data:", img.split(",")[1])  # Debug Base64 content
         # Continue processing...
         if "," in req["img"]:
             image_data = base64.b64decode(req["img"].split(",")[1])
@@ -373,7 +374,7 @@ def UpdateGardenElement():
 
         # שליפת נתונים
         rows = cursor.fetchall()
-#         # print(rows)
+        #         # print(rows)
         # המרת הנתונים ל-JSON
         json_data = backend.query_to_js(columns_names, rows)
         response = {"status": "success", "message": " added successfully", "new_elements": json_data}
@@ -402,7 +403,7 @@ def UpdatePlants():
          WHERE id =  {req["plants"]["id"]};
        """
 
-#     # print(sql)
+    #     # print(sql)
     try:
         cursor.execute(sql)
         conn.commit()
@@ -426,7 +427,7 @@ def update_supplier():
 
     if 'id' not in req:
         return {"status": "error", "message": "Missing 'id' in request data"}, 400
-
+    print(req["name"])
     sql = f"""
         UPDATE users
         SET
@@ -435,7 +436,7 @@ def update_supplier():
         WHERE id = {req["id"]};
         
     """
-#     # print(sql)
+    #     # print(sql)
     try:
         cursor.execute(sql)
         conn.commit()
@@ -473,8 +474,6 @@ def newProject():
         conn.close()
 
 
-
-
 @app.route('/deleteProject', methods=['POST'])
 @cross_origin()
 def deleteProject():
@@ -506,7 +505,6 @@ def deleteProject():
         return {"status": "error", "message": str(e)}, 500
     finally:
         conn.close()
-
 
 
 #
@@ -588,14 +586,11 @@ def review():
 
     # שליפת נתונים
     rows = cursor.fetchall()
-#     # print(rows)
+    #     # print(rows)
     # המרת הנתונים ל-JSON
     json_data = backend.query_to_js(columns_names, rows)
 
     return json_data
-
-
-
 
 
 # def insert_details(item,project,detail_id_to_check):
@@ -643,8 +638,8 @@ def delete_item(delete_id):
         DELETE FROM project_details
         WHERE detail_id = {delete_id}; 
     """
-    
-    conn = sqlitecloud.connect("sqlitecloud://cpyjdtbvnk.g5.sqlite.cloud:8860/PlantPricer.db?apikey=PJuyYTUePUY20Abu33rsOVLGhHyW3Hzspl9qsUZmfDk")
+
+    conn = sqlite3.connect("PlantPricer.db")
     cursor = conn.cursor()
     try:
         cursor.execute(delete_sql)
@@ -663,7 +658,7 @@ def update_designer():
     conn = sqlite3.connect("PlantPricer.db")
     cursor = conn.cursor()
     req = request.json  # הנתונים שמגיעים מהלקוח
-#     # print("Request received:", req)  # בדוק מה התקבל בשרת
+    #     # print("Request received:", req)  # בדוק מה התקבל בשרת
 
     sql = f"""
         UPDATE users
@@ -672,7 +667,7 @@ def update_designer():
         WHERE id = {req["id"]};
 
     """
-#     # print(sql)
+    #     # print(sql)
     try:
         cursor.execute(sql)
         conn.commit()
@@ -701,7 +696,7 @@ def update_user_status():
         WHERE id = {req["id"]};
 
     """
-#     # print(sql)
+    #     # print(sql)
     try:
         cursor.execute(sql)
         conn.commit()

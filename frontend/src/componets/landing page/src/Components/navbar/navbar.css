@@ -51,3 +51,7 @@ button {
 .active {
     color: brown;
 }
+
+.logged-in{
+    color: white;
+}
