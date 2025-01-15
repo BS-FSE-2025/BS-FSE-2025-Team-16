@@ -81,6 +81,10 @@ function DesignersPage() {
     const handleEditClick = () => {
         setIsEditMode(true);
     };
+    const hundleCopy =(project)=>{
+        console.log(project)
+        APIService.copyProject({"project":project,"user":user})
+    }
 
     return (
         <div>
@@ -128,7 +132,9 @@ function DesignersPage() {
                                     <ul>
                                         {desingerProjects.map(project => (
                                             <li key={project.id}>
+                                                <h4>{project.name}</h4>
                                                 <img key={project.id} src={`data:image/jpeg;base64,${project.img}`} alt={project.name} />
+                                                <button onClick={()=>hundleCopy(project)}>copy</button>
                                             </li>
                                         ))}
                                     </ul>

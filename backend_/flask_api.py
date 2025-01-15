@@ -485,8 +485,8 @@ def deleteProject():
     try:
         # עדכון שדה inactive בפרויקט
         update_sql = f"""
-        UPDATE projects
-        SET inactive = 0
+        delete from projects
+        
         WHERE id = ?;
         """
         cursor.execute(update_sql, (req["id"],))
@@ -815,6 +815,64 @@ def InsertImgToProject():
         if conn:
             conn.close()
 
+
+
+
+
+@app.route('/copyProject', methods=['POST'])
+@cross_origin()
+def copyProject():
+    conn = sqlite3.connect("PlantPricer.db")
+    cursor = conn.cursor()
+    req = request.json  # הנתונים שמגיעים מהלקוח
+    # print("Request received:", req)  # בדוק מה התקבל בשרת
+
+    # sql = f"""
+    # INSERT INTO projects (client_id,name, status_id,Budget,Width,Len,climate,inactive)
+    # VALUES ({req["user"]["Id"]}, '{req["project"]["name"]}-copy', 1,  {req["project"]["Budget"]}, {req["project"]["Width"]}, {req["project"]["Len"]}, {req["project"]["Climate"]},1);
+    #
+    # INSERT INTO project_details (project_id, item_id, itemName, total_price, type, x, y)
+    # SELECT , item_id, itemName, total_price, type, x, y
+    # FROM project_details
+    # WHERE project_id = {req["project"]["id"]};
+    # """
+
+    # print(sql)
+
+    try:
+        create_project_query = """
+               INSERT INTO projects (client_id, name, status_id, Budget, Width, Len, climate, inactive)
+               VALUES (?, ?, ?, ?, ?, ?, ?, ?);
+               """
+        cursor.execute(create_project_query, (
+            req["user"]["Id"],
+            f"{req['project']['name']}-copy",
+            1,
+            req["project"]["Budget"],
+            req["project"]["Width"],
+            req["project"]["Len"],
+            req["project"]["Climate"],
+            1,
+        ))
+
+        # שליפת ה-ID של הפרויקט החדש
+        new_project_id = cursor.lastrowid
+
+        # העתקת הנתונים
+        copy_details_query = """
+               INSERT INTO project_details (project_id, item_id, itemName, total_price, type, x, y)
+               SELECT ?, item_id, itemName, total_price, type, x, y
+               FROM project_details
+               WHERE project_id = ?;
+               """
+        cursor.execute(copy_details_query, (new_project_id, req["project"]["id"]))
+
+        conn.commit()
+        return {"status": "success", "message": "new Project successfully"}
+    except sqlite3.Error as e:
+        return {"status": "error", "message": str(e)}, 500
+    finally:
+        conn.close()
 
 if __name__ == "__main__":
     # db.create_all()
