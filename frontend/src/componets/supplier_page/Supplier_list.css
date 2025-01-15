@@ -8,6 +8,15 @@ body {
     padding: 0;
 }
 
+
+label {
+    font-size: 16px;
+    color: #333; /* ודא שיש צבע ניגודיות מספיק גבוה */
+    margin-bottom: 1px;
+    display: block; /* הפוך את הלייבל ל-block כדי שיציג מעל תיבת הטקסט */
+}
+
+
 h1 {
     text-align: center;
     color: #333;

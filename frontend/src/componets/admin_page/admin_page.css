@@ -1,16 +1,17 @@
 body {
-    font-family: Arial, sans-serif;
     background-color: #f4f4f4;
     background-image: url('../../componets/landing page/src/assest/back.png');
     background-size: cover;
     background-position: center;
     margin: 0;
     padding: 0;
+    font-family: 'Unbounded', sans-serif;
+    font-size: medium;
 }
 
 h1 {
     text-align: center;
-    color: #333;
+    color: #ffffff;
 }
 
 .user-list {
@@ -47,7 +48,7 @@ h1 {
     display: block;
     margin: 20px auto;
     padding: 10px 20px;
-    background-color: #007bff;
+    background-color: green;
     color: #fff;
     border: none;
     border-radius: 5px;
@@ -58,5 +59,5 @@ h1 {
 }
 
 .back-button:hover {
-    background-color: #0056b3;
+    background-color: brown;
 }

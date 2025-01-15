@@ -31,7 +31,7 @@
 .deskTopMenuListItem {
     cursor: pointer;
     color: whitesmoke;
-    font-size: larger;
+    font-size: smaller;
     text-decoration: none;  /* מוסיף - מבטל קו הדגשה */
 }
 
@@ -50,4 +50,8 @@ button {
 
 .active {
     color: brown;
+}
+
+.logged-in{
+    color: white;
 }

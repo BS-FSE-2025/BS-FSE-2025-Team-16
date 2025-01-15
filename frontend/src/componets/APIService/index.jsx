@@ -122,6 +122,9 @@ class ApiServices
 
         return axios.get(API_URL+'review', {'Access-Control-Allow-Origin': '*'})
      }
+     copyProject(data) {
+        return axios.post(API_URL + `copyProject`, data, { 'Access-Control-Allow-Origin': '*' });
+    }
 }
 
 export default new ApiServices()
