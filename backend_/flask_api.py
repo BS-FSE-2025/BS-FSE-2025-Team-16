@@ -545,7 +545,7 @@ def deleteProject():
         # עדכון שדה inactive בפרויקט
         update_sql = f"""
         UPDATE projects
-        SET inactive = 0
+        
         WHERE id = ?;
         """
         cursor.execute(update_sql, (req["id"],))
@@ -560,7 +560,7 @@ def deleteProject():
         conn.commit()
         return {"status": "success", "message": "Project successfully deleted and updated"}
     except sqlite3.Error as e:
-        print("SQL Error:", e)
+        # print("SQL Error:", e)
         return {"status": "error", "message": str(e)}, 500
     finally:
         conn.close()
