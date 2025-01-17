@@ -12,7 +12,7 @@ function DesignersPage() {
     const [isEditMode, setIsEditMode] = useState(false);
     const [user, setUser] = useState(JSON.parse(localStorage.getItem('loggedInUser')));
     const [desingerProjects, setDesignersProjects] = useState([]);
-
+    const [myProjects,setMyprojects]=useState([])
     useEffect(() => {
         const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser'));
         if (!loggedInUser) {
@@ -22,6 +22,10 @@ function DesignersPage() {
             console.log(data.data);
             setDesigners((data.data).filter((user) => user.Type === 4));
         });
+        APIService.projects().then(data => {
+            console.log(data.data);
+            setMyprojects(data.data.filter((project) => project.client_id === loggedInUser.Id));
+        })
     }
     }, []);
 
@@ -83,7 +87,13 @@ function DesignersPage() {
     };
     const hundleCopy =(project)=>{
         console.log(project)
-        APIService.copyProject({"project":project,"user":user})
+        if(user.Type==2 && myProjects.length>0){
+            window.alert("you cant copy the project becuse you have one and customer can work just on one project")
+        }
+        else{
+            APIService.copyProject({"project":project,"user":user})
+        }
+        
     }
 
     return (

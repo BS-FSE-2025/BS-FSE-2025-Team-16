@@ -2,10 +2,10 @@ import React, { useState, useEffect } from 'react';
 import './aboutUs.css';
 import logoForaboutUs from '../../assest/main-icon.jpg';
 import APIService from '../../../../APIService/index'; // Ensure the service is properly set up
-
+import { useNavigate } from 'react-router-dom';
 const AboutUs = () => {
   const [ratings, setRatings] = useState([]); // Store ratings and feedback
-
+  const navigate = useNavigate();
   // Fetch ratings from the server
   useEffect(() => {
     APIService.rating() // Assume APIService provides this function
@@ -28,7 +28,16 @@ const AboutUs = () => {
       </section>
 
       <div className="reviews-container">
+        <div className='header'>
      <h1 className="white-text">We talk about us</h1>
+                        <button
+                            className="btn btn-primary add-button"
+                            onClick={() => navigate('/rating')}
+                        >
+                            <i className="bi bi-plus"></i>
+                        </button>
+        </div>
+
         <div className="scrolling-container">
           {ratings.length > 0 && (
             <div className="scrolling-content" style={{ width: `${ratings.length * 320}px` }}>

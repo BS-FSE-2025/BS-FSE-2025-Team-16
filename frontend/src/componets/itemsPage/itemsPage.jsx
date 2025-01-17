@@ -54,6 +54,11 @@ const ProductList = () => {
             setGardenElement(res.data);
         });
         setUser(JSON.parse(localStorage.getItem('loggedInUser')) || {});
+        const savedUser = JSON.parse(localStorage.getItem("loggedInUser"));
+            if (!savedUser) {
+                window.location.href = '/';
+                return;
+            }
     }, []);
 
     return (

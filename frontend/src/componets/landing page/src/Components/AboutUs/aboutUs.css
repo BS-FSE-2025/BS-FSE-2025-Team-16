@@ -81,3 +81,6 @@
       transform: translateX(-50%);
     }
   }
+  .header {
+    margin-bottom: 20px;
+  }

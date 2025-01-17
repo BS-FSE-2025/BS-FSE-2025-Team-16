@@ -21,6 +21,11 @@ const CombinedForm = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
+        const savedUser = JSON.parse(localStorage.getItem("loggedInUser"));
+            if (!savedUser) {
+                window.location.href = '/';
+                return;
+            }
         APIService.climateType().then(res => {
             setclimateType(res.data);
             console.log(res.data);
@@ -28,6 +33,7 @@ const CombinedForm = () => {
         APIService.plantsType().then(res => {
             setPlantsType(res.data);
         });
+        
     }, []);
 
     const handleTypeChange = (e) => {
