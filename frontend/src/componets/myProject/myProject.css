@@ -7,6 +7,7 @@
   align-items: center;  /* ממרכז את התוכן לרוחב */
   justify-content: center;  /* ממרכז את התוכן לגובה */
   gap: 20px;
+  padding-top: 80px;
 }
 
 /* עיצוב כותרת */

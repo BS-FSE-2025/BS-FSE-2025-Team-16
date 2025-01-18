@@ -50,13 +50,13 @@ const NewUser=()=>{
     
       const hundleSubmit = () => {
         if (!validatePassword(user.Password)) {
-            window.alert("הסיסמה חייבת לכלול לפחות 8 תווים, לפחות אות גדולה אחת, ספרה אחת, ורק באנגלית.");
+            window.alert("The password must contain at least 8 characters, at least one uppercase letter, one digit, and be in English only");
             return;
         }
         
         setIsMatchPassword(user.Password === confirmPassword);
         if (user.Password !== confirmPassword) {
-            window.alert("הסיסמאות לא תואמות אחת לשנייה");
+            window.alert("The passwords do not match.");
             return;
         }
     
@@ -68,7 +68,7 @@ const NewUser=()=>{
             <div className="container" style={{ display: 'flex', flexDirection: 'column', gap: '20px', marginTop: '20px' }}>
             <div className="row">
                     <div className="text-center">
-                        <h1 className="">ברוכים הבאים למערכת  הגינון שלנו </h1>
+                        <h1 className="">Welcome to Plant priecer</h1>
                     </div>
 
                 </div>
@@ -152,7 +152,7 @@ const NewUser=()=>{
                         <div className="col-12 text-center red">
                          {
                             IsMatchPassword ?<></>  :<p>
-                                הסיסמאות לא תואמות
+                                The passwords do not match.
                             </p>
                          }  
                         </div>
