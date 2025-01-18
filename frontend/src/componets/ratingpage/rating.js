@@ -33,6 +33,7 @@ function RatingPage() {
     console.log(user);
     APIService.NewReview({"rating": rating, "feedback": feedback, "id": user.Id});
     window.location.reload();
+    window.location.href = '/';
   };
 
   return (

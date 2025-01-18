@@ -3,7 +3,7 @@
 }
 
 .sidebar {
-  width: 200px;
+  width: 350px;
   background-color: #f0f0f0;
   padding: 10px;
   border-right: 1px solid #ddd;
@@ -31,6 +31,7 @@
 
 .board-cell {
   width: 100%;
+  height: 100%;
   padding-top: 100%; 
   position: relative;
   background-color: #fff;
@@ -41,7 +42,7 @@
   background-color: #e0e0e0;
 }
 
-.board-item {
+/* .board-item {
   position: absolute;
   top: 50%;
   left: 50%;
@@ -51,9 +52,19 @@
   padding: 5px;
   border: 1px solid #007acc;
   border-radius: 4px;
+} */
+.board-item {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%; /* לכסות את כל המשבצת */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
 }
-
-.remove-button {
+/* .remove-button {
   margin-left: 5px;
   background-color: red;
   color: white;
@@ -61,6 +72,26 @@
   padding: 2px 5px;
   border-radius: 3px;
   cursor: pointer;
+}
+
+.remove-button:hover {
+  background-color: darkred;
+} */
+.hide-remove-buttons .remove-button {
+  display: none;
+}
+.remove-button {
+  position: absolute; /* מיקום מוחלט */
+  top: 5px; /* מרחק מהחלק העליון */
+  right: 5px; /* מרחק מהחלק הימני */
+  background-color: red;
+  color: white;
+  border: none;
+  padding: 1px 4px; /* גודל הכפתור */
+  border-radius: 50%; /* עיצוב מעוגל */
+  cursor: pointer;
+  font-size: 14px; /* גודל הטקסט */
+  z-index: 10; /* מבטיח שהכפתור מעל התמונה */
 }
 
 .remove-button:hover {
@@ -76,46 +107,69 @@
   max-width: 600px; /* מגבלת רוחב מקסימלית */
   height: auto; /* גובה יחושב אוטומטית */
 }
-.purchased-list {
-  width: 200px;
+/* .purchased-list {
+  width: 350px;
   background-color: #f0f0f0;
   padding: 10px;
   border-left: 1px solid #ddd;
   box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
   position: relative;
   right: 0;
-}
-
+  height: 400px; 
+  overflow-y: auto; /* מאפשר גלילה אנכית 
+} */
 .purchased-list h3,
 .purchased-list h4 {
   margin: 0 0 10px;
   text-align: center;
 }
 
+.purchased-list {
+  display: flex;
+  flex-direction: column; /* סידור אנכי */
+  width: 350px;
+  background-color: #f0f0f0;
+  padding: 10px;
+  border-left: 1px solid #ddd;
+  box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
+  position: relative;
+  right: 0;
+  height: 700px; /* גובה קבוע */
+  overflow-y: auto; /* מאפשר גלילה אנכית */
+}
+
 .purchased-list ul {
   list-style: none;
   padding: 0;
+  margin: 0;
+  flex: 1; /* תופס את כל הגובה הזמין */
+  overflow-y: auto; /* מוסיף גלילה לתוכן */
 }
 
-.purchased-list li {
-  margin: 5px 0;
-  padding: 5px;
-  background-color: #fff;
-  border: 1px solid #ddd;
-  border-radius: 3px;
+.purchased-list .inButtom {
+  margin-top: auto; /* דוחף את האלמנט לתחתית */
+  text-align: center;
 }
-.board-item img {
-  width: 100%; /* להתאים לרוחב המשבצת */
-  height: auto; /* לשמור על היחס המקורי של התמונה */
-  max-width: 100px; /* מגבלת גודל לרוחב */
-  max-height: 100px; /* מגבלת גודל לגובה */
-  object-fit: contain; /* לשמור על התמונה במרכז המשבצת */
+/* .board-item img {
+  width: 100%; /* להתאים לרוחב המשבצת 
+  height: auto; /* לשמור על היחס המקורי של התמונה 
+  max-width: 100px; /* מגבלת גודל לרוחב 
+  max-height: 100px; /* מגבלת גודל לגובה 
+  object-fit: contain; /* לשמור על התמונה במרכז המשבצת 
   display: block;
   margin: auto;
-}
+} */
 .save-button-container {
   text-align: center;
   margin-top: 20px;
+}
+.board-item img {
+  width: 100%;
+  height: 100%; /* להתאים לגובה המשבצת */
+  object-fit: cover; /* למלא את המשבצת מבלי לשמור על יחס התמונה */
+  display: block;
+  margin: 0; /* להסיר שוליים */
+  border-radius: 4px; /* פינות מעוגלות קלות */
 }
 
 .save-button {
@@ -132,4 +186,27 @@
 .save-button:hover {
   background-color: #005f99;
 }
-
+/* .remove-button-purchased{
+  margin-left: 5px;
+  background-color: red;
+  color: white;
+  border: none;
+  padding: 2px 5px;
+  border-radius: 3px;
+  cursor: pointer;
+}
+.remove-button-purchased:hover {
+  background-color: darkred;
+} */
+.remove-button-purchased {
+  margin-left: 5px;
+  background-color: red;
+  color: white;
+  border: none;
+  padding: 2px 5px;
+  border-radius: 3px;
+  cursor: pointer;
+}
+.remove-button-purchased:hover {
+  background-color: darkred;
+}

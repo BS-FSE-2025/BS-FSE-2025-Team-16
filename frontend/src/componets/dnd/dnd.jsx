@@ -62,36 +62,63 @@ const BoardCell = ({ x, y, children, onDrop, items, showMessage }) => {
     );
 };
 
-// רכיב הרשימה של פריטים שנקנו
-const PurchasedList = ({ purchasedItems, onRemove }) => {
-    const totalPrice = purchasedItems.reduce((sum, item) => {
+const PurchasedList = ({ purchasedItems, onRemove, budget, showMessage }) => {
+    const groupedItems = purchasedItems.reduce((acc, item) => {
         const normalizedItem = normalizeItem(item);
-        return sum + normalizedItem.price;
-    }, 0);
+        const existingItem = acc.find((i) => i.name === normalizedItem.name);
+
+        if (existingItem) {
+            existingItem.quantity += 1;
+            existingItem.totalPrice += normalizedItem.price;
+        } else {
+            acc.push({
+                name: normalizedItem.name,
+                price: normalizedItem.price,
+                quantity: 1,
+                totalPrice: normalizedItem.price,
+            });
+        }
+
+        return acc;
+    }, []);
+
+    const totalPrice = groupedItems.reduce((sum, item) => sum + item.totalPrice, 0);
+
+    useEffect(() => {
+        if (totalPrice >= budget) {
+            showMessage("You are exceeding your budget.");
+        }
+    }, [purchasedItems]);
 
     return (
         <div className="purchased-list">
             <h3>Purchased Items</h3>
             <ul>
-                {purchasedItems.map((item) => {
-                    const normalizedItem = normalizeItem(item);
-                    return (
-                        <li key={item.uniqueId}>
-                            {normalizedItem.name} - ${normalizedItem.price}
-                            <button
-                                className="remove-button"
-                                onClick={() => onRemove(item.uniqueId)}
-                            >
-                                X
-                            </button>
-                        </li>
-                    );
-                })}
+                {groupedItems.map((item) => (
+                    <li key={item.name}>
+                        {item.name} x {item.quantity} - ${item.price}
+                        <button
+                            className="remove-button-purchased"
+                            onClick={() => onRemove(item.name)} // הסרה לפי שם
+                        >
+                            X
+                        </button>
+                    </li>
+                ))}
             </ul>
-            <h4>Total Price: ${totalPrice}</h4>
+            <div className="inButtom">
+                <hr />
+                <h4>Total Price: ${totalPrice.toFixed(2)}</h4>
+            </div>
+
         </div>
     );
 };
+
+
+
+
+
 
 // הלוח
 const Board = ({ size, items, onDrop, onRemove, showMessage }) => {
@@ -100,6 +127,7 @@ const Board = ({ size, items, onDrop, onRemove, showMessage }) => {
         for (let y = 0; y < size.cols; y++) {
             const itemsInCell = items.filter((item) => item.x === x && item.y === y);
             cells.push(
+
                 <BoardCell
                     key={`${x}-${y}`}
                     x={x}
@@ -116,13 +144,14 @@ const Board = ({ size, items, onDrop, onRemove, showMessage }) => {
                             />
                             <button
                                 className="remove-button"
-                                onClick={() => onRemove(item.uniqueId)}
+                                onClick={() => onRemove(item.uniqueId, true)} // הסרה מהלוח
                             >
                                 X
                             </button>
                         </div>
                     ))}
                 </BoardCell>
+
             );
         }
     }
@@ -268,7 +297,7 @@ const DndBoardApp = () => {
             const itemsWithSameCoordinates = updatedPurchased.filter(existingItem => existingItem.x === x && existingItem.y === y);
             if (itemsWithSameCoordinates.length > 1) {
                 showMessage("Cell is already occupied!");
-                // שמירה על הפריט האחרון בלבד
+                
                 return updatedPurchased.filter(existingItem => existingItem.uniqueId !== uniqueId);
             }
     
@@ -279,18 +308,48 @@ const DndBoardApp = () => {
     };
     
     
+
+
+    // const handleRemoveItem = (uniqueId) => {
+    //     // if(fromBoard)
+    //     setItems((prevItems) => prevItems.filter((item) => item.uniqueId !== uniqueId));
+    //     setPurchasedItems((prevPurchased) =>
+    //         prevPurchased.filter((item) => item.uniqueId !== uniqueId)
+    //     );
+    //     setRemovedItems((prevRemoved) => [
+    //         ...prevRemoved,
+    //         items.find((item) => item.uniqueId === uniqueId),
+    //     ]); // שמירה ברשימת הפריטים שהוסרו
+    // };
+
+
+
+    const handleRemoveItem = (identifier, fromBoard = false) => {
+        if (fromBoard) {
+            // הסרה לפי uniqueId (בלוח)
+            setItems((prevItems) => prevItems.filter((item) => item.uniqueId !== identifier));
+            setPurchasedItems((prevPurchased) =>
+                prevPurchased.filter((item) => item.uniqueId !== identifier)
+            );
+            setRemovedItems((prevRemoved) => [
+                ...prevRemoved,
+                items.find((item) => item.uniqueId === identifier),
+            ]);
+        } else {
+            // הסרה לפי שם (ברשימת הקניות)
+            setItems((prevItems) => prevItems.filter((item) => normalizeItem(item).name !== identifier));
+            setPurchasedItems((prevPurchased) =>
+                prevPurchased.filter((item) => normalizeItem(item).name !== identifier)
+            );
+            setRemovedItems((prevRemoved) => [
+                ...prevRemoved,
+                ...items.filter((item) => normalizeItem(item).name === identifier),
+            ]);
+        }
+    };
     
 
-    const handleRemoveItem = (uniqueId) => {
-        setItems((prevItems) => prevItems.filter((item) => item.uniqueId !== uniqueId));
-        setPurchasedItems((prevPurchased) =>
-            prevPurchased.filter((item) => item.uniqueId !== uniqueId)
-        );
-        setRemovedItems((prevRemoved) => [
-            ...prevRemoved,
-            items.find((item) => item.uniqueId === uniqueId),
-        ]); // שמירה ברשימת הפריטים שהוסרו
-    };
+
 
     const showMessage = (msg) => {
         setMessage(msg);
@@ -303,6 +362,7 @@ const DndBoardApp = () => {
 
     const handleSave = async () => {
         console.log("Save button clicked");
+    
         const categorizedItems = items.reduce(
             (acc, item) => {
                 acc[item.type] = acc[item.type] || [];
@@ -312,39 +372,31 @@ const DndBoardApp = () => {
             { "Plant": [], "Garden Element": [], project, removedItems }
         );
         console.log("Categorized Items:", categorizedItems);
+    
         APIService.insertItemProject(categorizedItems);
+    
         const boardElement = document.querySelector(".board"); // בוחר את הלוח
+    
         if (boardElement) {
             try {
+                // הוספת מחלקה להסתרת כפתורי המחיקה
+                boardElement.classList.add("hide-remove-buttons");
+    
                 const canvas = await html2canvas(boardElement); // יצירת קנבס מהאלמנט
                 const base64Image = canvas.toDataURL("image/png"); // המרה ל-base64
     
-                // console.log("Base64 Image String:", base64Image); // הדפסת המחרוזת ל-console
-                APIService.InsertImgToProject({"img":base64Image,"id":project.id})
-                // כאן ניתן לשלוח את המחרוזת לשרת Python
-                // sendToPython(base64Image);
+                APIService.InsertImgToProject({ img: base64Image, id: project.id });
+    
+                // הסרת המחלקה לאחר צילום המסך
+                boardElement.classList.remove("hide-remove-buttons");
             } catch (error) {
                 console.error("Error capturing screenshot:", error);
+    
+                // הסרת המחלקה במקרה של שגיאה
+                boardElement.classList.remove("hide-remove-buttons");
             }
         }
     };
-  
-    // const handleFinish = async () => {
-    //     const boardElement = document.querySelector(".board"); // בוחר את הלוח
-    //     if (boardElement) {
-    //         try {
-    //             const canvas = await html2canvas(boardElement); // יצירת קנבס מהאלמנט
-    //             const base64Image = canvas.toDataURL("image/png"); // המרה ל-base64
-    
-    //             // console.log("Base64 Image String:", base64Image); // הדפסת המחרוזת ל-console
-    //             APIService.InsertImgToProject({"img":base64Image,"id":project.id})
-    //             // כאן ניתן לשלוח את המחרוזת לשרת Python
-    //             // sendToPython(base64Image);
-    //         } catch (error) {
-    //             console.error("Error capturing screenshot:", error);
-    //         }
-    //     }
-    // };
     
 
     return (
@@ -374,7 +426,7 @@ const DndBoardApp = () => {
                             Finish
                         </button> */}
                     </div>
-                    <PurchasedList purchasedItems={purchasedItems} onRemove={handleRemoveItem} />
+                    <PurchasedList purchasedItems={purchasedItems} onRemove={handleRemoveItem} budget={project.Budget} showMessage={showMessage}/>
                 </div>
             </DndProvider>
         </div>

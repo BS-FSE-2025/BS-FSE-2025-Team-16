@@ -10,8 +10,13 @@ function SuppliersPage() {
     const [suppliers, setSuppliers] = useState([]);
     const [editForm, setEditForm] = useState({ name: "", info: "" });
     const [isEditMode, setIsEditMode] = useState(false);
-
+    const [user, setUser] = useState(JSON.parse(localStorage.getItem('loggedInUser')));
     useEffect(() => {
+        const savedUser = JSON.parse(localStorage.getItem("loggedInUser"));
+            if (!savedUser) {
+                window.location.href = '/';
+                return;
+            }
         APIService.user().then(data => {
             console.log(data.data);
             setSuppliers((data.data).filter((user) => user.Type === 3));
@@ -82,21 +87,23 @@ function SuppliersPage() {
                         <form onSubmit={handleFormSubmit}>
                             <label>
                                 Name:
+                            </label>
                                 <input
                                     type="text"
                                     name="name"
-                                    value={editForm.name}
+                                    value={selectedSupplier.Name}
                                     onChange={handleInputChange}
                                 />
-                            </label>
+                            
                             <label>
                                 Info:
+                            </label>
                                 <textarea
                                     name="info"
-                                    value={editForm.info}
+                                    value={selectedSupplier.info}
                                     onChange={handleInputChange}
                                 />
-                            </label>
+                            
                             <button type="submit">Save</button>
                             <button type="button" onClick={handleBackClick}>Back</button>
                         </form>
@@ -105,7 +112,10 @@ function SuppliersPage() {
                     <div className="supplier-info">
                         <h2>{selectedSupplier.Name}</h2>
                         <p>{selectedSupplier.info}</p>
+                        {user.Id === selectedSupplier.Id && (
                         <button onClick={handleEditClick}>Edit</button>
+                        )}
+                        
                         <button onClick={handleBackClick}>Back</button>
                     </div>
                 )
