@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from "react";
 import { DndProvider, useDrag, useDrop } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
@@ -205,26 +204,36 @@ const DndBoardApp = () => {
                 }
     
                 // הבאת פריטים לסרגל הצד
-                const fetchSidebarItems = async () => {
-                    try {
-                        const plantsResponse = await APIService.plants();
-                        const gardenElementsResponse = await APIService.GardenElement();
-                        const plants = plantsResponse.data.map((plant) => ({
-                            ...plant,
-                            type: "Plant",
-                            uniqueId: parseInt(nanoid()),
-                        }));
-                        const gardenElements = gardenElementsResponse.data.map((element) => ({
-                            ...element,
-                            type: "Garden Element",
-                            uniqueId: parseInt(nanoid()),
-                        }));
-                        setSidebarItems([...plants, ...gardenElements]);
-                    } catch (error) {
-                        console.error("Error fetching sidebar items:", error);
-                    }
-                };
-    
+                // const fetchSidebarItems = async () => {
+                    const fetchSidebarItems = async () => {
+                        try {
+                            // קבלת נתוני הצמחים
+                            const plantsResponse = await APIService.plants();
+                            // סינון הנתונים לאחר קבלת התשובה
+                            const filteredPlants = plantsResponse.data.filter(res => res.climate === savedProject.Climate);
+                            console.log(filteredPlants)
+                            // קבלת נתוני אלמנטים בגינה
+                            const gardenElementsResponse = await APIService.GardenElement();
+                    
+                            // מיפוי הנתונים ליצירת אובייקטים עם uniqueId
+                            const plants = filteredPlants.map((plant) => ({
+                                ...plant,
+                                type: "Plant",
+                                uniqueId: parseInt(nanoid()),
+                            }));
+                    
+                            const gardenElements = gardenElementsResponse.data.map((element) => ({
+                                ...element,
+                                type: "Garden Element",
+                                uniqueId: parseInt(nanoid()),
+                            }));
+                    
+                            // עדכון ה- state עם הנתונים
+                            setSidebarItems([...plants, ...gardenElements]);
+                        } catch (error) {
+                            console.error("Error fetching sidebar items:", error);
+                        }
+                    };
                 await fetchSidebarItems(); // קריאה לפונקציה שהביאה פריטים
             } catch (error) {
                 console.error("Error during initialization:", error);
@@ -434,7 +443,3 @@ const DndBoardApp = () => {
 };
 
 export default DndBoardApp;
-
-    
-
-

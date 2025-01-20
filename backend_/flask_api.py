@@ -299,6 +299,7 @@ def plants():
     Plants.info AS info,
     Plants.img AS img,
     Plants.price,
+    Plants.climate,
     Climate_type.name AS climate_name
     FROM 
         Plants
