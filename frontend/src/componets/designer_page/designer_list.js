@@ -11,7 +11,8 @@ function DesignersPage() {
     const [editForm, setEditForm] = useState({ name: "", info: "" });
     const [isEditMode, setIsEditMode] = useState(false);
     const [user, setUser] = useState(JSON.parse(localStorage.getItem('loggedInUser')));
-
+    const [desingerProjects, setDesignersProjects] = useState([]);
+    const [myProjects,setMyprojects]=useState([])
     useEffect(() => {
         const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser'));
         if (!loggedInUser) {
@@ -21,6 +22,10 @@ function DesignersPage() {
             console.log(data.data);
             setDesigners((data.data).filter((user) => user.Type === 4));
         });
+        APIService.projects().then(data => {
+            console.log(data.data);
+            setMyprojects(data.data.filter((project) => project.client_id === loggedInUser.Id));
+        })
     }
     }, []);
 
@@ -35,8 +40,12 @@ function DesignersPage() {
         setEditForm({ 
             id: designer.Id, 
             name: designer.Name, 
-            info: designer.info 
+            info: designer.info
         });
+        APIService.projects().then(data => {
+            console.log(data.data);
+            setDesignersProjects(data.data.filter((project) => project.client_id === designer.Id));
+        })
     };
 
     const handleBackClick = () => {
@@ -76,6 +85,16 @@ function DesignersPage() {
     const handleEditClick = () => {
         setIsEditMode(true);
     };
+    const hundleCopy =(project)=>{
+        console.log(project)
+        if(user.Type==2 && myProjects.length>0){
+            window.alert("you cant copy the project becuse you have one and customer can work just on one project")
+        }
+        else{
+            APIService.copyProject({"project":project,"user":user})
+        }
+        
+    }
 
     return (
         <div>
@@ -116,8 +135,23 @@ function DesignersPage() {
                     <div className="designer-info">
                         <h2>{selectedDesigner.Name}</h2>
                         <p>{selectedDesigner.info}</p>
-                        <p>{selectedDesigner.Id}</p>
-                        {user.Id === selectedDesigner.Id && (
+                        {
+                            desingerProjects.length > 0 && (
+                                <div>
+                                    <h3>Projects</h3>
+                                    <ul>
+                                        {desingerProjects.map(project => (
+                                            <li key={project.id}>
+                                                <h4>{project.name}</h4>
+                                                <img key={project.id} src={`data:image/jpeg;base64,${project.img}`} alt={project.name} />
+                                                <button onClick={()=>hundleCopy(project)}>copy</button>
+                                            </li>
+                                        ))}
+                                    </ul>
+                                </div>
+                            )
+                        }
+                        {user.Id === selectedDesigner.Id || user.Type===1 && (
                         <button onClick={handleEditClick}>Edit</button>
                         )}
                         <button onClick={handleBackClick}>Back</button>

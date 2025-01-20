@@ -24,6 +24,11 @@ function RatingPage() {
 
   useEffect(() => {
     setUser(JSON.parse(localStorage.getItem('loggedInUser')));
+    const savedUser = JSON.parse(localStorage.getItem("loggedInUser"));
+    if (!savedUser) {
+        window.location.href = '/';
+        return;
+    }
   }, []);
 
   const handleSubmit = () => {
@@ -33,6 +38,7 @@ function RatingPage() {
     console.log(user);
     APIService.NewReview({"rating": rating, "feedback": feedback, "id": user.Id});
     window.location.reload();
+    window.location.href = '/';
   };
 
   return (

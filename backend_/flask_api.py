@@ -9,6 +9,7 @@ import sqlite3, flask_sqlalchemy
 import json
 import backend
 import base64
+# import sqlitecloud
 
 app = Flask(__name__)
 CORS(app, supports_credentials=True, resources={r"/api/*": {"origins": "*"}})
@@ -51,7 +52,7 @@ def usersType():
 
     # שליפת נתונים
     rows = cursor.fetchall()
-    # print(rows)
+    #     # print(rows)
     # המרת הנתונים ל-JSON
     json_data = backend.query_to_js(columns_names, rows)
 
@@ -63,14 +64,13 @@ def usersType():
 def plantsType():
     conn = sqlite3.connect("PlantPricer.db")
     cursor = conn.cursor()
-
     # שליפת שמות העמודות אוטומטית
     cursor.execute("SELECT * FROM plants_Type")
     columns_names = [description[0] for description in cursor.description]
 
     # שליפת נתונים
     rows = cursor.fetchall()
-    # print(rows)
+    #     # print(rows)
     # המרת הנתונים ל-JSON
     json_data = backend.query_to_js(columns_names, rows)
 
@@ -82,14 +82,13 @@ def plantsType():
 def climateType():
     conn = sqlite3.connect("PlantPricer.db")
     cursor = conn.cursor()
-
     # שליפת שמות העמודות אוטומטית
     cursor.execute("SELECT * FROM Climate_type")
     columns_names = [description[0] for description in cursor.description]
 
     # שליפת נתונים
     rows = cursor.fetchall()
-    # print(rows)
+    #     # print(rows)
     # המרת הנתונים ל-JSON
     json_data = backend.query_to_js(columns_names, rows)
 
@@ -101,7 +100,6 @@ def climateType():
 def projects():
     conn = sqlite3.connect("PlantPricer.db")
     cursor = conn.cursor()
-
     # שליפת שמות העמודות אוטומטית
     cursor.execute("SELECT * FROM projects")
     columns_names = [description[0] for description in cursor.description]
@@ -115,7 +113,7 @@ def projects():
             row_dict['img'] = base64.b64encode(row_dict['img']).decode('utf-8')
         json_data.append(row_dict)
 
-    # print(rows)
+    #     # print(rows)
     # המרת הנתונים ל-JSON
     # json_data = backend.query_to_js(columns_names, rows)
 
@@ -136,13 +134,13 @@ def newUser():
        WHERE name = '{req["userType"]}';
        """
 
-    # print(sql)
+    #     # print(sql)
     try:
         cursor.execute(sql)
         conn.commit()
         response = {"status": "success", "message": "added successfully"}
     except sqlite3.Error as e:
-        print(f"Database error: {e}")
+        # print(f"Database error: {e}")
         response = {"status": "error", "message": str(e)}
     finally:
         conn.close()
@@ -154,10 +152,11 @@ def newUser():
 @cross_origin()
 def NewPlants():
     try:
+
         conn = sqlite3.connect("PlantPricer.db")
         cursor = conn.cursor()
         req = request.get_json()
-        # print("Request received:", req)
+        #         # print("Request received:", req)
 
         img = req.get("img", None)  # Safely access the img key
         data = req.get("data", None)
@@ -165,7 +164,7 @@ def NewPlants():
         if img is None or data is None:
             return {"success": True}, 200
 
-        # print("Image Data:", img.split(",")[1])  # Debug Base64 content
+        #         # print("Image Data:", img.split(",")[1])  # Debug Base64 content
         # Continue processing...
         if "," in req["img"]:
             image_data = base64.b64decode(req["img"].split(",")[1])
@@ -188,7 +187,7 @@ def NewPlants():
         return response, 200
 
     except Exception as e:
-        print("Error:", e)
+        # print("Error:", e)
         return {"error": str(e)}, 500
 
 
@@ -202,7 +201,6 @@ def newElement():
 
     conn = sqlite3.connect("PlantPricer.db")
     cursor = conn.cursor()
-
     try:
         # Validate and decode the image data
         img_field = req["data"]["img"]
@@ -214,7 +212,7 @@ def newElement():
         else:
             image_data = base64.b64decode(img_field)
     except Exception as e:
-        print(f"Error decoding image data: {e}")
+        # print(f"Error decoding image data: {e}")
         return {"status": "error", "message": f"Invalid image data format: {e}"}, 400
 
     # Prepare the SQL query
@@ -232,7 +230,7 @@ def newElement():
         conn.commit()
         response = {"status": "success", "message": "Added successfully"}
     except sqlite3.Error as e:
-        print(f"Database error: {e}")
+        # print(f"Database error: {e}")
         response = {"status": "error", "message": str(e)}
     finally:
         conn.close()
@@ -244,7 +242,8 @@ def newElement():
 @cross_origin()
 def project_details():
     req = request.json
-    print(req)
+    # print(req)
+
     conn = sqlite3.connect("PlantPricer.db")
     cursor = conn.cursor()
     sql = f"""
@@ -281,7 +280,7 @@ def project_details():
         return jsonify({"status": "success", "data": json_data})
 
     except sqlite3.Error as e:
-        print(f"Database error: {e}")
+        # print(f"Database error: {e}")
         response = {"status": "error", "message": str(e)}
         return jsonify(response)
     finally:
@@ -293,7 +292,6 @@ def project_details():
 def plants():
     conn = sqlite3.connect("PlantPricer.db")
     cursor = conn.cursor()
-
     sql = """SELECT 
     Plants.id,
     Plants.name,
@@ -357,7 +355,6 @@ def UpdateGardenElement():
 
     conn = sqlite3.connect("PlantPricer.db")
     cursor = conn.cursor()
-
     sql = f"""
         UPDATE garden_elements
         SET 
@@ -366,7 +363,7 @@ def UpdateGardenElement():
          WHERE element_id =  {req["garden"]["id"]};
        """
 
-    print(sql)
+    # print(sql)
     try:
         cursor.execute(sql)
         conn.commit()
@@ -377,12 +374,12 @@ def UpdateGardenElement():
 
         # שליפת נתונים
         rows = cursor.fetchall()
-        # print(rows)
+        #         # print(rows)
         # המרת הנתונים ל-JSON
         json_data = backend.query_to_js(columns_names, rows)
         response = {"status": "success", "message": " added successfully", "new_elements": json_data}
     except sqlite3.Error as e:
-        print(f"Database error: {e}")
+        # print(f"Database error: {e}")
         response = {"status": "error", "message": str(e)}
     finally:
         conn.close()
@@ -397,7 +394,7 @@ def UpdatePlants():
 
     conn = sqlite3.connect("PlantPricer.db")
     cursor = conn.cursor()
-    print(req)
+    # print(req)
     sql = f"""
         UPDATE plants
         SET 
@@ -406,13 +403,13 @@ def UpdatePlants():
          WHERE id =  {req["plants"]["id"]};
        """
 
-    # print(sql)
+    #     # print(sql)
     try:
         cursor.execute(sql)
         conn.commit()
         response = {"status": "success", "message": "User added successfully"}
     except sqlite3.Error as e:
-        print(f"Database error: {e}")
+        # print(f"Database error: {e}")
         response = {"status": "error", "message": str(e)}
     finally:
         conn.close()
@@ -426,11 +423,11 @@ def update_supplier():
     conn = sqlite3.connect("PlantPricer.db")
     cursor = conn.cursor()
     req = request.json  # הנתונים שמגיעים מהלקוח
-    print("Request received:", req)  # בדוק מה התקבל בשרת
+    # print("Request received:", req)  # בדוק מה התקבל בשרת
 
     if 'id' not in req:
         return {"status": "error", "message": "Missing 'id' in request data"}, 400
-
+    print(req["name"])
     sql = f"""
         UPDATE users
         SET
@@ -439,7 +436,7 @@ def update_supplier():
         WHERE id = {req["id"]};
         
     """
-    # print(sql)
+    #     # print(sql)
     try:
         cursor.execute(sql)
         conn.commit()
@@ -456,7 +453,7 @@ def newProject():
     conn = sqlite3.connect("PlantPricer.db")
     cursor = conn.cursor()
     req = request.json  # הנתונים שמגיעים מהלקוח
-    print("Request received:", req)  # בדוק מה התקבל בשרת
+    # print("Request received:", req)  # בדוק מה התקבל בשרת
 
     sql = f"""
     INSERT INTO projects (client_id,name, status_id,Budget,Width,Len,climate,inactive)
@@ -465,7 +462,7 @@ def newProject():
 
     """
 
-    print(sql)
+    # print(sql)
 
     try:
         cursor.execute(sql)
@@ -477,21 +474,19 @@ def newProject():
         conn.close()
 
 
-
-
 @app.route('/deleteProject', methods=['POST'])
 @cross_origin()
 def deleteProject():
     conn = sqlite3.connect("PlantPricer.db")
     cursor = conn.cursor()
     req = request.json  # הנתונים שמגיעים מהלקוח
-    print("Request received:", req)  # בדוק מה התקבל בשרת
+    # print("Request received:", req)  # בדוק מה התקבל בשרת
 
     try:
         # עדכון שדה inactive בפרויקט
         update_sql = f"""
-        UPDATE projects
-        SET inactive = 0
+        delete from projects
+        
         WHERE id = ?;
         """
         cursor.execute(update_sql, (req["id"],))
@@ -506,21 +501,20 @@ def deleteProject():
         conn.commit()
         return {"status": "success", "message": "Project successfully deleted and updated"}
     except sqlite3.Error as e:
-        print("SQL Error:", e)
+        # print("SQL Error:", e)
         return {"status": "error", "message": str(e)}, 500
     finally:
         conn.close()
-
 
 
 #
 # @app.route('/deleteProject', methods=['POST'])
 # @cross_origin()
 # def deleteProject():
-#     conn = sqlite3.connect("PlantPricer.db")
-#     cursor = conn.cursor()
+#     
+#     conn = sqlitecloud.connect("sqlitecloud://cpyjdtbvnk.g5.sqlite.cloud:8860/PlantPricer.db?apikey=PJuyYTUePUY20Abu33rsOVLGhHyW3Hzspl9qsUZmfDk")
 #     req = request.json  # הנתונים שמגיעים מהלקוח
-#     print("Request received:", req)  # בדוק מה התקבל בשרת
+# #     print("Request received:", req)  # בדוק מה התקבל בשרת
 #
 #     sql = f"""
 #      UPDATE projects
@@ -533,7 +527,7 @@ def deleteProject():
 #
 #     """
 #
-#     print(sql)
+# #     print(sql)
 #
 #     try:
 #         cursor.execute(sql)
@@ -551,7 +545,7 @@ def newReview():
     conn = sqlite3.connect("PlantPricer.db")
     cursor = conn.cursor()
     req = request.json  # הנתונים שמגיעים מהלקוח
-    print("Request received:", req)  # בדוק מה התקבל בשרת
+    # print("Request received:", req)  # בדוק מה התקבל בשרת
 
     sql = f"""
     INSERT INTO rating (user_id,stars,review)
@@ -575,7 +569,6 @@ def newReview():
 def review():
     conn = sqlite3.connect("PlantPricer.db")
     cursor = conn.cursor()
-
     # שליפת שמות העמודות אוטומטית
     cursor.execute("""SELECT 
     rating.id,
@@ -593,27 +586,24 @@ def review():
 
     # שליפת נתונים
     rows = cursor.fetchall()
-    # print(rows)
+    #     # print(rows)
     # המרת הנתונים ל-JSON
     json_data = backend.query_to_js(columns_names, rows)
 
     return json_data
 
 
-
-
-
 # def insert_details(item,project,detail_id_to_check):
 def insert_details(item, project, detail_id_to_check):
-    print((item["id"]))
+    # print((item["id"]))
+
     conn = sqlite3.connect("PlantPricer.db")
     cursor = conn.cursor()
-
     # בדיקת קיום `detail_id_to_check` בטבלה
     check_sql = "SELECT 1 FROM project_details WHERE detail_id = ?"
     cursor.execute(check_sql, (detail_id_to_check,))
     if cursor.fetchone():
-        print({"status": "error", "message": f"detail_id {detail_id_to_check} already exists"}, 400)
+        # print({"status": "error", "message": f"detail_id {detail_id_to_check} already exists"}, 400)
         conn.close()
         return
 
@@ -634,9 +624,9 @@ def insert_details(item, project, detail_id_to_check):
             item["x"],
             item["y"]
         ))
-        print(project["id"])
+        # print(project["id"])
         conn.commit()
-        print({"status": "success", "message": "New item added successfully"})
+        # print({"status": "success", "message": "New item added successfully"})
     except sqlite3.Error as e:
         print({"status": "error", "message": str(e)}, 500)
     finally:
@@ -648,12 +638,13 @@ def delete_item(delete_id):
         DELETE FROM project_details
         WHERE detail_id = {delete_id}; 
     """
+
     conn = sqlite3.connect("PlantPricer.db")
     cursor = conn.cursor()
     try:
         cursor.execute(delete_sql)
         conn.commit()
-        print({"status": "success", "message": "item delete successfully"})
+        # print({"status": "success", "message": "item delete successfully"})
 
     except sqlite3.Error as e:
         print({"status": "error", "message": str(e)}, 500)
@@ -667,7 +658,7 @@ def update_designer():
     conn = sqlite3.connect("PlantPricer.db")
     cursor = conn.cursor()
     req = request.json  # הנתונים שמגיעים מהלקוח
-    # print("Request received:", req)  # בדוק מה התקבל בשרת
+    #     # print("Request received:", req)  # בדוק מה התקבל בשרת
 
     sql = f"""
         UPDATE users
@@ -676,7 +667,7 @@ def update_designer():
         WHERE id = {req["id"]};
 
     """
-    # print(sql)
+    #     # print(sql)
     try:
         cursor.execute(sql)
         conn.commit()
@@ -693,11 +684,11 @@ def update_user_status():
     conn = sqlite3.connect("PlantPricer.db")
     cursor = conn.cursor()
     req = request.json  # הנתונים שמגיעים מהלקוח
-    print("Request received:", req)  # בדוק מה התקבל בשרת
+    # print("Request received:", req)  # בדוק מה התקבל בשרת
 
     # if 'id' not in req:
     #     return {"status": "error", "message": "Missing 'id' in request data"}, 400
-    print(req)
+    # print(req)
     sql = f"""
         UPDATE users
         SET
@@ -705,7 +696,7 @@ def update_user_status():
         WHERE id = {req["id"]};
 
     """
-    # print(sql)
+    #     # print(sql)
     try:
         cursor.execute(sql)
         conn.commit()
@@ -727,7 +718,6 @@ def insertItemProject():
 
     conn = sqlite3.connect("PlantPricer.db")
     cursor = conn.cursor()
-
     try:
 
         sql = """SELECT * from project_details"""
@@ -737,11 +727,11 @@ def insertItemProject():
 
         # # שליפת נתונים
         rows = cursor.fetchall()
-        print(rows)
+        # print(rows)
 
         # # המרת הנתונים ל-JSON
         json_data = backend.query_to_js(columns_names, rows)
-        print(json_data)
+        # print(json_data)
         if len(req["Garden Element"]) != 0:
             for i in range(len(req["Garden Element"])):
 
@@ -752,7 +742,7 @@ def insertItemProject():
                     # update_detail()
                 else:
                     insert_details(req["Garden Element"][i], project, detail_id_to_check)
-                    print(f"detail_id {detail_id_to_check} לא קיים ברשימה.")
+                    # print(f"detail_id {detail_id_to_check} לא קיים ברשימה.")
 
         if len(req["Plant"]) != 0:
             for i in range(len(req["Plant"])):
@@ -764,18 +754,18 @@ def insertItemProject():
                     # update_detail()
                 else:
                     insert_details(req["Plant"][i], project, detail_id_to_check)
-                    # print(plant[i])
-                    print(f"detail_id {detail_id_to_check} לא קיים ברשימה.")
+                    # # print(plant[i])
+                    # print(f"detail_id {detail_id_to_check} לא קיים ברשימה.")
         if len(removeList) != 0:
             for i in range(len(removeList)):
                 detail_id_to_check = removeList[i]["uniqueId"]
                 exists = any(detail['detail_id'] == detail_id_to_check for detail in json_data)
                 if (exists):
                     delete_item(detail_id_to_check)
-                    print("item is delete")
+                    # print("item is delete")
         response = {"status": "success", "message": " added successfully", "new_elements": json_data}
     except sqlite3.Error as e:
-        print(f"Database error: {e}")
+        # print(f"Database error: {e}")
         response = {"status": "error", "message": str(e)}
     finally:
         conn.close()
@@ -818,13 +808,71 @@ def InsertImgToProject():
         return {"status": "success", "message": "Image stored as BLOB successfully"}, 200
 
     except Exception as e:
-        print("Error:", e)
+        # print("Error:", e)
         return {"error": str(e)}, 500
 
     finally:
         if conn:
             conn.close()
 
+
+
+
+
+@app.route('/copyProject', methods=['POST'])
+@cross_origin()
+def copyProject():
+    conn = sqlite3.connect("PlantPricer.db")
+    cursor = conn.cursor()
+    req = request.json  # הנתונים שמגיעים מהלקוח
+    # print("Request received:", req)  # בדוק מה התקבל בשרת
+
+    # sql = f"""
+    # INSERT INTO projects (client_id,name, status_id,Budget,Width,Len,climate,inactive)
+    # VALUES ({req["user"]["Id"]}, '{req["project"]["name"]}-copy', 1,  {req["project"]["Budget"]}, {req["project"]["Width"]}, {req["project"]["Len"]}, {req["project"]["Climate"]},1);
+    #
+    # INSERT INTO project_details (project_id, item_id, itemName, total_price, type, x, y)
+    # SELECT , item_id, itemName, total_price, type, x, y
+    # FROM project_details
+    # WHERE project_id = {req["project"]["id"]};
+    # """
+
+    # print(sql)
+
+    try:
+        create_project_query = """
+               INSERT INTO projects (client_id, name, status_id, Budget, Width, Len, climate, inactive)
+               VALUES (?, ?, ?, ?, ?, ?, ?, ?);
+               """
+        cursor.execute(create_project_query, (
+            req["user"]["Id"],
+            f"{req['project']['name']}-copy",
+            1,
+            req["project"]["Budget"],
+            req["project"]["Width"],
+            req["project"]["Len"],
+            req["project"]["Climate"],
+            1,
+        ))
+
+        # שליפת ה-ID של הפרויקט החדש
+        new_project_id = cursor.lastrowid
+
+        # העתקת הנתונים
+        copy_details_query = """
+               INSERT INTO project_details (project_id, item_id, itemName, total_price, type, x, y)
+               SELECT ?, item_id, itemName, total_price, type, x, y
+               FROM project_details
+               WHERE project_id = ?;
+               """
+        cursor.execute(copy_details_query, (new_project_id, req["project"]["id"]))
+
+        conn.commit()
+        return {"status": "success", "message": "new Project successfully"}
+    except sqlite3.Error as e:
+        return {"status": "error", "message": str(e)}, 500
+    finally:
+        conn.close()
 
 if __name__ == "__main__":
     # db.create_all()

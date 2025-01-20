@@ -60,7 +60,7 @@ const Navbar = ({hundleOpenLoginPopup}) => {
             </div>
             {!loggedInUser ? (
                 <>
-                    <button className="" onClick={hundleOpenLoginPopup}>
+                    <button className="" id='login-button' onClick={hundleOpenLoginPopup}>
                         Login
                     </button>
                     <button className=""onClick={()=>{
