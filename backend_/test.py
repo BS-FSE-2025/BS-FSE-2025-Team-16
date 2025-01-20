@@ -1,10 +1,25 @@
-import sqlitecloud
+from selenium import webdriver
+from selenium.webdriver.common.by import By
 
-try:
-    conn = sqlitecloud.connect(
-        "wss://cpyjdtbvnk.g5.sqlite.cloud:8860/PlantPricer.db?apikey=PJuyYTUePUY20Abu33rsOVLGhHyW3Hzspl9qsUZmfDk",
+# הגדרת הדפדפן
+driver = webdriver.Chrome()
 
-    )
-    print("Connected successfully!")
-except sqlitecloud.exceptions.SQLiteCloudException as e:
-    print("Connection failed:", e)
+# פתיחת האתר
+driver.get("http://localhost:3000")  # אתר React שלך
+
+# בדיקת ה-state הראשוני
+state = driver.execute_script("return window.getState();")
+assert state["show"] == False
+print("State לפני לחיצה:", state)
+
+# חיפוש רכיב ולחיצה
+button = driver.find_element(By.ID, "login-button")
+button.click()
+
+# בדיקת ה-state לאחר לחיצה
+state = driver.execute_script("return window.getState();")
+assert state["show"] == True
+print("State אחרי לחיצה:", state)
+
+# סגירת הדפדפן
+driver.quit()
