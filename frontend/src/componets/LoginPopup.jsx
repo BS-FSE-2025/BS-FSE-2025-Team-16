@@ -64,7 +64,7 @@ function LoginPopup({isOpen,setIsOpen}){
                               </div>
                               <div>
                               <h1 style={popupStyles.header}>
-                                  ברוכים הבאים למערכת ניהול הגינה
+                                 Login
                                 </h1>
                               </div>
                             <div className="row mb-5">
@@ -79,7 +79,7 @@ function LoginPopup({isOpen,setIsOpen}){
                                 </div>
                                 <div className=" col-4 text-end  my-auto">
                                     <div className="text-end">
-                                        <label>שם</label>
+                                        <label></label>
                                     </div>
                                         
                                     
@@ -115,13 +115,13 @@ function LoginPopup({isOpen,setIsOpen}){
                             </div>
                             <div className="col-4 text-end my-auto">
                               <div className="text-end">
-                                <label>סיסמה</label>
+                                <label></label>
                               </div>
                             </div>
                             <div className="row">
                             <div style={popupStyles.links}>
                                       {/* <a href="#" style={popupStyles.link} className="col-6 " dir="rtl">שכחת סיסמה?</a> */}
-                                      <a href="/newUser" style={popupStyles.link} className="col-6 " dir="rtl">אין לך חשבון? הירשם כאן</a>
+                                      <a href="/newUser" style={popupStyles.link} className="col-6 " dir="rtl"> Don’t have an account? Sign up here</a>
                               </div>
                             
                             </div>
@@ -157,6 +157,7 @@ const popupStyles = {
       fontSize: "24px",
       marginBottom: "20px",
       color: "#2E7D32", // ירוק כהה
+      marginTop:"-60px"
     },
     button: {
       padding: "10px",
@@ -169,10 +170,12 @@ const popupStyles = {
     },
     popup: {
       background: "#90EE90",
-      padding: "150px",
+      padding: "50px",  // הקטן מ-150px ל-50px
       borderRadius: "8px",
       boxShadow: "0 5px 15px rgba(0, 0, 0, 0.3)",
-        textAlign: "center",
+      textAlign: "center",
+      width: "500px",  // קביעת רוחב קבוע קטן יותר
+      height: "350px" // אפשר להוסיף כדי להקטין את הגובה
     },
     links: {
       marginTop: "15px",

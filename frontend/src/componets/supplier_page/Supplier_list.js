@@ -112,7 +112,7 @@ function SuppliersPage() {
                     <div className="supplier-info">
                         <h2>{selectedSupplier.Name}</h2>
                         <p>{selectedSupplier.info}</p>
-                        {user.Id === selectedSupplier.Id && (
+                        {user.Id === selectedSupplier.Id || user.Type===1 && (
                         <button onClick={handleEditClick}>Edit</button>
                         )}
                         
