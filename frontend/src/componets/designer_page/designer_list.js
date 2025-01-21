@@ -19,11 +19,11 @@ function DesignersPage() {
             window.location.href = '/';
         } else {
         APIService.user().then(data => {
-            console.log(data.data);
+            //console.log(data.data);
             setDesigners((data.data).filter((user) => user.Type === 4));
         });
         APIService.projects().then(data => {
-            console.log(data.data);
+            //console.log(data.data);
             setMyprojects(data.data.filter((project) => project.client_id === loggedInUser.Id));
         })
     }
@@ -43,7 +43,7 @@ function DesignersPage() {
             info: designer.info
         });
         APIService.projects().then(data => {
-            console.log(data.data);
+            //console.log(data.data);
             setDesignersProjects(data.data.filter((project) => project.client_id === designer.Id));
         })
     };
@@ -60,7 +60,7 @@ function DesignersPage() {
 
     const handleFormSubmit = (e) => {
         e.preventDefault();
-        console.log(editForm.id)
+        //console.log(editForm.id)
         //Update designer information in the database
         APIService.updateDesigner({
             id: editForm.id, // הוסף את ה-ID
@@ -72,7 +72,7 @@ function DesignersPage() {
                 designer.id === selectedDesigner.id ? { ...designer, ...editForm } : designer
             ));
             APIService.user().then(data => {
-                console.log(data.data);
+                //console.log(data.data);
                 setDesigners((data.data).filter((user) => user.Type === 4));
             });
             setSelectedDesigner(null);
@@ -86,7 +86,7 @@ function DesignersPage() {
         setIsEditMode(true);
     };
     const hundleCopy =(project)=>{
-        console.log(project)
+        //console.log(project)
         if(user.Type==2 && myProjects.length>0){
             window.alert("you cant copy the project becuse you have one and customer can work just on one project")
         }
@@ -160,7 +160,7 @@ function DesignersPage() {
             ) : (
                 <ul className="designer-list">
                     {designers.map(designer => (
-                        <li key={designer.Id} onClick={() =>{console.log(designer.Id);
+                        <li key={designer.Id} onClick={() =>{//console.log(designer.Id);
                          handleDesignerClick(designer)}}>
                             <h3>{designer.Name}</h3>
                         </li>

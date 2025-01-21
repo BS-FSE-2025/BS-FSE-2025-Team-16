@@ -28,7 +28,7 @@ const CombinedForm = () => {
             }
         APIService.climateType().then(res => {
             setclimateType(res.data);
-            console.log(res.data);
+            //console.log(res.data);
         });
         APIService.plantsType().then(res => {
             setPlantsType(res.data);
@@ -77,7 +77,7 @@ const CombinedForm = () => {
                 img: base64Img,
             };
 
-            console.log(jsonData);
+            //console.log(jsonData);
 
             if(formType === "plant"){
                 APIService.NewPlants({"data":jsonData, "climate":typesclimate, "type_plant":TypePlants,"img":JSON.stringify(jsonData.img)});

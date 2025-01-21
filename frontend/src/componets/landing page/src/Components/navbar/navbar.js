@@ -16,10 +16,10 @@ const Navbar = ({hundleOpenLoginPopup}) => {
     useEffect(() => {
         const savedUser = JSON.parse(localStorage.getItem('loggedInUser'));
         if (savedUser) {
-            console.log('User is logged in:', savedUser);
+            //console.log('User is logged in:', savedUser);
             setLoggedInUser(savedUser); // שמירה ב-state
         } else {
-            console.log('No user logged in--');
+            //console.log('No user logged in--');
         }
     }, []);
 
@@ -75,7 +75,7 @@ const Navbar = ({hundleOpenLoginPopup}) => {
                         onClick={() => {
                             localStorage.removeItem('loggedInUser');
                             setLoggedInUser(null);
-                            console.log('User logged out');
+                            //console.log('User logged out');
                             navigate('/')
                         }}
                     >

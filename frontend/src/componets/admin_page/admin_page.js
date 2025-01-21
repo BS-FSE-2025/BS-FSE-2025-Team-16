@@ -19,7 +19,7 @@ function AdminsPage() {
         } else {
             setUser(loggedInUser);
             APIService.user().then(data => {
-                console.log(data.data);
+                //console.log(data.data);
                 setUsers((data.data).filter((user) => user.Type !== 1));
             });
         }
@@ -32,7 +32,7 @@ function AdminsPage() {
       setshow(!show)
     }
     useEffect(()=>{
-        console.log(editForm)
+        //console.log(editForm)
     },[isEditMode])
     const handleUserClick = (user) => {
         setSelectedUser(user);
@@ -59,7 +59,7 @@ function AdminsPage() {
 
     const handleFormSubmit = (e) => {
         e.preventDefault();
-        console.log(editForm.id)
+        //console.log(editForm.id)
         //Update user information in the database
         APIService.updateUser({
             id: editForm.id, // הוסף את ה-ID
@@ -72,7 +72,7 @@ function AdminsPage() {
                 user.id === selectedUser.id ? { ...user, ...editForm } : user
             ));
             APIService.user().then(data => {
-                console.log(data.data);
+                //console.log(data.data);
                 setUser((data.data).filter((user) => user.Type !== 1));
             });
             setSelectedUser(null);
@@ -143,7 +143,7 @@ function AdminsPage() {
             ) : (
                 <ul className="user-list">
                     {users.map(user => (
-                        <li key={user.Id} onClick={() =>{console.log(user.Id);
+                        <li key={user.Id} onClick={() =>{//console.log(user.Id);
                          handleUserClick(user)}}>
                             <h3>{user.Name}</h3>
                         </li>

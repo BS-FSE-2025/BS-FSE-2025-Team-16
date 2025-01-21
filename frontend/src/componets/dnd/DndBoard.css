@@ -91,7 +91,7 @@
   border-radius: 50%; /* עיצוב מעוגל */
   cursor: pointer;
   font-size: 14px; /* גודל הטקסט */
-  z-index: 10; /* מבטיח שהכפתור מעל התמונה */
+  z-index: 1; /* מבטיח שהכפתור מעל התמונה */
 }
 
 .remove-button:hover {
@@ -209,4 +209,8 @@
 }
 .remove-button-purchased:hover {
   background-color: darkred;
+}
+.message-box{
+  color: red;
+  
 }

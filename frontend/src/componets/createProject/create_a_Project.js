@@ -67,7 +67,7 @@ function CreateProject() {
     // בדיקת שגיאות וטיפול בהן
     if (!Object.values(errors).some((err) => err) && formData.projectName && formData.climate) {
       alert("Form submitted successfully!");
-      console.log(formData);
+      //console.log(formData);
 
       // שליחת הנתונים ל-API
       APIService.NewProject({ "user": user, "project": formData });
@@ -78,8 +78,8 @@ function CreateProject() {
       alert("Please fix the errors before submitting.");
     }
 
-    console.log(user);
-    console.log(formData);
+    //console.log(user);
+    //console.log(formData);
   };
 
   return (

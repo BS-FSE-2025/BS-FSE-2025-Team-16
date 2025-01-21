@@ -193,7 +193,7 @@ const DndBoardApp = () => {
     
                 // בדיקת פרויקט שמור ב-localStorage
                 const savedProject = JSON.parse(localStorage.getItem("project"));
-                console.log("Saved Project:", savedProject);
+                //console.log("Saved Project:", savedProject);
     
                 if (savedUser) {
                     setLoggedInUser(savedUser);
@@ -205,26 +205,36 @@ const DndBoardApp = () => {
                 }
     
                 // הבאת פריטים לסרגל הצד
-                const fetchSidebarItems = async () => {
-                    try {
-                        const plantsResponse = await APIService.plants();
-                        const gardenElementsResponse = await APIService.GardenElement();
-                        const plants = plantsResponse.data.map((plant) => ({
-                            ...plant,
-                            type: "Plant",
-                            uniqueId: parseInt(nanoid()),
-                        }));
-                        const gardenElements = gardenElementsResponse.data.map((element) => ({
-                            ...element,
-                            type: "Garden Element",
-                            uniqueId: parseInt(nanoid()),
-                        }));
-                        setSidebarItems([...plants, ...gardenElements]);
-                    } catch (error) {
-                        console.error("Error fetching sidebar items:", error);
-                    }
-                };
-    
+                // const fetchSidebarItems = async () => {
+                    const fetchSidebarItems = async () => {
+                        try {
+                            // קבלת נתוני הצמחים
+                            const plantsResponse = await APIService.plants();
+                            // סינון הנתונים לאחר קבלת התשובה
+                            const filteredPlants = plantsResponse.data.filter(res => res.climate === savedProject.Climate);
+                            //console.log(filteredPlants)
+                            // קבלת נתוני אלמנטים בגינה
+                            const gardenElementsResponse = await APIService.GardenElement();
+                    
+                            // מיפוי הנתונים ליצירת אובייקטים עם uniqueId
+                            const plants = filteredPlants.map((plant) => ({
+                                ...plant,
+                                type: "Plant",
+                                uniqueId: parseInt(nanoid()),
+                            }));
+                    
+                            const gardenElements = gardenElementsResponse.data.map((element) => ({
+                                ...element,
+                                type: "Garden Element",
+                                uniqueId: parseInt(nanoid()),
+                            }));
+                    
+                            // עדכון ה- state עם הנתונים
+                            setSidebarItems([...plants, ...gardenElements]);
+                        } catch (error) {
+                            console.error("Error fetching sidebar items:", error);
+                        }
+                    };
                 await fetchSidebarItems(); // קריאה לפונקציה שהביאה פריטים
             } catch (error) {
                 console.error("Error during initialization:", error);
@@ -238,11 +248,11 @@ const DndBoardApp = () => {
     useEffect(() => {
 
         if (project.id) { // בדיקה אם project הוגדר
-            console.log(project.id)
+            //console.log(project.id)
 
             APIService.ProjectDetails(project)
                 .then((res) => {
-                    console.log("Project details:", res.data);
+                    //console.log("Project details:", res.data);
     
                     // מיפוי הנתונים למבנה הנדרש
                     const updatedItems = res.data["data"].map((item) => ({
@@ -304,23 +314,11 @@ const DndBoardApp = () => {
             return updatedPurchased;
         });
     
-        console.log("Added new item:", newItem);
+        //console.log("Added new item:", newItem);
     };
     
     
 
-
-    // const handleRemoveItem = (uniqueId) => {
-    //     // if(fromBoard)
-    //     setItems((prevItems) => prevItems.filter((item) => item.uniqueId !== uniqueId));
-    //     setPurchasedItems((prevPurchased) =>
-    //         prevPurchased.filter((item) => item.uniqueId !== uniqueId)
-    //     );
-    //     setRemovedItems((prevRemoved) => [
-    //         ...prevRemoved,
-    //         items.find((item) => item.uniqueId === uniqueId),
-    //     ]); // שמירה ברשימת הפריטים שהוסרו
-    // };
 
 
 
@@ -353,7 +351,7 @@ const DndBoardApp = () => {
 
     const showMessage = (msg) => {
         setMessage(msg);
-        setTimeout(() => setMessage(""), 3000);
+        setTimeout(() => setMessage(""), 5000);
     };
 
     const hundleOpenLoginPopup = () => {
@@ -361,7 +359,7 @@ const DndBoardApp = () => {
     };
 
     const handleSave = async () => {
-        console.log("Save button clicked");
+        //console.log("Save button clicked");
     
         const categorizedItems = items.reduce(
             (acc, item) => {
@@ -371,7 +369,7 @@ const DndBoardApp = () => {
             },
             { "Plant": [], "Garden Element": [], project, removedItems }
         );
-        console.log("Categorized Items:", categorizedItems);
+        //console.log("Categorized Items:", categorizedItems);
     
         APIService.insertItemProject(categorizedItems);
     

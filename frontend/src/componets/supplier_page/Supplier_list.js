@@ -18,7 +18,7 @@ function SuppliersPage() {
                 return;
             }
         APIService.user().then(data => {
-            console.log(data.data);
+            //console.log(data.data);
             setSuppliers((data.data).filter((user) => user.Type === 3));
         });
     }, []);
@@ -50,7 +50,7 @@ function SuppliersPage() {
 
     const handleFormSubmit = (e) => {
         e.preventDefault();
-        console.log(editForm.id)
+        //console.log(editForm.id)
         //Update supplier information in the database
         APIService.updateSupplier({
             id: editForm.id, // הוסף את ה-ID
@@ -122,7 +122,7 @@ function SuppliersPage() {
             ) : (
                 <ul className="supplier-list">
                     {suppliers.map(supplier => (
-                        <li key={supplier.Id} onClick={() =>{console.log(supplier.Id);
+                        <li key={supplier.Id} onClick={() =>{//console.log(supplier.Id);
                          handleSupplierClick(supplier)}}>
                             <h3>{supplier.Name}</h3>
                         </li>

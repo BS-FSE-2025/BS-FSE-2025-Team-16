@@ -13,7 +13,7 @@ class ApiServices
 
 
     // newComment(newComment){
-    //      //console.log(1)
+    //      ////console.log(1)
 
     //      return axios.post(API_URL+'newComment',  newComment,{'Access-Control-Allow-Origin': '*'});
     // }
@@ -33,7 +33,7 @@ class ApiServices
         return axios.get(API_URL+'plantsType', {'Access-Control-Allow-Origin': '*'})
     }
     createUser(newUser){
-        // console.log(1)
+        // //console.log(1)
          return axios.post(API_URL+'newUser', newUser,  {'Access-Control-Allow-Origin': '*'});
      }
      updateSupplier(data) {
@@ -43,7 +43,7 @@ class ApiServices
         return axios.get(API_URL+'plants', {'Access-Control-Allow-Origin': '*'})
     }
     updateplants(UpdatePlants){
-        console.log(UpdatePlants.id)
+        //console.log(UpdatePlants.id)
          return axios.post(API_URL+'UpdatePlants', {
             plants: {
                 info: UpdatePlants.info,
@@ -58,7 +58,7 @@ class ApiServices
         
      }
      updateGardenItem(UpdateGardenElement){
-        // console.log(1)
+        // //console.log(1)
          return axios.post(API_URL+'UpdateGardenElement', {
             garden: {
                 info: UpdateGardenElement.info,
@@ -74,20 +74,20 @@ class ApiServices
      }
 
      NewPlants(newPlants){
-        console.log(newPlants)
+        //console.log(newPlants)
          return axios.post(API_URL+'newPlants', newPlants,  {'Access-Control-Allow-Origin': '*'});
     }
     NewELement(newELement){
-        console.log(newELement)
+        //console.log(newELement)
          return axios.post(API_URL+'newElement', newELement,  {'Access-Control-Allow-Origin': '*'});
     }
 
      NewProject(newProject){
-        console.log(newProject)
+        //console.log(newProject)
          return axios.post(API_URL+'newProject', newProject,  {'Access-Control-Allow-Origin': '*'});
     }
     NewReview(newReview){
-        console.log(newReview)
+        //console.log(newReview)
          return axios.post(API_URL+'newReview', newReview,  {'Access-Control-Allow-Origin': '*'});
     }
     GardenElement(){
@@ -97,7 +97,7 @@ class ApiServices
         return axios.post(API_URL+'insertItemProject',categorizedItems, {'Access-Control-Allow-Origin': '*'})
     }
     ProjectDetails(project){
-        console.log({"project":project})
+        //console.log({"project":project})
         return axios.post(API_URL+'project_details',{"project":project}, {'Access-Control-Allow-Origin': '*'})
     }
     deleteProject(projectid){

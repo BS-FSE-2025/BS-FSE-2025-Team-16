@@ -33,9 +33,9 @@ function RatingPage() {
 
   const handleSubmit = () => {
     // Handle the submit action (e.g., sending the data to a server)
-    console.log("Rating submitted:", rating);
-    console.log("Feedback submitted:", feedback);
-    console.log(user);
+    //console.log("Rating submitted:", rating);
+    //console.log("Feedback submitted:", feedback);
+    //console.log(user);
     APIService.NewReview({"rating": rating, "feedback": feedback, "id": user.Id});
     window.location.reload();
     window.location.href = '/';

@@ -17,7 +17,7 @@ function ProjectManagement() {
   };
   const navigate = useNavigate();
   const fetchProjects = (savedUser) => {
-    console.log(savedUser)
+    //console.log(savedUser)
     APIService.projects()
       .then((res) => {
         setProjects(res.data.filter((project) => project.inactive === 1 && project.client_id==savedUser.Id));
@@ -45,11 +45,11 @@ function ProjectManagement() {
     if (selectedProject) {
         localStorage.setItem('project', JSON.stringify(selectedProject));
     }
-    console.log(`project ID: ${projectId}`);
+    //console.log(`project ID: ${projectId}`);
     navigate('/Dnd1')
   }
   const handleDeleteProject = (projectId) => {
-    console.log(`Delete project with ID: ${projectId}`);
+    //console.log(`Delete project with ID: ${projectId}`);
     const savedUser = JSON.parse(localStorage.getItem("loggedInUser"));
     APIService.deleteProject(projectId)
       .then(() => {

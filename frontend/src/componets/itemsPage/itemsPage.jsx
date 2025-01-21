@@ -157,7 +157,7 @@ const Modal = ({ product, setProdouct, onClose, onSave, TypeItem }) => {
         if (TypeItem === 1) {
             APIService.updateplants(updatedProduct)
                 .then((res) => {
-                    console.log("Plant updated:", res.data);
+                    //console.log("Plant updated:", res.data);
                 })
                 .catch((err) => {
                     console.error("Error updating plant:", err);
@@ -165,7 +165,7 @@ const Modal = ({ product, setProdouct, onClose, onSave, TypeItem }) => {
         } else if (TypeItem === 2) {
             APIService.updateGardenItem(updatedProduct)
                 .then((res) => {
-                    console.log("Garden item updated:", res.data.new_elements);
+                    //console.log("Garden item updated:", res.data.new_elements);
                     setProdouct(res.data.new_elements);
                 })
                 .catch((err) => {
