@@ -110,7 +110,7 @@ function DesignersPage() {
                     <div className="designer-info">
                         <h2>Edit Designer Info</h2>
                         <form onSubmit={handleFormSubmit}>
-                            <label>
+                            <p>
                                 Name: {editForm.name}
                                 {/* <input
                                     type="text"
@@ -118,15 +118,15 @@ function DesignersPage() {
                                     value={editForm.name}
                                     onChange={handleInputChange}
                                 /> */}
-                            </label>
-                            <label>
+                            </p>
+                            <p>
                                 Info:
                                 <textarea
                                     name="info"
                                     value={editForm.info}
                                     onChange={handleInputChange}
                                 />
-                            </label>
+                            </p>
                             <button type="submit">Save</button>
                             <button type="button" onClick={handleBackClick}>Back</button>
                         </form>

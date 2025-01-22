@@ -1,9 +1,10 @@
 .container {
   margin: 20px;
+  margin-top: -70px;
 }
 
 .header {
-  margin-bottom: 20px;
+  margin-bottom: 10px;
 }
 
 .filter-container {
@@ -108,3 +109,8 @@ button {
 button:hover {
   background-color: brown;
 }
+h10{
+  margin-top: -50px;
+
+}
+

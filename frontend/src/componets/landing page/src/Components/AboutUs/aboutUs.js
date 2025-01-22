@@ -1,16 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import './aboutUs.css';
 import logoForaboutUs from '../../assest/main-icon.jpg';
-import APIService from '../../../../APIService/index'; // Ensure the service is properly set up
+import APIService from '../../../../APIService/index';
 import { useNavigate } from 'react-router-dom';
+
 const AboutUs = () => {
-  const [ratings, setRatings] = useState([]); // Store ratings and feedback
+  const [ratings, setRatings] = useState([]);
   const navigate = useNavigate();
-  // Fetch ratings from the server
+
   useEffect(() => {
-    APIService.rating() // Assume APIService provides this function
+    APIService.rating()
       .then((response) => {
-        setRatings(response.data); // Store fetched ratings
+        setRatings(response.data);
       })
       .catch((error) => console.error("Error fetching reviews:", error));
   }, []);
@@ -29,13 +30,13 @@ const AboutUs = () => {
 
       <div className="reviews-container">
         <div className='header'>
-     <h1 className="white-text">We talk about us</h1>
-                        <button
-                            className="btn btn-primary add-button"
-                            onClick={() => navigate('/rating')}
-                        >
-                            <i className="bi bi-plus"></i>
-                        </button>
+          <h1 className="white-text">We talk about us</h1>
+          <button
+            className="btn btn-primary add-button"
+            onClick={() => navigate('/rating')}
+          >
+            Now it's your turn
+          </button>
         </div>
 
         <div className="scrolling-container">

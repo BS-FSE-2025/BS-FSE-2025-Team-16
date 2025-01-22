@@ -5,17 +5,21 @@ import "./admin_page.css";
 import APIService from "../APIService";
 
 function AdminsPage() {
-    // const [show, setShow] = useState(false);
     const [selectedUser, setSelectedUser] = useState(null);
     const [users, setUsers] = useState([]);
     const [editForm, setEditForm] = useState({ name: "", info: "" });
     const [isEditMode, setIsEditMode] = useState(false);
     const [user, setUser] = useState({});
+    const [show, setShow] = useState(false);
+
+    const hundleOpenLoginPopup = () => {
+        setShow(!show);
+    };
 
     useEffect(() => {
         const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser'));
-        if (!loggedInUser || loggedInUser.Type!==1) {
-            window.location.href = '/'; // Redirect to a specific page if not logged in
+        if (!loggedInUser || loggedInUser.Type !== 1) {
+            window.location.href = '/';
         } else {
             setUser(loggedInUser);
             APIService.user().then(data => {
@@ -23,14 +27,9 @@ function AdminsPage() {
                 setUsers((data.data).filter((user) => user.Type !== 1));
             });
         }
-        
     }, []);
 
-    const [show,setshow]=useState(false)
-    const hundleOpenLoginPopup =()=>{
-      
-      setshow(!show)
-    }
+
     useEffect(()=>{
         //console.log(editForm)
     },[isEditMode])
@@ -40,7 +39,7 @@ function AdminsPage() {
             id: user.Id, 
             name: user.Name, 
             info: user.info,
-            isActive: user.isActive
+            isActive: user.isActive 
         });
     };
 
@@ -53,6 +52,7 @@ function AdminsPage() {
         const { name, value } = e.target;
         setEditForm({ ...editForm, [name]: value });
     };
+
     const handleStatusToggle = () => {
         setEditForm({ ...editForm, isActive: !editForm.isActive });
     };
@@ -62,12 +62,11 @@ function AdminsPage() {
         //console.log(editForm.id)
         //Update user information in the database
         APIService.updateUser({
-            id: editForm.id, // הוסף את ה-ID
-            name: editForm.Name,
+            id: editForm.id,
+            name: editForm.name,
             info: editForm.info,
             isActive: editForm.isActive
         }).then(() => {
-            // Update the local state with the new designer information
             setUsers(users.map(user => 
                 user.id === selectedUser.id ? { ...user, ...editForm } : user
             ));
@@ -89,36 +88,17 @@ function AdminsPage() {
 
     return (
         <div>
-               <Navbar hundleOpenLoginPopup={hundleOpenLoginPopup} />
-             {
-                show ?
-                <LoginPopup isOpen={show} setIsOpen={setshow} />
-                :<></>
-              }
+            <Navbar hundleOpenLoginPopup={hundleOpenLoginPopup} />
+            {show ? <LoginPopup isOpen={show} setIsOpen={setShow} /> : null}
             {selectedUser ? (
                 isEditMode ? (
                     <div className="user-info">
                         <h2>Edit User Status</h2>
                         <form onSubmit={handleFormSubmit}>
                             <div>
-                                <p>
-                                Name: {editForm.name}
-                                </p>
+                                <p>Name: {editForm.name}</p>
                                 <p>Info: {editForm.info}</p>
                             </div>
-                            {/* <label>
-                                
-                                {/* <input
-                                    type="text"
-                                    name="name"
-                                    value={editForm.name}
-                                    onChange={handleInputChange}
-                                /> }
-                            </label>
-                            <label>
-                                
-                           
-                            </label> */}
                             <p>
                                 Status:
                                 <button type="button" onClick={handleStatusToggle}>
@@ -133,22 +113,21 @@ function AdminsPage() {
                     <div className="user-info">
                         <h2>{selectedUser.Name}</h2>
                         <p>{selectedUser.info}</p>
-                        
-                        {user.Type === 1 &&  (
-                        <button onClick={handleEditClick}>Edit</button>
-                        )}
+                        {user.Type === 1 && <button onClick={handleEditClick}>Edit</button>}
                         <button onClick={handleBackClick}>Back</button>
                     </div>
                 )
             ) : (
-                <ul className="user-list">
-                    {users.map(user => (
-                        <li key={user.Id} onClick={() =>{//console.log(user.Id);
-                         handleUserClick(user)}}>
-                            <h3>{user.Name}</h3>
-                        </li>
-                    ))}
-                </ul>
+                <div>
+                    <h1>User List</h1>
+                    <ul className="user-list">
+                        {users.map(user => (
+                            <li key={user.Id} onClick={() => handleUserClick(user)}>
+                                <h3>{user.Name}</h3>
+                            </li>
+                        ))}
+                    </ul>
+                </div>
             )}
         </div>
     );

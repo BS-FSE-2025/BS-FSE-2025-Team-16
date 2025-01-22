@@ -16,10 +16,10 @@ const ProductList = () => {
     const [gardenElement, setGardenElement] = useState([]);
     const [selectedImage, setSelectedImage] = useState(null);
     const navigate = useNavigate();
-    const [showImagePopup, setShowImagePopup] = useState(false);  // שינוי שם משתנה
+    const [showImagePopup, setShowImagePopup] = useState(false);
 
     const hundleOpenLoginPopup = () => {
-        setShowImagePopup(!showImagePopup);  // שינוי פה גם
+        setShowImagePopup(!showImagePopup);
     };
 
     const handleUpdateProduct = (updatedProduct) => {
@@ -33,7 +33,7 @@ const ProductList = () => {
 
     const handleShowImage = (product) => {
         setSelectedImage(`data:image/jpeg;base64,${product.img}`);
-        setShowImagePopup(true); // הצגת הפופ-אפ עם התמונה
+        setShowImagePopup(true);
     };
 
     const filteredProducts = Products.filter((product) => {
@@ -55,16 +55,15 @@ const ProductList = () => {
         });
         setUser(JSON.parse(localStorage.getItem('loggedInUser')) || {});
         const savedUser = JSON.parse(localStorage.getItem("loggedInUser"));
-            if (!savedUser) {
-                window.location.href = '/';
-                return;
-            }
+        if (!savedUser) {
+            window.location.href = '/';
+            return;
+        }
     }, []);
 
     return (
         <div>
             <Navbar hundleOpenLoginPopup={hundleOpenLoginPopup} />
-            {/* {showImagePopup && <LoginPopup isOpen={showImagePopup} setIsOpen={setShowImagePopup} />} */}
             <div>
                 <div className="container">
                     <div className="header">
@@ -88,33 +87,43 @@ const ProductList = () => {
                         <div>
                             {filteredProducts.map((product) => (
                                 <li key={product.id}>
-                                    <div onClick={() => {
-                                        setSelectedProduct(product);
-                                        if (user.Type === 1 || user.Type === 3) {
-                                            setShowModal(true);
-                                            setTypeItem(1);
-                                        }
-                                    }}>
+                                    <div>
                                         <strong>{product.name}</strong> ({product.climate_name}) - ${product.price}<br />
                                         {product.info}
                                     </div>
                                     <button onClick={() => handleShowImage(product)}>Show Image</button>
+                                    <button
+                                        onClick={() => {
+                                            setSelectedProduct(product);
+                                            if (user.Type === 1 || user.Type === 3) {
+                                                setShowModal(true);
+                                                setTypeItem(1);
+                                            }
+                                        }}
+                                    >
+                                        Edit
+                                    </button>
                                 </li>
                             ))}
                         </div>
                         {filteredGardenItem.map((product) => (
                             <li key={product.id}>
-                                <div onClick={() => {
-                                    setSelectedProduct(product);
-                                    if (user.Type === 1 || user.Type === 3) {
-                                        setShowModal(true);
-                                        setTypeItem(1);
-                                    }
-                                }}>
+                                <div>
                                     <strong>{product.name}</strong> - ${product.price}<br />
                                     {product.info}
                                 </div>
                                 <button onClick={() => handleShowImage(product)}>Show Image</button>
+                                <button
+                                    onClick={() => {
+                                        setSelectedProduct(product);
+                                        if (user.Type === 1 || user.Type === 3) {
+                                            setShowModal(true);
+                                            setTypeItem(2);
+                                        }
+                                    }}
+                                >
+                                    Edit
+                                </button>
                             </li>
                         ))}
                     </ul>
@@ -131,8 +140,6 @@ const ProductList = () => {
                     )
                 ) : null}
             </div>
-            
-            {/* Modal for image */}
             {showImagePopup && (
                 <div className="modal-backdrop">
                     <div className="box">
