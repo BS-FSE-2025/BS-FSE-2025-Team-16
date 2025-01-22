@@ -151,7 +151,7 @@ function DesignersPage() {
                                 </div>
                             )
                         }
-                        {user.Id === selectedDesigner.Id || user.Type===1 && (
+                        {(user.Id === selectedDesigner.Id || user.Type===1) && (
                         <button onClick={handleEditClick}>Edit</button>
                         )}
                         <button onClick={handleBackClick}>Back</button>

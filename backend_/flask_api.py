@@ -21,6 +21,15 @@ app.config['CORS_HEADERS'] = 'Content-Type'
 app.config['SESSION_PERMANENT'] = False
 app.config['SESSION_TYPE'] = 'filesystem'
 
+def query_to_js(columns_names, queries):
+    """
+    פונקציה להמרת נתונים שהתקבלו משאילתה למבנה JSON.
+    """
+    return [
+        {columns_names[i]: row[i] for i in range(len(columns_names))}
+        for row in queries
+    ]
+
 
 @app.route('/users', methods=['GET'])
 @cross_origin()
@@ -36,7 +45,7 @@ def users():
     rows = cursor.fetchall()
 
     # המרת הנתונים ל-JSON
-    json_data = backend.query_to_js(columns_names, rows)
+    json_data = query_to_js(columns_names, rows)
 
     return json_data
 
@@ -55,7 +64,7 @@ def usersType():
     rows = cursor.fetchall()
     #     # print(rows)
     # המרת הנתונים ל-JSON
-    json_data = backend.query_to_js(columns_names, rows)
+    json_data = query_to_js(columns_names, rows)
 
     return json_data
 
@@ -73,7 +82,7 @@ def plantsType():
     rows = cursor.fetchall()
     #     # print(rows)
     # המרת הנתונים ל-JSON
-    json_data = backend.query_to_js(columns_names, rows)
+    json_data = query_to_js(columns_names, rows)
 
     return json_data
 
@@ -91,7 +100,7 @@ def climateType():
     rows = cursor.fetchall()
     #     # print(rows)
     # המרת הנתונים ל-JSON
-    json_data = backend.query_to_js(columns_names, rows)
+    json_data = query_to_js(columns_names, rows)
 
     return json_data
 
@@ -114,9 +123,7 @@ def projects():
             row_dict['img'] = base64.b64encode(row_dict['img']).decode('utf-8')
         json_data.append(row_dict)
 
-    #     # print(rows)
-    # המרת הנתונים ל-JSON
-    # json_data = backend.query_to_js(columns_names, rows)
+
 
     return json_data
 
@@ -378,7 +385,7 @@ def UpdateGardenElement():
         rows = cursor.fetchall()
         #         # print(rows)
         # המרת הנתונים ל-JSON
-        json_data = backend.query_to_js(columns_names, rows)
+        json_data = query_to_js(columns_names, rows)
         response = {"status": "success", "message": " added successfully", "new_elements": json_data}
     except sqlite3.Error as e:
         # print(f"Database error: {e}")
@@ -561,7 +568,7 @@ def review():
     rows = cursor.fetchall()
     #     # print(rows)
     # המרת הנתונים ל-JSON
-    json_data = backend.query_to_js(columns_names, rows)
+    json_data = query_to_js(columns_names, rows)
 
     return json_data
 
@@ -578,7 +585,7 @@ def insert_details(item, project, detail_id_to_check):
     if cursor.fetchone():
         # print({"status": "error", "message": f"detail_id {detail_id_to_check} already exists"}, 400)
         conn.close()
-        return
+
 
     # הוספת פריט חדש
     insert_sql = """
@@ -703,7 +710,7 @@ def insertItemProject():
         # print(rows)
 
         # # המרת הנתונים ל-JSON
-        json_data = backend.query_to_js(columns_names, rows)
+        json_data = query_to_js(columns_names, rows)
         # print(json_data)
         if len(req["Garden Element"]) != 0:
             for i in range(len(req["Garden Element"])):
