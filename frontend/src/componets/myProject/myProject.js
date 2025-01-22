@@ -193,12 +193,12 @@ const handleDownloadPDF = async (projectId) => {
     doc.text(`Climate: ${getClimateType(selectedProject.Climate)}`, 15, 80);
 
     doc.setFontSize(16).text("Price Quote", 15, 100);
-    doc.setFontSize(12).rect(15, yPosition, 180, 10, 'F')
+    doc.setFontSize(12).setTextColor(255,255,255).rect(15, yPosition, 180, 10, 'F')
       .text("Item Name", 20, yPosition + 7)
       .text("Quantity", 90, yPosition + 7)
       .text("Unit Price", 130, yPosition + 7)
       .text("Total Price", 160, yPosition + 7);
-
+    doc.setTextColor(0,0,0)
     yPosition += 10;
     let totalCost = 0;
 
@@ -208,6 +208,7 @@ const handleDownloadPDF = async (projectId) => {
         doc.addPage();
         yPosition = 20;
         addLogo(); // לוגו בכל דף חדש
+        
         doc.rect(15, yPosition, 180, 10, 'F')
           .text("Item Name", 20, yPosition + 7)
           .text("Quantity", 90, yPosition + 7)
@@ -215,6 +216,7 @@ const handleDownloadPDF = async (projectId) => {
           .text("Total Price", 160, yPosition + 7);
         yPosition += 10;
       }
+      
       doc.rect(15, yPosition, 180, 10)
         .text(detail.itemName, 20, yPosition + 7)
         .text(`${detail.quantity}`, 100, yPosition + 7)

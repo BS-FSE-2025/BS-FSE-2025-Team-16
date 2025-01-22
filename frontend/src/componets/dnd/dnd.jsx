@@ -65,7 +65,7 @@ const PurchasedList = ({ purchasedItems, onRemove, budget, showMessage }) => {
     const groupedItems = purchasedItems.reduce((acc, item) => {
         const normalizedItem = normalizeItem(item);
         const existingItem = acc.find((i) => i.name === normalizedItem.name);
-
+        
         if (existingItem) {
             existingItem.quantity += 1;
             existingItem.totalPrice += normalizedItem.price;
@@ -80,7 +80,7 @@ const PurchasedList = ({ purchasedItems, onRemove, budget, showMessage }) => {
 
         return acc;
     }, []);
-
+    const savedProject = JSON.parse(localStorage.getItem("project"));
     const totalPrice = groupedItems.reduce((sum, item) => sum + item.totalPrice, 0);
 
     useEffect(() => {
@@ -107,7 +107,9 @@ const PurchasedList = ({ purchasedItems, onRemove, budget, showMessage }) => {
             </ul>
             <div className="inButtom">
                 <hr />
-                <h4>Total Price: ${totalPrice.toFixed(2)}</h4>
+                <h4 className={totalPrice.toFixed(2) > savedProject.Budget ? "text-danger" : "text-dark"}>
+                    Total Price: ${totalPrice.toFixed(2)}
+                </h4>
             </div>
 
         </div>
