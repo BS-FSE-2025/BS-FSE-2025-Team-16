@@ -32,11 +32,11 @@ function SuppliersPage() {
 
     const handleSupplierClick = (supplier) => {
         setSelectedSupplier(supplier);
-        setEditForm({ 
-            id: supplier.Id, 
-            name: supplier.name, 
-            info: supplier.info 
-        });
+        // setEditForm({ 
+        //     id: supplier.Id, 
+        //     name: supplier.name, 
+        //     info: supplier.info 
+        // });
     };
 
     const handleBackClick = () => {
@@ -93,14 +93,14 @@ function SuppliersPage() {
                             <input
                                 type="text"
                                 name="name"
-                                value={selectedSupplier.Name}
+                                value={editForm.name}
                                 onChange={handleInputChange}
                             />
                             
                             <p>Info:</p>
                             <textarea
                                 name="info"
-                                value={selectedSupplier.info}
+                                value={editForm.info}
                                 onChange={handleInputChange}
                             />
                             
@@ -112,7 +112,7 @@ function SuppliersPage() {
                     <div className="supplier-info">
                         <h2>{selectedSupplier.Name}</h2>
                         <p>{selectedSupplier.info}</p>
-                        {user.Id === selectedSupplier.Id || user.Type === 1 && (
+                        {(user.Id === selectedSupplier.Id || user.Type === 1) && (
                             <button onClick={handleEditClick}>Edit</button>
                         )}
                         
