@@ -1,3 +1,5 @@
+
+
 import Navbar from "../landing page/src/Components/navbar/navbar";
 import { useEffect, useState } from "react";
 import LoginPopup from "../LoginPopup";
@@ -5,10 +7,9 @@ import "./Supplier_list.css";
 import APIService from "../APIService";
 
 function SuppliersPage() {
-    // const [show, setShow] = useState(false);
     const [selectedSupplier, setSelectedSupplier] = useState(null);
     const [suppliers, setSuppliers] = useState([]);
-    const [editForm, setEditForm] = useState({ name: "", info: "" });
+    const [editForm, setEditForm] = useState({ id: null, name: "", info: "" });
     const [isEditMode, setIsEditMode] = useState(false);
     const [user, setUser] = useState(JSON.parse(localStorage.getItem('loggedInUser')));
     
@@ -19,7 +20,6 @@ function SuppliersPage() {
             return;
         }
         APIService.user().then(data => {
-            //console.log(data.data);
             setSuppliers((data.data).filter((user) => user.Type === 3));
         });
     }, []);
@@ -32,16 +32,13 @@ function SuppliersPage() {
 
     const handleSupplierClick = (supplier) => {
         setSelectedSupplier(supplier);
-        // setEditForm({ 
-        //     id: supplier.Id, 
-        //     name: supplier.name, 
-        //     info: supplier.info 
-        // });
+        setEditForm({ id: supplier.Id, name: supplier.Name, info: supplier.info });
     };
 
     const handleBackClick = () => {
         setSelectedSupplier(null);
         setIsEditMode(false);
+        setEditForm({ id: null, name: "", info: "" }); // איפוס הטופס
     };
 
     const handleInputChange = (e) => {
@@ -51,16 +48,13 @@ function SuppliersPage() {
 
     const handleFormSubmit = (e) => {
         e.preventDefault();
-        //console.log(editForm.id)
-        //Update supplier information in the database
         APIService.updateSupplier({
-            id: editForm.id, // הוסף את ה-ID
+            id: editForm.id,
             name: editForm.name,
             info: editForm.info
         }).then(() => {
-            // Update the local state with the new supplier information
             setSuppliers(suppliers.map(supplier => 
-                supplier.id === selectedSupplier.id ? { ...supplier, ...editForm } : supplier
+                supplier.Id === editForm.id ? { ...supplier, Name: editForm.name, info: editForm.info } : supplier
             ));
             setSelectedSupplier(null);
             setIsEditMode(false);
@@ -122,8 +116,7 @@ function SuppliersPage() {
             ) : (
                 <ul className="supplier-list">
                     {suppliers.map(supplier => (
-                        <li key={supplier.Id} onClick={() =>{//console.log(supplier.Id);
-                         handleSupplierClick(supplier)}}>
+                        <li key={supplier.Id} onClick={() => handleSupplierClick(supplier)}>
                             <h3>{supplier.Name}</h3>
                         </li>
                     ))}
