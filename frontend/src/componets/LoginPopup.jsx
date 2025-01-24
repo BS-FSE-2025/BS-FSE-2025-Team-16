@@ -42,11 +42,11 @@ function LoginPopup({isOpen,setIsOpen}){
           // שמירת פרטי המשתמש ב-localStorage
           localStorage.setItem('loggedInUser', JSON.stringify(loggedInUser));
         
-          window.alert("היוזר קיים במערכת")
+         
           window.location.reload()
         }
         else{
-          window.alert("היוזר לא קיים במערכת")
+          window.alert("the user dont exsist in the system")
         }
         
       }

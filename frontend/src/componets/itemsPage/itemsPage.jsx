@@ -79,7 +79,7 @@ const ProductList = () => {
                     <div className="header">
                         <h1>Products List</h1>
                         {
-                            user.Type!==2 &&                         
+                            user.Type!==2 && user.Type!==4 &&                         
                         <button
                             className="btn btn-primary add-button"
                             onClick={() => navigate('/CreateProduct')}
