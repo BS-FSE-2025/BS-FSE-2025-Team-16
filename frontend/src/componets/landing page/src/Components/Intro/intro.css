@@ -1,37 +1,42 @@
-#intro{
-    height: calc(100vh- 4rem);
+#intro {
+    height: calc(100vh - 4rem);
     width: 100vw;
     max-width: 75rem;
-    margin : 0 auto;
+    margin: 0;
     overflow: hidden;
-    
 }
 
-.introContent{
+.introContent {
     height: 100vh;
-    width: 100;
+    width: 100%;
     padding: 2rem;
     font-size: 2rem;
     font-weight: 700;
     display: flex;
     flex-direction: column;
-    justify-content: top;
+    justify-content: flex-start;
     margin-top: 100px;
-    
+    text-align: left; /* הוספתי כאן כדי ליישר את הטקסט לשמאל */
 }
-.hello{
+
+.hello {
     font-size: 2rem;
     font-weight: 100;
+    text-align: left; /* הוספתי כאן כדי לוודא שהטקסט יהיה בצד שמאל */
+}
 
-}
-.introName{
+.introName {
     color: green;
-    font-size: 3rem
+    font-size: 3rem;
+    text-align: left; /* הוספתי כאן כדי לוודא שהטקסט יהיה בצד שמאל */
 }
-.introblabla{
+
+.introblabla {
     font-size: large;
     font-weight: 100;
+    text-align: left; /* הוספתי כאן כדי לוודא שהטקסט יהיה בצד שמאל */
 }
-@media screen and (max-width:844px) {
-    
+
+@media screen and (max-width: 844px) {
+    /* אפשר להוסיף התאמות נוספות כאן */
 }

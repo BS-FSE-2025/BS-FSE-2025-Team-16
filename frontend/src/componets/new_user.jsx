@@ -1,10 +1,10 @@
+
 import { useEffect, useState } from "react"
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { useNavigate } from 'react-router-dom';
 
 import CloseButton from 'react-bootstrap/CloseButton'
 import "bootstrap-icons/font/bootstrap-icons.css";
-import { useRef } from "react";
 import OptionsList from "./option/index"
 import APIService from "./APIService";
 
@@ -15,6 +15,7 @@ const NewUser=()=>{
         Password:'',
     })
     const [type,setType]=useState('')
+    
     const [typesUser,SetTypesUser] =useState([{"id":1,"name":"Admin"}])
     const [confirmPassword, SetConfirmPassword]=useState('')
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -36,29 +37,43 @@ const NewUser=()=>{
       useEffect(()=>{
         APIService.usersType().then(res=>{
             SetTypesUser(res.data)
-            console.log(res.data)
+            //console.log(res.data)
         })
         
       },[])
     
       const navigate = useNavigate();
-
-      const hundleSubmit =()=>{
-        setIsMatchPassword(user.Password==confirmPassword)
-        if(user.Password!=confirmPassword){
-            window.alert("הסיסאות לא תואמות אחד לשני")
-
+      const validatePassword = (password) => {
+        const regex = /^(?=.*[A-Z])(?=.*\d)(?=.*[a-zA-Z])[A-Za-z\d]{8,12}$/;
+        return regex.test(password);
+    };
+    
+      const hundleSubmit = () => {
+        if (!validatePassword(user.Password)) {
+            window.alert("The password must contain at least 8 characters, at least one uppercase letter, one digit, and be in English only");
+            return;
         }
-        APIService.createUser({"userType":type, "user":user}).then(res=>console.log(res.data))
-        navigate("/")
-
-      }
+        
+        setIsMatchPassword(user.Password === confirmPassword);
+        if (user.Password !== confirmPassword) {
+            window.alert("The passwords do not match.");
+            return;
+        }
+    
+        APIService.createUser({ "userType": type, "user": user }).then(res => 
+        navigate("/"));
+    };
     return(
         <div style={{backgroundColor: "#90EE90",minHeight: "100vh"}}>
             <div className="container" style={{ display: 'flex', flexDirection: 'column', gap: '20px', marginTop: '20px' }}>
             <div className="row">
+                <button className="btn t-end col-1" onClick={()=>{
+                    navigate("/")
+                }}><i className="bi bi-x fs-2"></i></button>
+            </div>
+            <div className="row">
                     <div className="text-center">
-                        <h1 className="">ברוכים הבאים למערכת  הגינון שלנו </h1>
+                        <h1 className="">Welcome to Plant priecer</h1>
                     </div>
 
                 </div>
@@ -134,7 +149,7 @@ const NewUser=()=>{
                     </div>
                     <div className="row mt-5">
                         <div className="col-7 text-center">
-                               <button onClick={hundleSubmit} className="btn btn-primary t-center">submit</button>
+                               <button onClick={hundleSubmit} className="btn btn-primary t-center" disabled={!type || type=="None"}>submit</button>
                         </div>
                          
                     </div>
@@ -142,7 +157,7 @@ const NewUser=()=>{
                         <div className="col-12 text-center red">
                          {
                             IsMatchPassword ?<></>  :<p>
-                                הסיסמאות לא תואמות
+                                The passwords do not match.
                             </p>
                          }  
                         </div>

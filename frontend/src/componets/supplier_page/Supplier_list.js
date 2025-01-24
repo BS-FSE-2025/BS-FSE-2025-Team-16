@@ -1,3 +1,5 @@
+
+
 import Navbar from "../landing page/src/Components/navbar/navbar";
 import { useEffect, useState } from "react";
 import LoginPopup from "../LoginPopup";
@@ -5,31 +7,38 @@ import "./Supplier_list.css";
 import APIService from "../APIService";
 
 function SuppliersPage() {
-    const [show, setShow] = useState(false);
     const [selectedSupplier, setSelectedSupplier] = useState(null);
     const [suppliers, setSuppliers] = useState([]);
-    const [editForm, setEditForm] = useState({ name: "", info: "" });
+    const [editForm, setEditForm] = useState({ id: null, name: "", info: "" });
     const [isEditMode, setIsEditMode] = useState(false);
-
+    const [user, setUser] = useState(JSON.parse(localStorage.getItem('loggedInUser')));
+    
     useEffect(() => {
+        const savedUser = JSON.parse(localStorage.getItem("loggedInUser"));
+        if (!savedUser) {
+            window.location.href = '/';
+            return;
+        }
         APIService.user().then(data => {
-            console.log(data.data);
             setSuppliers((data.data).filter((user) => user.Type === 3));
         });
     }, []);
 
-    const handleOpenLoginPopup = () => {
-        setShow(!show);
+    const [show, setshow] = useState(false);
+
+    const hundleOpenLoginPopup = () => {
+        setshow(!show);
     };
 
     const handleSupplierClick = (supplier) => {
         setSelectedSupplier(supplier);
-        setEditForm({ name: supplier.name, info: supplier.info });
+        setEditForm({ id: supplier.Id, name: supplier.Name, info: supplier.info });
     };
 
     const handleBackClick = () => {
         setSelectedSupplier(null);
         setIsEditMode(false);
+        setEditForm({ id: null, name: "", info: "" }); // איפוס הטופס
     };
 
     const handleInputChange = (e) => {
@@ -39,14 +48,18 @@ function SuppliersPage() {
 
     const handleFormSubmit = (e) => {
         e.preventDefault();
-        // Update supplier information in the database
-        APIService.updateSupplier(selectedSupplier.id, editForm).then(() => {
-            // Update the local state with the new supplier information
+        APIService.updateSupplier({
+            id: editForm.id,
+            name: editForm.name,
+            info: editForm.info
+        }).then(() => {
             setSuppliers(suppliers.map(supplier => 
-                supplier.id === selectedSupplier.id ? { ...supplier, ...editForm } : supplier
+                supplier.Id === editForm.id ? { ...supplier, Name: editForm.name, info: editForm.info } : supplier
             ));
             setSelectedSupplier(null);
             setIsEditMode(false);
+        }).catch((error) => {
+            console.error("Error updating supplier:", error);
         });
     };
 
@@ -56,30 +69,35 @@ function SuppliersPage() {
 
     return (
         <div>
-            <Navbar handleOpenLoginPopup={handleOpenLoginPopup} />
-            {show && <LoginPopup isOpen={show} setIsOpen={setShow} />}
+            <Navbar hundleOpenLoginPopup={hundleOpenLoginPopup} />
+            {show ? 
+                <LoginPopup isOpen={show} setIsOpen={setshow} /> 
+                : <></>
+            }
+
+            {/* Title */}
+            <h1>Suppliers That Work with Us</h1> 
+
             {selectedSupplier ? (
                 isEditMode ? (
                     <div className="supplier-info">
                         <h2>Edit Supplier Info</h2>
                         <form onSubmit={handleFormSubmit}>
-                            <label>
-                                Name:
-                                <input
-                                    type="text"
-                                    name="name"
-                                    value={editForm.name}
-                                    onChange={handleInputChange}
-                                />
-                            </label>
-                            <label>
-                                Info:
-                                <textarea
-                                    name="info"
-                                    value={editForm.info}
-                                    onChange={handleInputChange}
-                                />
-                            </label>
+                            <p>Name:</p>
+                            <input
+                                type="text"
+                                name="name"
+                                value={editForm.name}
+                                onChange={handleInputChange}
+                            />
+                            
+                            <p>Info:</p>
+                            <textarea
+                                name="info"
+                                value={editForm.info}
+                                onChange={handleInputChange}
+                            />
+                            
                             <button type="submit">Save</button>
                             <button type="button" onClick={handleBackClick}>Back</button>
                         </form>
@@ -88,14 +106,17 @@ function SuppliersPage() {
                     <div className="supplier-info">
                         <h2>{selectedSupplier.Name}</h2>
                         <p>{selectedSupplier.info}</p>
-                        <button onClick={handleEditClick}>Edit</button>
+                        {(user.Id === selectedSupplier.Id || user.Type === 1) && (
+                            <button onClick={handleEditClick}>Edit</button>
+                        )}
+                        
                         <button onClick={handleBackClick}>Back</button>
                     </div>
                 )
             ) : (
                 <ul className="supplier-list">
                     {suppliers.map(supplier => (
-                        <li key={supplier.id} onClick={() => handleSupplierClick(supplier)}>
+                        <li key={supplier.Id} onClick={() => handleSupplierClick(supplier)}>
                             <h3>{supplier.Name}</h3>
                         </li>
                     ))}

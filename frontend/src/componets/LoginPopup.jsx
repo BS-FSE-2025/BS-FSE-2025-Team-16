@@ -35,15 +35,20 @@ function LoginPopup({isOpen,setIsOpen}){
         password:''
       })
       const submit=()=>{
-        console.log(users)
-        console.log(users.some(worker=>worker.Name==user1.name && worker.Password==user1.password))
-        if(users.some(worker=>worker.Name==user1.name && worker.Password==user1.password)){
-          window.alert("היוזר קיים במערכת")
+
+        if(users.some(worker=>worker.Name.toUpperCase()==user1.name.toUpperCase() && worker.Password==user1.password)){
+          const loggedInUser = users.find(worker=>worker.Name.toUpperCase()==user1.name.toUpperCase() && worker.Password==user1.password);
+
+          // שמירת פרטי המשתמש ב-localStorage
+          localStorage.setItem('loggedInUser', JSON.stringify(loggedInUser));
+        
+         
+          window.location.reload()
         }
         else{
-          window.alert("היוזר לא קיים במערכת")
+          window.alert("the user dont exsist in the system")
         }
-        setIsOpen(false);
+        
       }
     return(
         <div ref={inputRef}>
@@ -54,13 +59,14 @@ function LoginPopup({isOpen,setIsOpen}){
                         <div style={popupStyles.overlay}>
                             <div style={popupStyles.popup}>
                               <div className="row">
-                              <CloseButton className=''  variant="red" onClick={togglePopup} />   
+                                <button className="btn t-end col-1" onClick={togglePopup}><i className="bi bi-x fs-2 red"></i></button>
+                              
                               </div>
-                              <div>
+                              {/* <div className="row"> */}
                               <h1 style={popupStyles.header}>
-                                  ברוכים הבאים למערכת ניהול הגינה
+                                 Login
                                 </h1>
-                              </div>
+                              {/* </div> */}
                             <div className="row mb-5">
                                 <div className="col-8">
                                     <input type="text" id="name" placeholder="name" value={user1.name} name="name" onChange={hundleChange} className="form-control col-12" />
@@ -73,7 +79,7 @@ function LoginPopup({isOpen,setIsOpen}){
                                 </div>
                                 <div className=" col-4 text-end  my-auto">
                                     <div className="text-end">
-                                        <label>שם</label>
+                                        <label></label>
                                     </div>
                                         
                                     
@@ -109,13 +115,13 @@ function LoginPopup({isOpen,setIsOpen}){
                             </div>
                             <div className="col-4 text-end my-auto">
                               <div className="text-end">
-                                <label>סיסמה</label>
+                                <label></label>
                               </div>
                             </div>
                             <div className="row">
                             <div style={popupStyles.links}>
                                       {/* <a href="#" style={popupStyles.link} className="col-6 " dir="rtl">שכחת סיסמה?</a> */}
-                                      <a href="/newUser" style={popupStyles.link} className="col-6 " dir="rtl">אין לך חשבון? הירשם כאן</a>
+                                      <a href="/newUser" style={popupStyles.link} className="col-6 " dir="rtl"> Don’t have an account? Sign up here</a>
                               </div>
                             
                             </div>
@@ -151,6 +157,7 @@ const popupStyles = {
       fontSize: "24px",
       marginBottom: "20px",
       color: "#2E7D32", // ירוק כהה
+      marginTop:"-60px"
     },
     button: {
       padding: "10px",
@@ -163,10 +170,12 @@ const popupStyles = {
     },
     popup: {
       background: "#90EE90",
-      padding: "150px",
+      padding: "50px",  // הקטן מ-150px ל-50px
       borderRadius: "8px",
       boxShadow: "0 5px 15px rgba(0, 0, 0, 0.3)",
-        textAlign: "center",
+      textAlign: "center",
+      width: "500px",  // קביעת רוחב קבוע קטן יותר
+      height: "400px" // אפשר להוסיף כדי להקטין את הגובה
     },
     links: {
       marginTop: "15px",
