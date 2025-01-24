@@ -1,13 +1,12 @@
-from flask import Flask, render_template, request, redirect, url_for, session, flash, jsonify, after_this_request
+from flask import Flask,request, jsonify
 from flask_cors import CORS, cross_origin
 from flask_session import Session
 from flask_sqlalchemy import SQLAlchemy
 
 from flask_restful import Api
-# from mobile_resources.events import UserMobile
-import sqlite3, flask_sqlalchemy
-import json
-import backend
+
+import sqlite3
+
 import base64
 
 # import sqlitecloud
