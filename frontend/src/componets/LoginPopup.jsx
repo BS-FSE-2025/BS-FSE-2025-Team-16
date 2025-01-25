@@ -46,7 +46,7 @@ function LoginPopup({isOpen,setIsOpen}){
           window.location.reload()
         }
         else{
-          window.alert("the user dont exsist in the system")
+          window.alert("the user does not exist in the system!")
         }
         
       }

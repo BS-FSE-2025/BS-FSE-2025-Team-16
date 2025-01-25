@@ -31,7 +31,7 @@ function ProjectManagement() {
   useEffect(() => {
    
     const savedUser = JSON.parse(localStorage.getItem("loggedInUser"));
-            if (!savedUser) {
+            if (!savedUser || savedUser.Type === 3) {
                 window.location.href = '/';
                 return;
             }

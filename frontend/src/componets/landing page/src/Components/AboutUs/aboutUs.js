@@ -30,7 +30,7 @@ const AboutUs = () => {
 
       <div className="reviews-container">
         <div className='header'>
-          <h1 className="white-text">We talk about us</h1>
+          <h1 className="white-text">Our customers talk about us</h1>
           <button
             className="btn btn-primary add-button"
             onClick={() => navigate('/rating')}
@@ -42,13 +42,6 @@ const AboutUs = () => {
         <div className="scrolling-container">
           {ratings.length > 0 && (
             <div className="scrolling-content" style={{ width: `${ratings.length * 320}px` }}>
-              {ratings.map((review, index) => (
-                <div className="review-box" key={index}>
-                  <h3>{review.Name}</h3>
-                  <p>Stars: {"★".repeat(review.stars)}</p>
-                  <p>Feedback: {review.review}</p>
-                </div>
-              ))}
               {ratings.map((review, index) => (
                 <div className="review-box" key={`copy-${index}`}>
                   <h3>{review.Name}</h3>

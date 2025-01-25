@@ -83,14 +83,7 @@ function SuppliersPage() {
                     <div className="supplier-info">
                         <h2>Edit Supplier Info</h2>
                         <form onSubmit={handleFormSubmit}>
-                            <p>Name:</p>
-                            <input
-                                type="text"
-                                name="name"
-                                value={editForm.name}
-                                onChange={handleInputChange}
-                            />
-                            
+                            <p>Name: {editForm.name}</p>
                             <p>Info:</p>
                             <textarea
                                 name="info"

@@ -15,7 +15,7 @@ function DesignersPage() {
     const [myProjects,setMyprojects]=useState([])
     useEffect(() => {
         const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser'));
-        if (!loggedInUser) {
+        if (!loggedInUser || loggedInUser.Type === 3) {
             window.location.href = '/';
         } else {
         APIService.user().then(data => {
