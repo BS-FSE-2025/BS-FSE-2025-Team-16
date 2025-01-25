@@ -47,7 +47,10 @@ const Navbar = ({hundleOpenLoginPopup}) => {
                 )}
                <NavLink  to="/ProductList" className="deskTopMenuListItem">Product list</NavLink>
                <NavLink  to="/supplier" className="deskTopMenuListItem"> Supplier info</NavLink>
+               {loggedInUser &&
+                (loggedInUser.Type !== 3) &&(
                <NavLink  to="/designer" className="deskTopMenuListItem"> Designers Page</NavLink>
+                )}  
                {loggedInUser &&
                 (loggedInUser.Type !== 1) &&(
                <NavLink  to="/rating" className="deskTopMenuListItem"> Rating</NavLink>

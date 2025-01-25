@@ -25,13 +25,26 @@ function RatingPage() {
   useEffect(() => {
     setUser(JSON.parse(localStorage.getItem('loggedInUser')));
     const savedUser = JSON.parse(localStorage.getItem("loggedInUser"));
-    if (!savedUser) {
+    if (!savedUser || savedUser.Type === 1) {
         window.location.href = '/';
         return;
     }
   }, []);
 
   const handleSubmit = () => {
+    if (feedback.trim() === '') {
+      alert('Rating message cannot be empty');
+      return;
+    }
+    if (feedback.length > 75) {
+      alert('Rating message cannot be longer than 75 characters');
+      return;
+    }
+    if (rating === 0) {
+      alert('Please select a rating');
+      return;
+    }
+
     // Handle the submit action (e.g., sending the data to a server)
     //console.log("Rating submitted:", rating);
     //console.log("Feedback submitted:", feedback);

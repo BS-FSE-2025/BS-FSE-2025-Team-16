@@ -100,7 +100,7 @@ function AdminsPage() {
                                 <p>Info: {editForm.info}</p>
                             </div>
                             <p>
-                                Status:
+                                Status: {editForm.isActive}
                                 <button type="button" onClick={handleStatusToggle}>
                                     {editForm.isActive ? "Disable" : "Enable"}
                                 </button>
