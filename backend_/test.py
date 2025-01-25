@@ -1,143 +1,7 @@
-# import unittest
-# import json
-# from flask_api import app
-#
-#
-# class TestApp(unittest.TestCase):
-#     @classmethod
-#     def setUpClass(cls):
-#         cls.client = app.test_client()
-#         cls.base_url = "http://localhost:5001"  # לשנות אם השרת רץ על פורט אחר
-#
-#     def test_get_users(self):
-#         response = self.client.get('/users')
-#         self.assertEqual(response.status_code, 200)
-#         self.assertTrue(isinstance(response.json, list))  # בדוק שהפורמט הוא רשימה
-#
-#     def test_get_users_type(self):
-#         response = self.client.get('/usersType')
-#         self.assertEqual(response.status_code, 200)
-#         self.assertTrue(isinstance(response.json, list))
-#
-#     def test_get_plants_type(self):
-#         response = self.client.get('/plantsType')
-#         self.assertEqual(response.status_code, 200)
-#         self.assertTrue(isinstance(response.json, list))
-#
-#     def test_get_climate_type(self):
-#         response = self.client.get('/climateType')
-#         self.assertEqual(response.status_code, 200)
-#         self.assertTrue(isinstance(response.json, list))
-#
-#     def test_post_new_user(self):
-#         payload = {
-#             "user": {
-#                 "Name": "Test User",
-#                 "Email": "testuser@example.com",
-#                 "Password": "test123"
-#             },
-#             "userType": "Admin"
-#         }
-#         response = self.client.post('/newUser', json=payload)
-#         self.assertEqual(response.status_code, 200)
-#         self.assertEqual(response.json['status'], 'success')
-#
-#     def test_post_new_project(self):
-#         # שלב 1: יצירת פרויקט חדש
-#         payload = {
-#             "user": {"Id": 1},
-#             "project": {
-#                 "projectName": "Test Project",
-#                 "budget": 1000,
-#                 "width": 10,
-#                 "length": 20,
-#                 "climate": "Tropical"
-#             }
-#         }
-#         response = self.client.post('/newProject', json=payload)
-#         self.assertEqual(response.status_code, 200)
-#         self.assertEqual(response.json['status'], 'success')
-#
-#         # שלב 2: אימות שהפרויקט נוצר בהצלחה
-#         response = self.client.get('/projects')
-#         self.assertEqual(response.status_code, 200)
-#         projects = response.json  # רשימת הפרויקטים
-#         self.assertIsInstance(projects, list)
-#
-#         # חיפוש ה-ID של הפרויקט שנוצר
-#         new_project = next(
-#             (project for project in projects if project["name"] == "Test Project"), None
-#         )
-#         self.assertIsNotNone(new_project, "New project was not found in the list.")
-#         new_project_id = new_project["id"]
-#
-#         # שלב 3: מחיקת הפרויקט שנוצר
-#         delete_payload = {"id": new_project_id}
-#         delete_response = self.client.post('/deleteProject', json=delete_payload)
-#         self.assertEqual(delete_response.status_code, 200)
-#         self.assertEqual(delete_response.json['status'], 'success')
-#
-#         # שלב 4: אימות שהפרויקט נמחק בהצלחה
-#         response = self.client.get('/projects')
-#         self.assertEqual(response.status_code, 200)
-#         projects_after_delete = response.json
-#         deleted_project = next(
-#             (project for project in projects_after_delete if project["id"] == new_project_id), None
-#         )
-#         self.assertIsNone(deleted_project, "The project was not deleted successfully.")
-#
-#     def test_update_user_status(self):
-#         payload = {
-#             "id": 1,
-#             "isActive": 0
-#         }
-#         response = self.client.post('/updateUserStatus', json=payload)
-#         self.assertEqual(response.status_code, 200)
-#         self.assertEqual(response.json['status'], 'success')
-#
-#     def test_get_projects(self):
-#         response = self.client.get('/projects')
-#         self.assertEqual(response.status_code, 200)
-#         self.assertTrue(isinstance(response.json, list))
-#
-#     def test_delete_project(self):
-#         payload = {"id": 1}
-#         response = self.client.post('/deleteProject', json=payload)
-#         self.assertEqual(response.status_code, 200)
-#         self.assertEqual(response.json['status'], 'success')
-#
-#     def test_update_garden_element(self):
-#         payload = {
-#             "garden": {
-#                 "id": 1,
-#                 "info": "Updated Info",
-#                 "price": 150
-#             }
-#         }
-#         response = self.client.post('/UpdateGardenElement', json=payload)
-#         self.assertEqual(response.status_code, 200)
-#         self.assertEqual(response.json['status'], 'success')
-#
-#     def test_update_plants(self):
-#         payload = {
-#             "plants": {
-#                 "id": 1,
-#                 "info": "Updated Info",
-#                 "price": 100
-#             }
-#         }
-#         response = self.client.post('/UpdatePlants', json=payload)
-#         self.assertEqual(response.status_code, 200)
-#         self.assertEqual(response.json['status'], 'success')
-#
-#
-# if __name__ == "__main__":
-#     unittest.main()
 import unittest
 import json
 import base64
 import os
-from flask import Flask
 from flask_api import app
 import sqlite3
 
@@ -294,7 +158,7 @@ class FlaskAppTests(unittest.TestCase):
         self.assertEqual(response.status_code, 200)
         data = json.loads(response.data)
         # data.filter()
-        filtered_data = list(filter(lambda item: "amir" == item['Name'].lower() and "Amir"==item['Password'], data))
+        filtered_data = list(filter(lambda item: "amir" == item['Name'].lower() and "Amir123"==item['Password'], data))
         print(filtered_data)
         self.assertIsInstance(filtered_data, list)
         self.assertTrue(len(filtered_data) > 0)

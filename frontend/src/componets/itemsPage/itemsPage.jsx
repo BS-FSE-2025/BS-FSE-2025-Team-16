@@ -12,7 +12,7 @@ const ProductList = () => {
     const [searchTerm, setSearchTerm] = useState("");
     const [filterType, setFilterType] = useState("All");
     const [selectedProduct, setSelectedProduct] = useState(null);
-    const [user, setUser] = useState({});
+    const [user, setUser] = useState(JSON.parse(localStorage.getItem('loggedInUser')));
     const [gardenElement, setGardenElement] = useState([]);
     const [selectedImage, setSelectedImage] = useState(null);
     const navigate = useNavigate();
@@ -22,12 +22,26 @@ const ProductList = () => {
         setShowImagePopup(!showImagePopup);
     };
 
+    const reloadProducts = () => {
+        APIService.plants().then((res) => setProducts(res.data));
+        APIService.GardenElement().then((res) => setGardenElement(res.data));
+    };
+
     const handleUpdateProduct = (updatedProduct) => {
-        setProducts((prev) =>
-            prev.map((product) =>
-                product.id === updatedProduct.id ? updatedProduct : product
-            )
-        );
+        if (TypeItem === 1) {
+            setProducts((prev) =>
+                prev.map((product) =>
+                    product.id === updatedProduct.id ? updatedProduct : product
+                )
+            );
+        } else if (TypeItem === 2) {
+            setGardenElement((prev) =>
+                prev.map((product) =>
+                    product.id === updatedProduct.id ? updatedProduct : product
+                )
+            );
+        }
+        reloadProducts();
         setShowModal(false);
     };
 
@@ -47,12 +61,7 @@ const ProductList = () => {
     });
 
     useEffect(() => {
-        APIService.plants().then((res) => {
-            setProducts(res.data);
-        });
-        APIService.GardenElement().then((res) => {
-            setGardenElement(res.data);
-        });
+        reloadProducts();
         setUser(JSON.parse(localStorage.getItem('loggedInUser')) || {});
         const savedUser = JSON.parse(localStorage.getItem("loggedInUser"));
         if (!savedUser) {
@@ -68,12 +77,16 @@ const ProductList = () => {
                 <div className="container">
                     <div className="header">
                         <h1>Products List</h1>
+                        {
+                            user.Type!==2 && user.Type!==4 &&                         
                         <button
                             className="btn btn-primary add-button"
                             onClick={() => navigate('/CreateProduct')}
                         >
                             <i className="bi bi-plus"></i>
                         </button>
+                        }
+
                     </div>
                     <div className="filter-container">
                         <input
@@ -92,17 +105,17 @@ const ProductList = () => {
                                         {product.info}
                                     </div>
                                     <button onClick={() => handleShowImage(product)}>Show Image</button>
+                                    {(user.Type === 1 || user.Type === 3) && (
                                     <button
                                         onClick={() => {
                                             setSelectedProduct(product);
-                                            if (user.Type === 1 || user.Type === 3) {
-                                                setShowModal(true);
-                                                setTypeItem(1);
-                                            }
+                                            setShowModal(true);
+                                            setTypeItem(1);
                                         }}
                                     >
                                         Edit
                                     </button>
+                                )}
                                 </li>
                             ))}
                         </div>
@@ -113,17 +126,18 @@ const ProductList = () => {
                                     {product.info}
                                 </div>
                                 <button onClick={() => handleShowImage(product)}>Show Image</button>
-                                <button
-                                    onClick={() => {
-                                        setSelectedProduct(product);
-                                        if (user.Type === 1 || user.Type === 3) {
+                                {(user.Type === 1 || user.Type === 3) && (
+                                    <button
+                                        onClick={() => {
+                                            setSelectedProduct(product);
                                             setShowModal(true);
                                             setTypeItem(2);
-                                        }
-                                    }}
-                                >
-                                    Edit
-                                </button>
+                                        }}
+                                    >
+                                        Edit
+                                    </button>
+                                )}
+                                
                             </li>
                         ))}
                     </ul>
@@ -164,7 +178,9 @@ const Modal = ({ product, setProdouct, onClose, onSave, TypeItem }) => {
         if (TypeItem === 1) {
             APIService.updateplants(updatedProduct)
                 .then((res) => {
-                    //console.log("Plant updated:", res.data);
+                    setProdouct((prev) => 
+                        prev.map((item) => item.id === updatedProduct.id ? { ...item, ...updatedProduct } : item)
+                    );
                 })
                 .catch((err) => {
                     console.error("Error updating plant:", err);
@@ -172,13 +188,15 @@ const Modal = ({ product, setProdouct, onClose, onSave, TypeItem }) => {
         } else if (TypeItem === 2) {
             APIService.updateGardenItem(updatedProduct)
                 .then((res) => {
-                    //console.log("Garden item updated:", res.data.new_elements);
-                    setProdouct(res.data.new_elements);
+                    setProdouct((prev) => 
+                        prev.map((item) => item.id === updatedProduct.id ? { ...item, ...updatedProduct } : item)
+                    );
                 })
                 .catch((err) => {
                     console.error("Error updating garden item:", err);
                 });
         }
+        onClose();
     };
 
     const handleChange = (e) => {

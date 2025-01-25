@@ -1,16 +1,10 @@
-from flask import Flask, render_template, request, redirect, url_for, session, flash, jsonify, after_this_request
+from flask import Flask, request,  jsonify
 from flask_cors import CORS, cross_origin
-from flask_session import Session
-from flask_sqlalchemy import SQLAlchemy
 
-from flask_restful import Api
-# from mobile_resources.events import UserMobile
-import sqlite3, flask_sqlalchemy
-import json
-import backend
+import sqlite3
+
 import base64
 
-# import sqlitecloud
 
 app = Flask(__name__)
 CORS(app, supports_credentials=True, resources={r"/api/*": {"origins": "*"}})
@@ -664,19 +658,22 @@ def update_user_status():
     conn = sqlite3.connect("PlantPricer.db")
     cursor = conn.cursor()
     req = request.json  # הנתונים שמגיעים מהלקוח
-    # print("Request received:", req)  # בדוק מה התקבל בשרת
 
-    # if 'id' not in req:
-    #     return {"status": "error", "message": "Missing 'id' in request data"}, 400
-    # print(req)
+    # בדיקה שהשדות הדרושים קיימים
+    if 'id' not in req or 'isActive' not in req:
+        return {"status": "error", "message": "Missing 'id' or 'isActive' in request data"}, 400
+    print("Request Data:", req)
+
+    # הגדרת ערך הסטטוס
+    num = 1 if req["isActive"] else 0
+
+    # שימוש בפרמטרים במקום f-strings
     sql = f"""
         UPDATE users
-        SET
-            inactive = {req["isActive"]}
+        SET inactive = {num}
         WHERE id = {req["id"]};
-
     """
-    #     # print(sql)
+    print(sql)
     try:
         cursor.execute(sql)
         conn.commit()
